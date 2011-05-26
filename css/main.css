@@ -43,6 +43,10 @@ a {
 
 .clearer { clear: both; }
 
+#wrapper {
+	overflow: none;
+}
+
 #lucky {
 	position: absolute;
 	border: 2px solid #fff;
