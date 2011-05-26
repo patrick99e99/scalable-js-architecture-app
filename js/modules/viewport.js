@@ -21,7 +21,7 @@ Core.loadModule('viewport', function(sandbox) {
 
 				self.adjustWrapperHeight();
 				
-			})
+			});
 		},
 		
 		adjustWrapperHeight: function() {

@@ -10,10 +10,8 @@ var Sandbox = function(name) {
 		 external              = Core.getPlugin('external'),
 		 event_manager         = Core.getPlugin('event_manager'),
 		 html_generator        = Core.getPlugin('html_generator'),
-		 form_markup_generator = Core.getPlugin('form_markup_generator');
-		 tooltip               = Core.getPlugin('tooltip'),
-		 alert_window          = Core.getPlugin('alert_window'),
-		 utilities             = Core.getPlugin('utilities'),
+		 form_markup_generator = Core.getPlugin('form_markup_generator'),
+		 utilities             = Core.getPlugin('utilities');
 
 	this.name = name;
 	
@@ -592,52 +590,5 @@ var Sandbox = function(name) {
 	this.dasherize = function(str) {
 		return utilities.dasherize(str);
 	};
-	
-	/*------------ tooltip methods ------------*/
-	
-	this.createTooltip = function(element, text, options) {
-		return tooltip.create(element, text, options);
-	};
-
-	/*------------ alert window methods ------------*/
-	
-	this.alert = function(text, options) {
-		return alert_window.alert(text, options);
-	};
-
-	this.alertConfirm = function(text, fn, options) {
-		return alert_window.confirm(text, fn, options);
-	};
-	
-	this.alertError = function() {
-		return alert_window.error();
-	};
-	
-	this.newAlertPage = function(markup, options) {
-		return alert_window.newPage(markup, options);
-	};
-	
-	this.updateAlertPage = function(markup, options) {
-		return alert_window.updatePage(markup, options);
-	};
-	
-	this.displayAlertWindow = function(markup, options) {
-		return alert_window.display(markup, options);
-	};
-	
-	this.closeAlertWindow = function(callback) {
-		return alert_window.close(callback);
-	};
-	
-	this.refreshAlertWindow = function(options) {
-		return alert_window.refresh(options);
-	};
-	
-	/* unused */
-	
-	this.onImagesLoad = function(selector, options) {
-		return effects.onImagesLoad(selector, options);
-	};
-	
 	
 };
