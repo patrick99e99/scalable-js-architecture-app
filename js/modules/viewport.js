@@ -12,7 +12,9 @@ Core.loadModule('viewport', function(sandbox) {
 		},
 		
 		onReady: function() {
-			self.adjustWrapperHeight();
+			self.adjustWrapperHeight(function() {
+				sandbox.notify('viewport-ready');
+			});
 		},
 		
 		assignBehaviors: function() {
@@ -24,11 +26,15 @@ Core.loadModule('viewport', function(sandbox) {
 			});
 		},
 		
-		adjustWrapperHeight: function() {
+		adjustWrapperHeight: function(callback) {
 		 	viewport_height = sandbox.getHeight(window);
 			sandbox.setCSS(wrapper, {'height': viewport_height + 'px'});
 			
 			sandbox.notify('wrapper-height-changed');
+			
+			if (sandbox.isFunction(callback)) {
+				callback();
+			}
 		}
 		
 	};

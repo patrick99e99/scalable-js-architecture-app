@@ -14,6 +14,7 @@ Core.loadModule('lucky', function(sandbox) {
 			self = this;
 			helpers = self.helpers;
 			
+			sandbox.listen('viewport-ready', self.fadeIn);
 			sandbox.listen('wrapper-height-changed', self.center);
 			sandbox.listen('radius-changed', self.setRadius);
 			sandbox.listen('speed-changed', self.setSpeed);
@@ -22,6 +23,10 @@ Core.loadModule('lucky', function(sandbox) {
 		},
 		
 		helpers: ['lucky'],
+		
+		fadeIn: function() {
+			sandbox.appear(lucky);
+		},
 		
 		center: function() {
 			var container = sandbox.find('wrapper');
