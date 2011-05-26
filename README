@@ -1,3 +1,5 @@
 This is a basic js application project built based off of Nicholas Zakas' scalable javascript architecture design talk:
 
     http://developer.yahoo.com/yui/theater/video.php?v=zakas-architecture
+
+it uses jQuery as the main base library, and YUI 3 for unit testing.

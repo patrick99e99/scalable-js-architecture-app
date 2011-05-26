@@ -26,11 +26,11 @@ Core.loadModule('lucky', function(sandbox) {
 		},
 		
 		setRadius: function(r) {
-			radius = r;
+			radius = parseInt(r, 10);
 		},
 		
 		setSpeed: function(s) {
-			speed = parseInt(s);
+			speed = parseInt(s, 10);
 		},
 		
 		revolve: function() {
