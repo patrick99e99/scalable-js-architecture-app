@@ -1,17 +1,18 @@
 Core.loadModule('lucky', function(sandbox) {
 	
 	var self,
+		 helpers,
 		 lucky = sandbox.find('lucky'),
 		 radius,
 		 speed,
 		 moving = false,
-		 pi = Math.PI,
 		 center;
 		
 	return {
 		
 		init: function() {
 			self = this;
+			helpers = self.helpers;
 			
 			sandbox.listen('wrapper-height-changed', self.center);
 			sandbox.listen('radius-changed', self.setRadius);
@@ -19,6 +20,8 @@ Core.loadModule('lucky', function(sandbox) {
 			sandbox.listen('go-button-clicked', self.revolve);
 			sandbox.listen('stop-button-clicked', self.stop);
 		},
+		
+		helpers: ['lucky'],
 		
 		center: function() {
 			var container = sandbox.find('wrapper');
@@ -55,10 +58,9 @@ Core.loadModule('lucky', function(sandbox) {
 			  return false;
 			}
 			
-			var x = center.x + Math.round((Math.cos(i * pi / 180) * radius)) + 'px';
-		   var y = center.y + Math.round((Math.sin(i * pi / 180) * radius)) + 'px';
-         
-		   sandbox.setCSS(lucky, {'top': y, 'left': x});
+			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': i, 'radius': radius});
+
+		   sandbox.setCSS(lucky, {'top': pos.y, 'left': pos.x});
 			
 			// recursively call this function until we've achieved 360 degrees
 			setTimeout(self.move.curry(i + 1), speed);
@@ -85,10 +87,9 @@ Core.loadModule('lucky', function(sandbox) {
 		moveOutToCircumfrence: function(callback) {
 			sandbox.notify('lucky-is-moving-out-to-circumfrence');
 			
-			var x = center.x + Math.round((Math.cos(pi / 180) * radius)) + 'px';
-		   var y = center.y + Math.round((Math.sin(pi / 180) * radius)) + 'px';
+			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': 1, 'radius': radius});
 		
-			sandbox.animate(lucky, {'top': y, 'left': x}, {'duration': 1000, 'complete': function() {
+			sandbox.animate(lucky, {'top': pos.y, 'left': pos.x}, {'duration': 1000, 'complete': function() {
 				sandbox.notify('lucky-has-moved-out-to-circumfrence');
 				
 				if (sandbox.isFunction(callback)) {

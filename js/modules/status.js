@@ -14,7 +14,7 @@ Core.loadModule('status', function(sandbox) {
 			sandbox.listen('lucky-is-moving-out-to-circumfrence', self.movingOutMessage);
 			sandbox.listen('lucky-has-moved-in-to-center', self.movedInMessage);
 		},
-		
+
 		onReady: function() {
 			self.idleMessage();
 		},
