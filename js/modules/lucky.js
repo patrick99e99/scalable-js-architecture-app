@@ -2,7 +2,8 @@ Core.loadModule('lucky', function(sandbox) {
 	
 	var self,
 		 helpers,
-		 lucky = sandbox.find('lucky'),
+		 wrapper = sandbox.find('wrapper'),
+		 lucky   = sandbox.find('lucky'),
 		 radius,
 		 speed,
 		 moving = false,
@@ -29,8 +30,7 @@ Core.loadModule('lucky', function(sandbox) {
 		},
 		
 		center: function() {
-			var container = sandbox.find('wrapper');
-			center = sandbox.center(lucky, container);
+			center = sandbox.center(lucky, wrapper);
 		},
 		
 		setRadius: function(r) {
@@ -46,11 +46,11 @@ Core.loadModule('lucky', function(sandbox) {
 				return false;
 			}
 			
-			self.moveOutToCircumfrence(function() {			
+			self.moveOutToCircumfrence(function() {
+				// after lucky is ready, set her moving state to true and start moving her 		
 				moving = true;
 				sandbox.notify('lucky-is-moving');
 
-				// start moving at degree 1
 				self.move(1);
 			});
 
@@ -63,6 +63,7 @@ Core.loadModule('lucky', function(sandbox) {
 			  return false;
 			}
 			
+			// figure out the X & Y point of the circle that she should be at...
 			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': i, 'radius': radius});
 
 		   sandbox.setCSS(lucky, {'top': pos.y, 'left': pos.x});
@@ -75,15 +76,16 @@ Core.loadModule('lucky', function(sandbox) {
 			if (!moving) {
 				return false;
 			}
-			
+
+			// tell lucky to stop traveling around the circle and come back!
 			moving = false;
-			
 			self.moveInToCenter();
 		},
 		
 		moveInToCenter: function() {
 			sandbox.notify('lucky-is-moving-in-to-center');
 
+			// tell lucky to come back to the center of the viewport
 			sandbox.animate(lucky, {'top': center.y, 'left': center.x}, {'duration': 1000, 'complete': function() {
 				sandbox.notify('lucky-has-moved-in-to-center');
 			}});	
@@ -91,12 +93,15 @@ Core.loadModule('lucky', function(sandbox) {
 		
 		moveOutToCircumfrence: function(callback) {
 			sandbox.notify('lucky-is-moving-out-to-circumfrence');
-			
+		
+			// figure out the X & Y point of the start of the circle path
 			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': 1, 'radius': radius});
 		
+			// tell lucky to start moving out to that point of the path
 			sandbox.animate(lucky, {'top': pos.y, 'left': pos.x}, {'duration': 1000, 'complete': function() {
 				sandbox.notify('lucky-has-moved-out-to-circumfrence');
-				
+
+				// after she has reached the outer point of the circle, tell her to start moving along the path
 				if (sandbox.isFunction(callback)) {
 					callback();
 				}
