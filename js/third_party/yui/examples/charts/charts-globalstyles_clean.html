@@ -1,0 +1,162 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Customize a Chart</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    width:90%;
+    max-width: 800px;
+    height:400px;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="false">
+
+<h1>Customize a Chart</h1>
+
+<div class="exampleIntro">
+	This example shows how to use a <code>Chart</code>'s <code>styles</code> attribute to customize a <code>Chart</code>.
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<html>
+<head>
+</head>
+<body>
+<div id="mychart"></div>
+<script type="text/javascript">
+(function() {
+    YUI({filter:"raw"}).use('charts', function (Y) 
+    { 
+        var myDataValues = [ 
+            {date:"5/1/2010", international:2000, expenses:3700, domestic:2200}, 
+            {date:"5/2/2010", international:50, expenses:9100, domestic:100}, 
+            {date:"5/3/2010", international:400, expenses:1100, domestic:1500}, 
+            {date:"5/4/2010", international:200, expenses:1900, domestic:2800}, 
+            {date:"5/5/2010", international:5000, expenses:5000, domestic:2650}
+        ];
+        var styleDef = {
+            axes:{
+                values:{
+                    label:{
+                        rotation:-45,
+                        color:"#ff0000"
+                    }
+                },
+                date:{
+                    label:{
+                        rotation:-45,
+                        color: "#ff0000"
+                    }
+                }
+            },
+            series:{
+                international:{
+                    marker:{
+                        fill:{
+                            color:"#ff8888"
+                        },
+                        border:{
+                            color:"#ff0000"
+                        },
+                        over:{
+                            fill:{
+                                color:"#ffffff"
+                            },
+                            border:{
+                                color:"#fe0000"
+                            },
+                            width: 12,
+                            height: 12
+                        }
+                    },
+                    line:{
+                        color:"#ff0000"
+                    }
+                },
+                expenses:{
+                    line:{
+                        color:"#999"
+                    },
+                    marker:
+                    {
+                        fill:{
+                            color:"#ddd"
+                        },
+                        border:{
+                            color:"#999"
+                        },
+                        over: {
+                            fill: {
+                                color: "#eee"
+                            },
+                            border: {
+                                color: "#000"
+                            },
+                            width: 12,
+                            height: 12
+                        }
+                    }
+                },
+                domestic: {
+                    marker: {
+                        over: {
+                            fill: {
+                                color: "#eee"
+                            },
+                            width: 12,
+                            height: 12
+                        }
+                    }
+                }
+            }
+        };
+
+        var mychart = new Y.Chart({
+                                    dataProvider:myDataValues, 
+                                    interactionType:"planar", 
+                                    categoryKey:"date", 
+                                    styles:styleDef, 
+                                    horizontalGridlines:true, 
+                                    verticalGridlines:true, 
+                                    render:"#mychart"
+                                });
+
+    });
+})();
+</script>
+</body>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

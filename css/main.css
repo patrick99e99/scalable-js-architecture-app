@@ -1,0 +1,82 @@
+* {
+	padding: 0;
+	margin: 0;
+	outline: 0;
+	list-style-type: none;
+}
+
+:focus {outline:none;}
+::-moz-focus-inner {border:0;}
+
+body {
+	background: #000;
+	color: #fff;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 100%;
+	cursor: default;
+	
+   /* fallback */
+	background: #000;	
+
+   /* Firefox 3.6+ */
+   background: -moz-linear-gradient(100% 100% 90deg, #330055, #000);
+
+   /* Safari 4-5, Chrome 1-9 */
+   /* -webkit-gradient(<type>, <point> [, <radius>]?, <point> [, <radius>]? [, <stop>]*) */
+   background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#330055), to(#000));
+
+   /* Safari 5.1+, Chrome 10+ */
+   background: -webkit-linear-gradient(#000, #330055);
+
+   /* Opera 11.10+ */
+   background: -o-linear-gradient(#000, #330055);
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+
+.hoverable a:hover {
+	color: #fff;
+}
+
+.clearer { clear: both; }
+
+#lucky {
+	position: absolute;
+	border: 2px solid #fff;
+}
+
+#status {
+	float: right;
+	padding: 10px;
+	border: 1px solid #fff;
+	background: #000;
+	margin: 5px 5px 0 0;
+}
+
+/* YUI TEST */
+
+.yui3-console {
+	width: 75% !important;
+	margin: 0 auto;
+	height: 400px !important;
+}
+
+#testLogger .yui3-console .yui3-console-title {
+   border: 0 none;
+   color: #000;
+   font-size: 13px;
+   font-weight: bold;
+   text-transform: none;
+   margin-bottom: 1em;
+}
+#testLogger .yui3-console .yui3-console-entry-meta {
+    margin: 0;
+}
+
+.yui3-skin-sam .yui3-console-entry-pass .yui3-console-entry-cat {
+    background: #070;
+    color: #fff;
+}

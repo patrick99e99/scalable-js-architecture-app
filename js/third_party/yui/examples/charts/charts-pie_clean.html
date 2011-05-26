@@ -1,0 +1,90 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Pie Chart</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    width: 400px;
+    height:400px;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Pie Chart</h1>
+
+<div class="exampleIntro">
+	This example shows how to use <code>Charts</code> to create a Pie Chart.
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<html>
+<head>
+</head>
+<body>
+<div id="mychart"></div>
+<script type="text/javascript">
+(function() {
+    YUI().use('charts', function (Y) 
+    { 
+        // Create data 
+        var myDataValues = [
+                {day:"Monday", taxes:2000}, 
+                {day:"Tuesday", taxes:50}, 
+                {day:"Wednesday", taxes:4000}, 
+                {day:"Thursday", taxes:200}, 
+                {day:"Friday", taxes:2000}
+        ];				
+
+        var pieGraph = new Y.Chart({
+                render:"#mychart", 
+                categoryKey:"day", 
+                seriesKeys:["taxes"], 
+                dataProvider:myDataValues, 
+                type:"pie", 
+                seriesCollection:[
+                    {
+                        categoryKey:"day",
+                        valueKey:"taxes"
+                    }
+                ]
+            });
+    });
+})();
+</script>
+</body>
+</html>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

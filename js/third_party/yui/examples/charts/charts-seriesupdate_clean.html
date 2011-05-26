@@ -1,0 +1,140 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Update Chart Series</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    width:90%;
+    max-width: 800px;
+    height:400px;
+}
+.fields label {
+    font-weight:bold;
+    display:block;
+    float:left;
+    width:8em;
+}
+
+.fields {
+    border-top:1px solid #aaa;
+    padding:10px;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Update Chart Series</h1>
+
+<div class="exampleIntro">
+	This example shows how to access a <code>Chart</code> instance's <code>seriesCollection</code> after the <code>Chart</code> has rendered.
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<html>
+<head>
+</head>
+<body>
+<div id="mychart"></div>
+<div class="fields">
+    <p>
+        <label for="seriesSelector">series:</label>
+        <select name="seriesSelector" id="seriesSelector">
+            <option value="expenses">expenses</option>
+            <option value="revenue">revenue</option>
+        </select>
+    </p>
+    <p>
+        <label for="fillColor">fill color:</label>
+        <input type="text" name="fillColor" id="fillColor" />
+    </p>
+    <p>
+        <label for="borderColor">border color:</label>
+        <input type="text" name="borderColor" id="borderColor" />
+    </p>
+    <p>
+        <label for="borderWeight">border weight:</label>
+        <input type="text" name="borderColor" id="borderWeight" />
+    </p>
+    <p>
+        <button type="button" class="action" id="updateSeries">Update Series</button>
+    </p>
+</div>
+<script type="text/javascript">
+(function() {
+    YUI().use('charts', function (Y) 
+    { 
+        var myDataValues = [ 
+            {category:"Q1", expenses:137000, revenue:532200}, 
+            {category:"Q2", expenses:211000, revenue:689100}, 
+            {category:"Q3", expenses:151000, revenue:521500}, 
+            {category:"Q4", expenses:163000, revenue:892650}
+        ];
+        
+        var mychart = new Y.Chart({type:"bar", dataProvider:myDataValues, render:"#mychart"});
+        
+        //Click handler
+        Y.on("click", function(e) {
+            var seriesName = document.getElementById("seriesSelector").value,
+                fillColor = document.getElementById("fillColor").value,
+                borderColor = document.getElementById("borderColor").value,
+                borderWeight = document.getElementById("borderWeight").value,
+                series,
+                marker = {fill:{}, border:{}};
+            if(seriesName)
+            {
+                series = mychart.getSeries(seriesName);
+                if(fillColor)
+                {
+                    marker.fill.color = fillColor;
+                }
+                if(borderColor)
+                {
+                    marker.border.color = borderColor;
+                }
+                if(!isNaN(borderWeight))
+                {
+                    marker.border.weight = borderWeight;
+                }
+                series.set("styles", {marker:marker});
+            }
+       }, "#updateSeries");
+    });
+    
+})();
+</script>
+</body>
+</html>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

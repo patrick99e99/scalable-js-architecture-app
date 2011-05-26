@@ -1,0 +1,196 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Creating an Arrow Event for DOM Subscription</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+    #homebase {
+        margin-left: 100px;
+        position: relative;
+        height: 125px;
+        width: 200px;
+    }
+    .robot {
+        height: 100px;
+        width: 74px;
+        background: url(assets/red_robot.png) no-repeat top left;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #B {
+        background-image: url(assets/blue_robot.png);
+        left: 125px;
+    }
+    #demo input {
+        margin-left: 4em;
+    }
+    #demo label {
+        font-size: 87%;
+        color: #555;
+    }
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Creating an Arrow Event for DOM Subscription</h1>
+
+<div class="exampleIntro">
+	<p>This example will illustrate how to use the synthetic event creation API.
+We'll create an <code>arrow</code> event that fires in response to the user
+pressing the arrow keys (up, down, left, right) and adds a
+<code>direction</code> property to the generated event.</p>
+
+<p>Subscribing to this new event will look like this:</p>
+<div id="syntax-232df91361c5ee1be364d00bf0daa739" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">node.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">node.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-232df91361c5ee1be364d00bf0daa739-plain">node.on("arrow", onArrowHandler);
+</textarea></div>
+<p>Support will also be added for delegation, allowing a single subscriber from
+a node higher up the DOM tree, to listen for the new event emanating from its
+descendant elements.</p>
+
+<div id="syntax-f55d2a4b04c4082c159f0c726d595fde" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">containerNode.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="sy0">,</span> <span class="st0">&quot;.robot&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">containerNode.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="sy0">,</span> <span class="st0">&quot;.robot&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f55d2a4b04c4082c159f0c726d595fde-plain">containerNode.delegate("arrow", onArrowHandler, ".robot");
+</textarea></div>			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="demo">
+    <p>Step 1. <button type="button" id="attach" tabindex="1">subscribe</button> to the <code>arrow</code> event.<br>
+    <input type="checkbox" id="delegate" value="1" tabindex="1">
+        <label for="delegate">Use a delegated subscription</label></p>
+    <p>Step 2. Click on a robot and move it around with the arrow keys.</p>
+
+    <div id="homebase">
+        <div id="A" class="robot" tabindex="2"></div>
+        <div id="B" class="robot" tabindex="3"></div>
+    </div>
+
+    <button type="button" id="detach" tabindex="4">Detach subscriptions</button>
+</div>
+<script>
+YUI({ filter: 'raw' }).use("event-synthetic", "node", "transition", function (Y) {
+
+    Y.Event.define("arrow", {
+        // Webkit and IE repeat keydown when you hold down arrow keys.
+        // Opera links keypress to page scroll; others keydown.
+        // Firefox prevents page scroll via preventDefault() on either
+        // keydown or keypress.
+        _event: (Y.UA.webkit || Y.UA.ie) ? 'keydown' : 'keypress',
+
+        _keys: {
+            '37': 'left',
+            '38': 'up',
+            '39': 'right',
+            '40': 'down'
+        },
+
+        _keyHandler: function (e, notifier) {
+            if (this._keys[e.keyCode]) {
+                e.direction = this._keys[e.keyCode];
+                notifier.fire(e);
+            }
+        },
+
+        on: function (node, sub, notifier) {
+            sub._detacher = node.on(this._event, this._keyHandler,
+                                    this, notifier);
+        },
+
+        detach: function (node, sub, notifier) {
+            sub._detacher.detach();
+        },
+
+        delegate: function (node, sub, notifier, filter) {
+            sub._delegateDetacher = node.delegate(this._event, this._keyHandler,
+                                                  filter, this, notifier);
+        },
+
+        detachDelegate: function (node, sub, notifier) {
+            sub._delegateDetacher.detach();
+        }
+    });
+
+
+    var robotA = Y.one('#A'),
+        robotB = Y.one('#B'),
+        subs;
+
+    robotA.setData('x', parseInt(robotA.getStyle('left'), 10));
+    robotA.setData('y', parseInt(robotA.getStyle('top'), 10));
+    robotB.setData('x', parseInt(robotB.getStyle('left'), 10));
+    robotB.setData('y', parseInt(robotB.getStyle('top'), 10));
+
+    function move(e) {
+        // to prevent page scrolling
+        e.preventDefault();
+
+        var xy = this.getData();
+
+        switch (e.direction) {
+            case 'up':    xy.y -= 10; break;
+            case 'down':  xy.y += 10; break;
+            case 'left':  xy.x -= 10; break;
+            case 'right': xy.x += 10; break;
+        }
+
+        this.transition({
+            top : (xy.y + 'px'),
+            left: (xy.x + 'px'),
+            duration: .2
+        });
+    }
+
+    function detachSubs() {
+        if (subs) {
+            subs.detach();
+            subs = null;
+        }
+    }
+
+    Y.one("#attach").on("click", function (e) {
+        detachSubs();
+
+        if (Y.one("#delegate").get('checked')) {
+            subs = Y.one('#demo').delegate('arrow', move, '.robot');
+        } else {
+            subs = new Y.EventHandle([
+                robotA.on("arrow", move),
+                robotB.on("arrow", move)
+            ]);
+        }
+    });
+
+    Y.one("#detach").on("click", detachSubs);
+
+} );
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

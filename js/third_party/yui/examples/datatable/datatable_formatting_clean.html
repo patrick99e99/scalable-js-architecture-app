@@ -1,0 +1,95 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Formatting Row Data for Display</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+/* custom styles for this example */
+.dt-example {margin:1em;}
+
+/* css to counter global site css */
+.dt-example th {text-transform:none;}
+.dt-example table {width:auto;}
+.dt-example caption {display:table-caption;}
+</style>
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Formatting Row Data for Display</h1>
+
+<div class="exampleIntro">
+	<p>Custom format row data for display with string templates or custom functions.</p>			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="template" class="dt-example"></div>
+
+<div id="function" class="dt-example"></div>
+
+<div id="dates" class="dt-example"></div>
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("datatype-date", "datatable-base", function (Y) {
+    var colsTemplate = ["id","name", {key:"price", formatter:"${value}"}],
+    dataTemplate = [
+        {id:"ga-3475", name:"gadget", price:6.99},
+        {id:"sp-9980", name:"sprocket", price:3.75},
+        {id:"wi-0650", name:"widget", price:4.25}
+    ],
+    dtTemplate = new Y.DataTable.Base({columnset:colsTemplate, recordset:dataTemplate,
+        caption:"Data formatting with string template"}).render("#template"),
+    // o = {tbody, tr, td, classnames, rowindex, record, column, data, value}
+    calculate = function(o){
+        var record = o.record;
+        return "$"+(record.getValue("price")-record.getValue("cost"));
+    },
+    colsFunction = ["id", "name", {key:"profit", formatter:calculate}],
+    dataFunction = [
+        {id:"ga-3475", name:"gadget", price:6.99, cost:4.99},
+        {id:"sp-9980", name:"sprocket", price:3.75, cost:2.75},
+        {id:"wi-0650", name:"widget", price:4.25, cost:3.25}
+    ],
+    dtFunction = new Y.DataTable.Base({columnset:colsFunction, recordset:dataFunction,
+        caption:"Data formatting with custom function"}).render("#function"),
+    // o = {tbody, tr, td, classnames, rowindex, record, column, data, value}
+    formatDates = function(o){
+        return Y.DataType.Date.format(o.value, {format:"%m/%d/%Y"});
+    },
+    colsDates = ["id", "name", {key:"date", formatter:formatDates}],
+    dataDates = [
+        {id:"ga-3475", name:"gadget", date:new Date(2006, 5, 1)},
+        {id:"sp-9980", name:"sprocket", date:new Date(2004, 8, 16)},
+        {id:"wi-0650", name:"widget", date:new Date(2005, 4, 23)}
+    ],
+    dtDates = new Y.DataTable.Base({columnset:colsDates, recordset:dataDates,
+        caption:"Data formatting with DataType.Date"}).render("#dates");
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

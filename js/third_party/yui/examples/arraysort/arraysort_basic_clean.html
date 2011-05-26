@@ -1,0 +1,102 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Case-insensitve array sorting</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+/* custom styles for this example */
+#demo_sort {margin-top:1em;}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Case-insensitve array sorting</h1>
+
+<div class="exampleIntro">
+	<p>The ArraySort utility allows arrays of strings to be sorted case-insensitively.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<form id="demo">
+    <h6>Original array</h6>
+    <pre id="original">
+["attic", "Aardvark", "1", "0", "Zoo", "zebra"]
+    </pre>
+    
+    <h6>Array sorted with native Array.sort</h6>
+    <pre id="nativesort">
+    </pre>
+
+    <h6>Array sorted with ArraySort</h6>
+    <pre id="arraysort">
+    </pre>
+
+    <input type="button" id="demo_sort" value="Sort the array =>">
+</form>
+
+
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("node", "arraysort", function (Y) {
+    Y.on("click", function(e){
+        var data_in = ["attic", "Aardvark", "1", "0", "Zoo", "zebra"];
+        
+        function dumpArray(array) {
+            var output = ["["],
+                i=0,
+                len=array.length,
+                item;
+                
+            for(; i<len; i++) {
+                item = array[i];
+                if(Y.Lang.isString(item)) {
+                    output.push("\"");
+                }
+                output.push(array[i]);
+                if(Y.Lang.isString(item)) {
+                    output.push("\"");
+                }
+                if(i !== len-1) {
+                    output.push(", ");
+                }
+            }
+            output.push("]");
+            
+            return output.join("");
+        };
+        
+        Y.one("#nativesort").setContent(dumpArray(data_in.slice().sort()));
+        Y.one("#arraysort").setContent(dumpArray(data_in.slice().sort(Y.ArraySort.compare)));
+    }, "#demo_sort");
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

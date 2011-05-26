@@ -1,0 +1,100 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Customize a Chart's Tooltip</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    width:90%;
+    max-width: 800px;
+    height:400px;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="false">
+
+<h1>Customize a Chart's Tooltip</h1>
+
+<div class="exampleIntro">
+	This example shows how to customize the default tooltip of a <code>Chart</code>.
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<html>
+<head>
+</head>
+<body>
+<div id="mychart"></div>
+<script type="text/javascript">
+(function() {
+    YUI().use('charts', function (Y) 
+    { 
+        var myDataValues = [ 
+            {category:"5/1/2010", Miscellaneous:2000, Expenses:3700, Revenue:2200}, 
+            {category:"5/2/2010", Miscellaneous:50, Expenses:9100, Revenue:100}, 
+            {category:"5/3/2010", Miscellaneous:400, Expenses:1100, Revenue:1500}, 
+            {category:"5/4/2010", Miscellaneous:200, Expenses:1900, Revenue:2800}, 
+            {category:"5/5/2010", Miscellaneous:5000, Expenses:5000, Revenue:2650}
+        ];
+        
+        var myTooltip = {
+            styles: { 
+                backgroundColor: "#333",
+                color: "#eee",
+                borderColor: "#eee",
+                textAlign: "center",
+                padding: "2px 8px 2px 8px"
+            },
+            markerLabelFunction: function(categoryItem, valueItem, itemIndex, series, seriesIndex)
+            {
+                var msg = "<span style=\"text-decoration:underline\">" + valueItem.displayName + " for " + 
+                categoryItem.axis.get("labelFunction").apply(this, [categoryItem.value, categoryItem.axis.get("labelFormat")]) + 
+                "</span><br/><div style=\"margin-top:5px;font-weight:bold\">" + valueItem.axis.get("labelFunction").apply(this, [valueItem.value, {prefix:"$", decimalPlaces:2}]) + "</div>";
+                return msg; 
+            }
+        };
+
+        var mychart = new Y.Chart({
+                            dataProvider:myDataValues, 
+                            type:"bar",
+                            render:"#mychart", 
+                            tooltip: myTooltip
+                        });
+    });
+})();
+</script>
+</body>
+</html>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

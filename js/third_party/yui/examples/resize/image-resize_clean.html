@@ -1,0 +1,135 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>8-way Image Resize</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>8-way Image Resize</h1>
+
+<div class="exampleIntro">
+	<p>This example shows a simple 8-way image resize and provides the required CSS elements required for the most common image-resize visual treatment.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<style>
+#demo {
+	height: 121px;
+	width: 182px;
+	position: absolute;
+	top: 100px;
+	left: 100px;
+}
+
+#demoContainer {
+	position: relative;
+	height: 333px;
+	width: 500px;
+    border: 1px solid black;
+}
+
+/* knob handles demo */
+
+.yui3-resize-knob .yui3-resize-handle-tr,
+.yui3-resize-knob .yui3-resize-handle-br,
+.yui3-resize-knob .yui3-resize-handle-tl,
+.yui3-resize-knob .yui3-resize-handle-bl,
+.yui3-resize-knob .yui3-resize-handle-b,
+.yui3-resize-knob .yui3-resize-handle-t,
+.yui3-resize-knob .yui3-resize-handle-l,
+.yui3-resize-knob .yui3-resize-handle-r {
+	border: 1px solid #808080;
+	background-color: #F2F2F2;
+	height: 6px;
+	width: 6px;
+}
+
+.yui3-resize-knob .yui3-resize-handle-b,
+.yui3-resize-knob .yui3-resize-handle-t {
+	left: 45%;
+}
+
+.yui3-resize-knob .yui3-resize-handle-l,
+.yui3-resize-knob .yui3-resize-handle-r {
+	top: 45%;
+}
+
+.yui3-resize-knob .yui3-resize-handle-t,
+.yui3-resize-knob .yui3-resize-handle-tr,
+.yui3-resize-knob .yui3-resize-handle-tl {
+	top: -4px;
+}
+
+.yui3-resize-knob .yui3-resize-handle-b,
+.yui3-resize-knob .yui3-resize-handle-br,
+.yui3-resize-knob .yui3-resize-handle-bl {
+	bottom: -4px;
+}
+
+.yui3-resize-knob .yui3-resize-handle-l,
+.yui3-resize-knob .yui3-resize-handle-bl,
+.yui3-resize-knob .yui3-resize-handle-tl {
+	left: -4px;
+}
+
+.yui3-resize-knob .yui3-resize-handle-r,
+.yui3-resize-knob .yui3-resize-handle-br,
+.yui3-resize-knob .yui3-resize-handle-tr {
+	right: -4px;
+}
+
+.yui3-resize-knob .yui3-resize-handle-inner {
+	background: none;
+	height: 6px;
+	width: 6px;
+}
+    
+</style>
+
+<div id="demoContainer" class="yui3-resize-knob">
+	<img id="demo" src="assets/team.jpg" alt="Eduardo Lundgren, Nate Cavanaugh and the YUI Team at Yahoo">
+</div>
+
+
+<script>
+
+YUI({ filter: 'raw' }).use('resize', function(Y) {
+    var resize = new Y.Resize({
+        //Selector of the node to resize
+        node: '#demo'
+    });   
+	resize.plug(Y.Plugin.ResizeConstrained, {
+		constrain: '#demoContainer',
+		minHeight: 50,
+		minWidth: 50
+	});
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

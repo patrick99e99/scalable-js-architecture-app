@@ -1,0 +1,325 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Dial: Dial With Image Background</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+<style>
+.yui3-skin-sam .yui3-dial-content .yui3-dial-handle-user{
+	background:url("assets/images/ball_bearing.png") no-repeat;
+	opacity:1; 
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring{
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:url("assets/images/bkg_ring_of_lines.png") no-repeat scroll 0px 0px;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button {
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:none;
+	opacity:1;
+}
+.yui3-skin-sam .yui3-dial-ring-vml v\:oval {
+	visibility:hidden;
+}
+.yui3-skin-sam .yui3-dial-ring-vml .yui3-dial-marker v\:oval {
+	visibility:visible;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring-vml{
+	background:url("assets/images/bkg_ring_of_lines.png") no-repeat scroll 0px 0px;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-handle-user-vml{
+	background:url("assets/images/ball_bearing_8.png") no-repeat scroll 0px 0px;
+	opacity:1; 
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button-vml {
+	background:url(assets/images/empty.png);
+}
+</style>
+</head>
+<body id="yahoo-com" class="yui3-skin-sam  yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Dial: Dial With Image Background</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>Dial: Dial With Image Background</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	<p>This example shows how to create a <code>Dial</code> widget using background images for the ring and the handle.</p>	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="dial-image-background_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<div id="demo"></div>
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("dial", function(Y) {
+
+	var dial = new Y.Dial({
+		min:-220,
+		max:220,
+		stepsPerRev:100,
+		value: 30
+	});
+    dial.render('#demo');
+
+});
+</script>
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<h3>Creating a Dial With Images as Backgrounds</h3>
+
+<p>A <code>Dial</code> can be created that has its presentation determined by background images.
+This can be done with CSS, providing the images can be contained within the dimensions of the <code>Dial</code> elements.
+</p>
+
+<h4>The Markup</h4>
+
+<p>The only markup requirement is an element to contain the <code>Dial</code></p>
+
+<div id="syntax-cf0d80e459e71f73c62900b3bcd09cf7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></pre></div><textarea id="syntax-cf0d80e459e71f73c62900b3bcd09cf7-plain"><div id="demo"></div></textarea></div>
+<h4>The JavaScript</h4>
+
+<p>The same JavaScript can be used as in the basic Dial example.</p>
+<p><code>Dial</code> extends the <code>Widget</code> class, following the same pattern 
+as any widget constructor, accepting a configuration object to 
+set the initial configuration for the widget.</p>
+
+<p>After creating and configuring the new <code>Dial</code>, 
+call the <code>render</code> method on your <code>Dial</code> object passing it
+the selector of a container object. 
+This renders it in the container and makes it usable.</p>
+
+<p>Some commonly used configuration attributes are shown below. 
+</p>
+
+<div id="syntax-ba19acd19f87be4e2a6e612460311e12" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#123;</span> filter<span class="sy0">:</span> <span class="st0">'raw'</span> <span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;dial&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> dial <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Dial</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		min<span class="sy0">:-</span><span class="nu0">220</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		max<span class="sy0">:</span><span class="nu0">220</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		stepsPerRev<span class="sy0">:</span><span class="nu0">100</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		value<span class="sy0">:</span> <span class="nu0">30</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    dial.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;#demo&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#123;</span> filter<span class="sy0">:</span> <span class="st0">'raw'</span> <span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;dial&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+	<span class="kw2">var</span> dial <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Dial</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+		min<span class="sy0">:-</span><span class="nu0">220</span><span class="sy0">,</span>
+		max<span class="sy0">:</span><span class="nu0">220</span><span class="sy0">,</span>
+		stepsPerRev<span class="sy0">:</span><span class="nu0">100</span><span class="sy0">,</span>
+		value<span class="sy0">:</span> <span class="nu0">30</span>
+	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    dial.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;#demo&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-ba19acd19f87be4e2a6e612460311e12-plain">YUI({ filter: 'raw' }).use("dial", function(Y) {
+
+	var dial = new Y.Dial({
+		min:-220,
+		max:220,
+		stepsPerRev:100,
+		value: 30
+	});
+    dial.render("#demo");
+	
+});</textarea></div>
+<h4>The CSS</h4>
+
+<p> 
+In this example we add an image of a ball bearing to the dial <code>handle-user</code> object's background.
+Note that this is <code>yui3-dial-handle-user</code>, the object seen by the user, 
+not <code>yui3-dial-handle</code>, its container object.</p>
+
+<p>We'll also add an image of a circle of radial lines to the background ring object.
+To make these changes, we only need to do two things. </p>
+
+<ol>
+	<li>Remove some of the CSS styling on the elements we want to display as images.</li>
+	<li>Add the background URL to the image rule of the selectors of those objects as shown below.</li>
+</ol>	
+
+<div id="syntax-1c47dd77bc76c28397a31a4155dfeb3c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>handle<span class="sy0">-</span>user<span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/ball_bearing.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	opacity<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">;</span> <span class="co2">/*Normally the user handle is not full opacity*/</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">-</span>moz<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">-</span>webkit<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">-</span>moz<span class="sy0">-</span>box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/bkg_ring_of_lines.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat <span class="kw3">scroll</span> 0px 0px<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>center<span class="sy0">-</span>button <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">-</span>moz<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	<span class="sy0">-</span>webkit<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">-</span>moz<span class="sy0">-</span>box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	background<span class="sy0">:</span>none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	opacity<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*Normally the center button is not full opacity. </span></div></li><li class="li2"><div class="de2"><span class="coMULTI">	In this case it doesn't matter since we are removing the </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	styles and not adding a bitmap*/</span> </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="co2">/* Hide the VML ovals in IE. */</span></div></li><li class="li1"><div class="de1">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="sy0">-</span>vml v\<span class="sy0">:</span>oval <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	visibility<span class="sy0">:</span>hidden<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="co2">/* Show the marker VML oval */</span></div></li><li class="li1"><div class="de1">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="sy0">-</span>vml .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>marker v\<span class="sy0">:</span>oval <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	visibility<span class="sy0">:</span>visible<span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="sy0">-</span>vml<span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/bkg_ring_of_lines.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat <span class="kw3">scroll</span> 0px 0px<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>handle<span class="sy0">-</span>user<span class="sy0">-</span>vml<span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/ball_bearing_8.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat <span class="kw3">scroll</span> 0px 0px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	opacity<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>center<span class="sy0">-</span>button<span class="sy0">-</span>vml <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/empty.png&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>handle<span class="sy0">-</span>user<span class="br0">&#123;</span>
+	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/ball_bearing.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat<span class="sy0">;</span>
+	opacity<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">;</span> <span class="co2">/*Normally the user handle is not full opacity*/</span>
+<span class="br0">&#125;</span>
+.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="br0">&#123;</span>
+	box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span>
+	<span class="sy0">-</span>moz<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span>
+	<span class="sy0">-</span>webkit<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span>
+	<span class="sy0">-</span>moz<span class="sy0">-</span>box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span>
+	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/bkg_ring_of_lines.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat <span class="kw3">scroll</span> 0px 0px<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>center<span class="sy0">-</span>button <span class="br0">&#123;</span>
+	box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span>
+	<span class="sy0">-</span>moz<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span>
+	<span class="sy0">-</span>webkit<span class="sy0">-</span>border<span class="sy0">-</span>radius<span class="sy0">:</span> none<span class="sy0">;</span>
+	<span class="sy0">-</span>moz<span class="sy0">-</span>box<span class="sy0">-</span>shadow<span class="sy0">:</span> none<span class="sy0">;</span>
+	background<span class="sy0">:</span>none<span class="sy0">;</span>
+	opacity<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">;</span>
+	<span class="coMULTI">/*Normally the center button is not full opacity. 
+	In this case it doesn't matter since we are removing the 
+	styles and not adding a bitmap*/</span> 
+<span class="br0">&#125;</span>
+<span class="co2">/* Hide the VML ovals in IE. */</span>
+.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="sy0">-</span>vml v\<span class="sy0">:</span>oval <span class="br0">&#123;</span>
+	visibility<span class="sy0">:</span>hidden<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+<span class="co2">/* Show the marker VML oval */</span>
+.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="sy0">-</span>vml .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>marker v\<span class="sy0">:</span>oval <span class="br0">&#123;</span>
+	visibility<span class="sy0">:</span>visible<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>ring<span class="sy0">-</span>vml<span class="br0">&#123;</span>
+	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/bkg_ring_of_lines.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat <span class="kw3">scroll</span> 0px 0px<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>handle<span class="sy0">-</span>user<span class="sy0">-</span>vml<span class="br0">&#123;</span>
+	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/ball_bearing_8.png&quot;</span><span class="br0">&#41;</span> no<span class="sy0">-</span>repeat <span class="kw3">scroll</span> 0px 0px<span class="sy0">;</span>
+	opacity<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">;</span> 
+<span class="br0">&#125;</span>
+.<span class="me1">yui3</span><span class="sy0">-</span>skin<span class="sy0">-</span>sam .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>content .<span class="me1">yui3</span><span class="sy0">-</span>dial<span class="sy0">-</span>center<span class="sy0">-</span>button<span class="sy0">-</span>vml <span class="br0">&#123;</span>
+	background<span class="sy0">:</span>url<span class="br0">&#40;</span><span class="st0">&quot;assets/images/empty.png&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre></div><textarea id="syntax-1c47dd77bc76c28397a31a4155dfeb3c-plain">.yui3-skin-sam .yui3-dial-content .yui3-dial-handle-user{
+	background:url("assets/images/ball_bearing.png") no-repeat;
+	opacity:1; /*Normally the user handle is not full opacity*/
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring{
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:url("assets/images/bkg_ring_of_lines.png") no-repeat scroll 0px 0px;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button {
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:none;
+	opacity:1;
+	/*Normally the center button is not full opacity. 
+	In this case it doesn't matter since we are removing the 
+	styles and not adding a bitmap*/ 
+}
+/* Hide the VML ovals in IE. */
+.yui3-skin-sam .yui3-dial-ring-vml v\:oval {
+	visibility:hidden;
+}
+/* Show the marker VML oval */
+.yui3-skin-sam .yui3-dial-ring-vml .yui3-dial-marker v\:oval {
+	visibility:visible;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring-vml{
+	background:url("assets/images/bkg_ring_of_lines.png") no-repeat scroll 0px 0px;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-handle-user-vml{
+	background:url("assets/images/ball_bearing_8.png") no-repeat scroll 0px 0px;
+	opacity:1; 
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button-vml {
+	background:url("assets/images/empty.png");
+}</textarea></div>				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    Dial Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li><a href='../dial/dial-basic.html'>Basic Dial</a></li><li><a href='../dial/dial-text-input.html'>Dial Linked With Text Input</a></li><li class='selected'><a href='../dial/dial-image-background.html'>Dial With Image Background</a></li><li><a href='../dial/dial-image-surrounding.html'>Dial With a Surrounding Image</a></li><li><a href='../dial/dial-interactive.html'>Dial With Interactive UI</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More Dial Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/dial/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_dial.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="item"><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="item"><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="selected "><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

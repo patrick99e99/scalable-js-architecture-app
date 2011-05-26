@@ -1,0 +1,63 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Remote Data via YQL</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#ac-input { width: 250px; }
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Remote Data via YQL</h1>
+
+<div class="exampleIntro">
+	<p>
+This example demonstrates how to provide autocomplete suggestions using a YQL query as the source. In this case, we're using the <a href="http://developer.yahoo.com/yql/console/#h=select%20*%20from%20search.suggest%20where%20query%3D%22yui%20autocomplete%22"><code>search.suggest</code> YQL table</a> to provide suggestions based on popular Yahoo! Search queries.
+</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="demo">
+  <label for="ac-input">Search:</label><br>
+  <input id="ac-input" type="text">
+</div>
+
+<script>
+YUI({ filter: 'raw' }).use("autocomplete", "autocomplete-highlighters", function (Y) {
+  Y.one('#ac-input').plug(Y.Plugin.AutoComplete, {
+    resultHighlighter: 'phraseMatch',
+    source: 'select * from search.suggest where query="{query}"'
+  });
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

@@ -1,0 +1,739 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: AutoComplete: Find Photos on Flickr (Custom Formatting, YQL Source)</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+
+<!--there is no custom header content for this example-->
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+</head>
+<body id="yahoo-com" class="yui3-skin-sam  yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: AutoComplete: Find Photos on Flickr (Custom Formatting, YQL Source)</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>AutoComplete: Find Photos on Flickr (Custom Formatting, YQL Source)</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	<p>
+This example uses the Flickr Search API (via YQL) to allow the user to select photo results based on a search query. After each photo is selected, it's added to the collection of photos displayed below the input field.
+</p>
+
+<p>
+A custom <code>resultFormatter</code> is used to format the Flickr results in the AutoComplete dropdown list, and a custom <code>select</code> event handler is used to override the default selection logic.
+</p>	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="ac_flickr_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<style>
+  #ac-input { width: 300px; }
+
+  #photos {
+    border: 1px solid #cfcfcf;
+    list-style: none;
+    margin: 1.5em 0 0;
+    padding: 6px;
+  }
+
+  #photos li {
+    display: inline-block;
+    list-style: none;
+
+    /* fake inline-block for IE<8 */
+    zoom: 1;
+    *display: inline;
+  }
+
+  #photos .empty { font-style: italic; }
+
+  #photos .photo {
+    margin: 5px;
+    text-align: center;
+    width: 100px;
+  }
+
+  #photos .photo img {
+    border: 1px solid #000;
+    vertical-align: top;
+  }
+
+  .result {
+    margin: 2px 0;
+    zoom: 1;
+  }
+
+  .result:after {
+    clear: both;
+    content: '.';
+    display: block;
+    height: 0;
+    visibility: hidden;
+  }
+
+  .result .photo {
+    height: 32px;
+    float: left;
+    margin-right: 6px;
+    width: 32px;
+  }
+
+  .result .title { vertical-align: top; }
+</style>
+
+<div id="demo">
+  <label for="ac-input">Search Flickr:</label><br>
+  <input id="ac-input" type="text">
+
+  <ul id="photos">
+    <li class="empty">No photos selected.</li>
+  </ul>
+</div>
+
+<script>
+YUI({ filter: 'raw' }).use("autocomplete", "autocomplete-highlighters", function (Y) {
+  var inputNode  = Y.one('#ac-input'),
+      photosNode = Y.one('#photos');
+
+  // Constructs an image URL for the Flickr photo represented by the given
+  // AutoComplete result object.
+  function getImageUrl(result, size) {
+    if (!size) { size = 's'; }
+
+    return Y.Lang.sub(
+      'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_' + size + '.jpg',
+      result.raw
+    );
+  }
+
+  inputNode.plug(Y.Plugin.AutoComplete, {
+    maxResults: 5,
+    resultHighlighter: 'wordMatch',
+    resultTextLocator: 'title',
+    source: 'select * from flickr.photos.search where text="{query}" limit {maxResults}',
+
+    // Custom result formatter for Flickr results.
+    resultFormatter: function (query, results) {
+      return Y.Array.map(results, function (result) {
+        return '<div class="result">' +
+                 '<img class="photo" src="' + getImageUrl(result) + '" alt="thumbnail">' +
+                 '<span class="title">' + result.highlighted + '</span>' +
+               '</div>';
+      });
+    }
+  });
+
+  // After a photo is selected, add it to the collection.
+  inputNode.ac.on('select', function (e) {
+    var result = e.result;
+
+    // Prevent the default select handler so we can provide our own selection
+    // behavior instead.
+    e.preventDefault();
+
+    inputNode.select();
+    inputNode.ac.hide();
+
+    // Remove the 'No photos selected' message if it exists.
+    photosNode.all('.empty').remove();
+
+    // Append a new list item containing the selected photo.
+    photosNode.append(
+      '<li class="photo">' +
+        '<img src="' + getImageUrl(result, 't') +
+            '" alt="' + result.raw.title + '" title="' + result.raw.title + '">' +
+      '</li>'
+    );
+  });
+});
+</script>
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<h3>HTML</h3>
+
+<div id="syntax-a4eb11eac0e378f18a23240743e8018e" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;demo&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span>&gt;</span>Search Flickr:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">br</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  <span class="sc2">&lt;<span class="kw2">ul</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;photos&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;empty&quot;</span>&gt;</span>No photos selected.<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;demo&quot;</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span>&gt;</span>Search Flickr:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">br</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span>&gt;</span>
+&nbsp;
+  <span class="sc2">&lt;<span class="kw2">ul</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;photos&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;empty&quot;</span>&gt;</span>No photos selected.<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+  <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></pre></div><textarea id="syntax-a4eb11eac0e378f18a23240743e8018e-plain"><div id="demo">
+  <label for="ac-input">Search Flickr:</label><br>
+  <input id="ac-input" type="text">
+
+  <ul id="photos">
+    <li class="empty">No photos selected.</li>
+  </ul>
+</div></textarea></div>
+<h3>CSS</h3>
+
+<div id="syntax-f0bb4e87037bf09d5879f15635956c3f" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#ac-input</span> <span class="br0">&#123;</span> <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">300px</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#photos</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#cfcfcf</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">1.5em</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">padding</span><span class="sy0">:</span> <span class="re3">6px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="re0">#photos</span> li <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">display</span><span class="sy0">:</span> inline-<span class="kw2">block</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="coMULTI">/* fake inline-block for IE&lt;8 */</span></div></li><li class="li2"><div class="de2">  zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">inline</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#photos</span> <span class="re1">.empty</span> <span class="br0">&#123;</span> <span class="kw1">font-style</span><span class="sy0">:</span> <span class="kw2">italic</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#photos</span> <span class="re1">.photo</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">5px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">text-align</span><span class="sy0">:</span> <span class="kw2">center</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">100px</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#photos</span> <span class="re1">.photo</span> img <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#000</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">vertical-align</span><span class="sy0">:</span> <span class="kw1">top</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re1">.result</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">2px</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re1">.result</span><span class="re2">:after </span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">clear</span><span class="sy0">:</span> <span class="kw2">both</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">content</span><span class="sy0">:</span> <span class="st0">'.'</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">  <span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">block</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">height</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">visibility</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="re1">.result</span> <span class="re1">.photo</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">32px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">float</span><span class="sy0">:</span> <span class="kw1">left</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">margin-right</span><span class="sy0">:</span> <span class="re3">6px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">32px</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re1">.result</span> <span class="re1">.title</span> <span class="br0">&#123;</span> <span class="kw1">vertical-align</span><span class="sy0">:</span> <span class="kw1">top</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#ac-input</span> <span class="br0">&#123;</span> <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">300px</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="br0">&#123;</span>
+  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#cfcfcf</span><span class="sy0">;</span>
+  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">1.5em</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span>
+  <span class="kw1">padding</span><span class="sy0">:</span> <span class="re3">6px</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> li <span class="br0">&#123;</span>
+  <span class="kw1">display</span><span class="sy0">:</span> inline-<span class="kw2">block</span><span class="sy0">;</span>
+  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+&nbsp;
+  <span class="coMULTI">/* fake inline-block for IE&lt;8 */</span>
+  zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span>
+  <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">inline</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="re1">.empty</span> <span class="br0">&#123;</span> <span class="kw1">font-style</span><span class="sy0">:</span> <span class="kw2">italic</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="re1">.photo</span> <span class="br0">&#123;</span>
+  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">5px</span><span class="sy0">;</span>
+  <span class="kw1">text-align</span><span class="sy0">:</span> <span class="kw2">center</span><span class="sy0">;</span>
+  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">100px</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="re1">.photo</span> img <span class="br0">&#123;</span>
+  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#000</span><span class="sy0">;</span>
+  <span class="kw1">vertical-align</span><span class="sy0">:</span> <span class="kw1">top</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re1">.result</span> <span class="br0">&#123;</span>
+  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">2px</span> <span class="nu0">0</span><span class="sy0">;</span>
+  zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re1">.result</span><span class="re2">:after </span><span class="br0">&#123;</span>
+  <span class="kw1">clear</span><span class="sy0">:</span> <span class="kw2">both</span><span class="sy0">;</span>
+  <span class="kw1">content</span><span class="sy0">:</span> <span class="st0">'.'</span><span class="sy0">;</span>
+  <span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">block</span><span class="sy0">;</span>
+  <span class="kw1">height</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span>
+  <span class="kw1">visibility</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re1">.result</span> <span class="re1">.photo</span> <span class="br0">&#123;</span>
+  <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">32px</span><span class="sy0">;</span>
+  <span class="kw1">float</span><span class="sy0">:</span> <span class="kw1">left</span><span class="sy0">;</span>
+  <span class="kw1">margin-right</span><span class="sy0">:</span> <span class="re3">6px</span><span class="sy0">;</span>
+  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">32px</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re1">.result</span> <span class="re1">.title</span> <span class="br0">&#123;</span> <span class="kw1">vertical-align</span><span class="sy0">:</span> <span class="kw1">top</span><span class="sy0">;</span> <span class="br0">&#125;</span></pre></div><textarea id="syntax-f0bb4e87037bf09d5879f15635956c3f-plain">#ac-input { width: 300px; }
+
+#photos {
+  border: 1px solid #cfcfcf;
+  list-style: none;
+  margin: 1.5em 0 0;
+  padding: 6px;
+}
+
+#photos li {
+  display: inline-block;
+  list-style: none;
+
+  /* fake inline-block for IE<8 */
+  zoom: 1;
+  *display: inline;
+}
+
+#photos .empty { font-style: italic; }
+
+#photos .photo {
+  margin: 5px;
+  text-align: center;
+  width: 100px;
+}
+
+#photos .photo img {
+  border: 1px solid #000;
+  vertical-align: top;
+}
+
+.result {
+  margin: 2px 0;
+  zoom: 1;
+}
+
+.result:after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.result .photo {
+  height: 32px;
+  float: left;
+  margin-right: 6px;
+  width: 32px;
+}
+
+.result .title { vertical-align: top; }</textarea></div>
+<h3>JavaScript</h3>
+
+<div id="syntax-3dfe83635885cf9a9663940d4a748c64" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-highlighters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw2">var</span> inputNode  <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#ac-input'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      photosNode <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#photos'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  <span class="co1">// Constructs an image URL for the Flickr photo represented by the given</span></div></li><li class="li1"><div class="de1">  <span class="co1">// AutoComplete result object.</span></div></li><li class="li1"><div class="de1">  <span class="kw2">function</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> size<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span>size<span class="br0">&#41;</span> <span class="br0">&#123;</span> size <span class="sy0">=</span> <span class="st0">'s'</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw1">return</span> Y.<span class="me1">Lang</span>.<span class="me1">sub</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">      <span class="st0">'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_'</span> <span class="sy0">+</span> size <span class="sy0">+</span> <span class="st0">'.jpg'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      result.<span class="me1">raw</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">  inputNode.<span class="me1">plug</span><span class="br0">&#40;</span>Y.<span class="me1">Plugin</span>.<span class="me1">AutoComplete</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    maxResults<span class="sy0">:</span> <span class="nu0">5</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    resultHighlighter<span class="sy0">:</span> <span class="st0">'wordMatch'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    resultTextLocator<span class="sy0">:</span> <span class="st0">'title'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    source<span class="sy0">:</span> <span class="st0">'select * from flickr.photos.search where text=&quot;{query}&quot; limit {maxResults}'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Custom result formatter for Flickr results.</span></div></li><li class="li1"><div class="de1">    resultFormatter<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>query<span class="sy0">,</span> results<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">      <span class="kw1">return</span> Y.<span class="me1">Array</span>.<span class="me1">map</span><span class="br0">&#40;</span>results<span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">return</span> <span class="st0">'&lt;div class=&quot;result&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">                 <span class="st0">'&lt;img class=&quot;photo&quot; src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'&quot; alt=&quot;thumbnail&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">                 <span class="st0">'&lt;span class=&quot;title&quot;&gt;'</span> <span class="sy0">+</span> result.<span class="me1">highlighted</span> <span class="sy0">+</span> <span class="st0">'&lt;/span&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">               <span class="st0">'&lt;/div&gt;'</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="co1">// After a photo is selected, add it to the collection.</span></div></li><li class="li1"><div class="de1">  inputNode.<span class="me1">ac</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'select'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> result <span class="sy0">=</span> e.<span class="me1">result</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Prevent the default select handler so we can provide our own selection</span></div></li><li class="li1"><div class="de1">    <span class="co1">// behavior instead.</span></div></li><li class="li1"><div class="de1">    e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    inputNode.<span class="me1">select</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    inputNode.<span class="me1">ac</span>.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Remove the 'No photos selected' message if it exists.</span></div></li><li class="li2"><div class="de2">    photosNode.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'.empty'</span><span class="br0">&#41;</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Append a new list item containing the selected photo.</span></div></li><li class="li1"><div class="de1">    photosNode.<span class="me1">append</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">      <span class="st0">'&lt;li class=&quot;photo&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li2"><div class="de2">        <span class="st0">'&lt;img src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> <span class="st0">'t'</span><span class="br0">&#41;</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">            <span class="st0">'&quot; alt=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot; title=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">      <span class="st0">'&lt;/li&gt;'</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-highlighters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+  <span class="kw2">var</span> inputNode  <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#ac-input'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+      photosNode <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#photos'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="co1">// Constructs an image URL for the Flickr photo represented by the given</span>
+  <span class="co1">// AutoComplete result object.</span>
+  <span class="kw2">function</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> size<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span>size<span class="br0">&#41;</span> <span class="br0">&#123;</span> size <span class="sy0">=</span> <span class="st0">'s'</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+    <span class="kw1">return</span> Y.<span class="me1">Lang</span>.<span class="me1">sub</span><span class="br0">&#40;</span>
+      <span class="st0">'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_'</span> <span class="sy0">+</span> size <span class="sy0">+</span> <span class="st0">'.jpg'</span><span class="sy0">,</span>
+      result.<span class="me1">raw</span>
+    <span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  inputNode.<span class="me1">plug</span><span class="br0">&#40;</span>Y.<span class="me1">Plugin</span>.<span class="me1">AutoComplete</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    maxResults<span class="sy0">:</span> <span class="nu0">5</span><span class="sy0">,</span>
+    resultHighlighter<span class="sy0">:</span> <span class="st0">'wordMatch'</span><span class="sy0">,</span>
+    resultTextLocator<span class="sy0">:</span> <span class="st0">'title'</span><span class="sy0">,</span>
+    source<span class="sy0">:</span> <span class="st0">'select * from flickr.photos.search where text=&quot;{query}&quot; limit {maxResults}'</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Custom result formatter for Flickr results.</span>
+    resultFormatter<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>query<span class="sy0">,</span> results<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      <span class="kw1">return</span> Y.<span class="me1">Array</span>.<span class="me1">map</span><span class="br0">&#40;</span>results<span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">return</span> <span class="st0">'&lt;div class=&quot;result&quot;&gt;'</span> <span class="sy0">+</span>
+                 <span class="st0">'&lt;img class=&quot;photo&quot; src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'&quot; alt=&quot;thumbnail&quot;&gt;'</span> <span class="sy0">+</span>
+                 <span class="st0">'&lt;span class=&quot;title&quot;&gt;'</span> <span class="sy0">+</span> result.<span class="me1">highlighted</span> <span class="sy0">+</span> <span class="st0">'&lt;/span&gt;'</span> <span class="sy0">+</span>
+               <span class="st0">'&lt;/div&gt;'</span><span class="sy0">;</span>
+      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="co1">// After a photo is selected, add it to the collection.</span>
+  inputNode.<span class="me1">ac</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'select'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> result <span class="sy0">=</span> e.<span class="me1">result</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Prevent the default select handler so we can provide our own selection</span>
+    <span class="co1">// behavior instead.</span>
+    e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    inputNode.<span class="me1">select</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    inputNode.<span class="me1">ac</span>.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Remove the 'No photos selected' message if it exists.</span>
+    photosNode.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'.empty'</span><span class="br0">&#41;</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Append a new list item containing the selected photo.</span>
+    photosNode.<span class="me1">append</span><span class="br0">&#40;</span>
+      <span class="st0">'&lt;li class=&quot;photo&quot;&gt;'</span> <span class="sy0">+</span>
+        <span class="st0">'&lt;img src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> <span class="st0">'t'</span><span class="br0">&#41;</span> <span class="sy0">+</span>
+            <span class="st0">'&quot; alt=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot; title=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot;&gt;'</span> <span class="sy0">+</span>
+      <span class="st0">'&lt;/li&gt;'</span>
+    <span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-3dfe83635885cf9a9663940d4a748c64-plain">YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
+  var inputNode  = Y.one('#ac-input'),
+      photosNode = Y.one('#photos');
+
+  // Constructs an image URL for the Flickr photo represented by the given
+  // AutoComplete result object.
+  function getImageUrl(result, size) {
+    if (!size) { size = 's'; }
+
+    return Y.Lang.sub(
+      'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_' + size + '.jpg',
+      result.raw
+    );
+  }
+
+  inputNode.plug(Y.Plugin.AutoComplete, {
+    maxResults: 5,
+    resultHighlighter: 'wordMatch',
+    resultTextLocator: 'title',
+    source: 'select * from flickr.photos.search where text="{query}" limit {maxResults}',
+
+    // Custom result formatter for Flickr results.
+    resultFormatter: function (query, results) {
+      return Y.Array.map(results, function (result) {
+        return '<div class="result">' +
+                 '<img class="photo" src="' + getImageUrl(result) + '" alt="thumbnail">' +
+                 '<span class="title">' + result.highlighted + '</span>' +
+               '</div>';
+      });
+    }
+  });
+
+  // After a photo is selected, add it to the collection.
+  inputNode.ac.on('select', function (e) {
+    var result = e.result;
+
+    // Prevent the default select handler so we can provide our own selection
+    // behavior instead.
+    e.preventDefault();
+
+    inputNode.select();
+    inputNode.ac.hide();
+
+    // Remove the 'No photos selected' message if it exists.
+    photosNode.all('.empty').remove();
+
+    // Append a new list item containing the selected photo.
+    photosNode.append(
+      '<li class="photo">' +
+        '<img src="' + getImageUrl(result, 't') +
+            '" alt="' + result.raw.title + '" title="' + result.raw.title + '">' +
+      '</li>'
+    );
+  });
+});</textarea></div>
+<h3>Complete Example Source</h3>
+
+<div id="syntax-6489cd3dc106307fac7dcb7f42c6e0c2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sy0">&lt;</span>style<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">  #ac<span class="sy0">-</span>input <span class="br0">&#123;</span> width<span class="sy0">:</span> 300px<span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  #photos <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    border<span class="sy0">:</span> 1px solid #cfcfcf<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    margin<span class="sy0">:</span> 1.5em <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    padding<span class="sy0">:</span> 6px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">  #photos li <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    display<span class="sy0">:</span> inline<span class="sy0">-</span>block<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co2">/* fake inline-block for IE&lt;8 */</span></div></li><li class="li1"><div class="de1">    zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span>display<span class="sy0">:</span> inline<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  #photos .<span class="me1">empty</span> <span class="br0">&#123;</span> font<span class="sy0">-</span>style<span class="sy0">:</span> italic<span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  #photos .<span class="me1">photo</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    margin<span class="sy0">:</span> 5px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    text<span class="sy0">-</span>align<span class="sy0">:</span> center<span class="sy0">;</span></div></li><li class="li2"><div class="de2">    width<span class="sy0">:</span> 100px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  #photos .<span class="me1">photo</span> img <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    border<span class="sy0">:</span> 1px solid #000<span class="sy0">;</span></div></li><li class="li2"><div class="de2">    vertical<span class="sy0">-</span>align<span class="sy0">:</span> top<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  .<span class="me1">result</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    margin<span class="sy0">:</span> 2px <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  .<span class="me1">result</span><span class="sy0">:</span>after <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    clear<span class="sy0">:</span> both<span class="sy0">;</span></div></li><li class="li2"><div class="de2">    content<span class="sy0">:</span> <span class="st0">'.'</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    display<span class="sy0">:</span> block<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    visibility<span class="sy0">:</span> hidden<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">  .<span class="me1">result</span> .<span class="me1">photo</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> 32px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    float<span class="sy0">:</span> left<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    margin<span class="sy0">-</span>right<span class="sy0">:</span> 6px<span class="sy0">;</span></div></li><li class="li2"><div class="de2">    width<span class="sy0">:</span> 32px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  .<span class="me1">result</span> .<span class="me1">title</span> <span class="br0">&#123;</span> vertical<span class="sy0">-</span>align<span class="sy0">:</span> top<span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="sy0">&lt;/</span>style<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">&lt;</span>label <span class="kw1">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span><span class="sy0">&gt;</span>Search Flickr<span class="sy0">:&lt;/</span>label<span class="sy0">&gt;&lt;</span>br<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">&lt;</span>input id<span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> type<span class="sy0">=</span><span class="st0">&quot;text&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  <span class="sy0">&lt;</span>ul id<span class="sy0">=</span><span class="st0">&quot;photos&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;empty&quot;</span><span class="sy0">&gt;</span>No photos selected.<span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">&lt;/</span>ul<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1"><span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sy0">&lt;</span>script<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-highlighters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw2">var</span> inputNode  <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#ac-input'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      photosNode <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#photos'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  <span class="co1">// Constructs an image URL for the Flickr photo represented by the given</span></div></li><li class="li1"><div class="de1">  <span class="co1">// AutoComplete result object.</span></div></li><li class="li1"><div class="de1">  <span class="kw2">function</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> size<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span>size<span class="br0">&#41;</span> <span class="br0">&#123;</span> size <span class="sy0">=</span> <span class="st0">'s'</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw1">return</span> Y.<span class="me1">Lang</span>.<span class="me1">sub</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">      <span class="st0">'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_'</span> <span class="sy0">+</span> size <span class="sy0">+</span> <span class="st0">'.jpg'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      result.<span class="me1">raw</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">  inputNode.<span class="me1">plug</span><span class="br0">&#40;</span>Y.<span class="me1">Plugin</span>.<span class="me1">AutoComplete</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    maxResults<span class="sy0">:</span> <span class="nu0">5</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    resultHighlighter<span class="sy0">:</span> <span class="st0">'wordMatch'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    resultTextLocator<span class="sy0">:</span> <span class="st0">'title'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    source<span class="sy0">:</span> <span class="st0">'select * from flickr.photos.search where text=&quot;{query}&quot; limit {maxResults}'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Custom result formatter for Flickr results.</span></div></li><li class="li1"><div class="de1">    resultFormatter<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>query<span class="sy0">,</span> results<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">      <span class="kw1">return</span> Y.<span class="me1">Array</span>.<span class="me1">map</span><span class="br0">&#40;</span>results<span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">return</span> <span class="st0">'&lt;div class=&quot;result&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">                 <span class="st0">'&lt;img class=&quot;photo&quot; src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'&quot; alt=&quot;thumbnail&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">                 <span class="st0">'&lt;span class=&quot;title&quot;&gt;'</span> <span class="sy0">+</span> result.<span class="me1">highlighted</span> <span class="sy0">+</span> <span class="st0">'&lt;/span&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">               <span class="st0">'&lt;/div&gt;'</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="co1">// After a photo is selected, add it to the collection.</span></div></li><li class="li1"><div class="de1">  inputNode.<span class="me1">ac</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'select'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> result <span class="sy0">=</span> e.<span class="me1">result</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Prevent the default select handler so we can provide our own selection</span></div></li><li class="li1"><div class="de1">    <span class="co1">// behavior instead.</span></div></li><li class="li1"><div class="de1">    e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    inputNode.<span class="me1">select</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    inputNode.<span class="me1">ac</span>.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Remove the 'No photos selected' message if it exists.</span></div></li><li class="li2"><div class="de2">    photosNode.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'.empty'</span><span class="br0">&#41;</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Append a new list item containing the selected photo.</span></div></li><li class="li1"><div class="de1">    photosNode.<span class="me1">append</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">      <span class="st0">'&lt;li class=&quot;photo&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li2"><div class="de2">        <span class="st0">'&lt;img src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> <span class="st0">'t'</span><span class="br0">&#41;</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">            <span class="st0">'&quot; alt=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot; title=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot;&gt;'</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">      <span class="st0">'&lt;/li&gt;'</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="sy0">&lt;/</span>script<span class="sy0">&gt;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="sy0">&lt;</span>style<span class="sy0">&gt;</span>
+  #ac<span class="sy0">-</span>input <span class="br0">&#123;</span> width<span class="sy0">:</span> 300px<span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+  #photos <span class="br0">&#123;</span>
+    border<span class="sy0">:</span> 1px solid #cfcfcf<span class="sy0">;</span>
+    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span>
+    margin<span class="sy0">:</span> 1.5em <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span>
+    padding<span class="sy0">:</span> 6px<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  #photos li <span class="br0">&#123;</span>
+    display<span class="sy0">:</span> inline<span class="sy0">-</span>block<span class="sy0">;</span>
+    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span>
+&nbsp;
+    <span class="co2">/* fake inline-block for IE&lt;8 */</span>
+    zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span>
+    <span class="sy0">*</span>display<span class="sy0">:</span> inline<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  #photos .<span class="me1">empty</span> <span class="br0">&#123;</span> font<span class="sy0">-</span>style<span class="sy0">:</span> italic<span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+  #photos .<span class="me1">photo</span> <span class="br0">&#123;</span>
+    margin<span class="sy0">:</span> 5px<span class="sy0">;</span>
+    text<span class="sy0">-</span>align<span class="sy0">:</span> center<span class="sy0">;</span>
+    width<span class="sy0">:</span> 100px<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  #photos .<span class="me1">photo</span> img <span class="br0">&#123;</span>
+    border<span class="sy0">:</span> 1px solid #000<span class="sy0">;</span>
+    vertical<span class="sy0">-</span>align<span class="sy0">:</span> top<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  .<span class="me1">result</span> <span class="br0">&#123;</span>
+    margin<span class="sy0">:</span> 2px <span class="nu0">0</span><span class="sy0">;</span>
+    zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  .<span class="me1">result</span><span class="sy0">:</span>after <span class="br0">&#123;</span>
+    clear<span class="sy0">:</span> both<span class="sy0">;</span>
+    content<span class="sy0">:</span> <span class="st0">'.'</span><span class="sy0">;</span>
+    display<span class="sy0">:</span> block<span class="sy0">;</span>
+    height<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span>
+    visibility<span class="sy0">:</span> hidden<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  .<span class="me1">result</span> .<span class="me1">photo</span> <span class="br0">&#123;</span>
+    height<span class="sy0">:</span> 32px<span class="sy0">;</span>
+    float<span class="sy0">:</span> left<span class="sy0">;</span>
+    margin<span class="sy0">-</span>right<span class="sy0">:</span> 6px<span class="sy0">;</span>
+    width<span class="sy0">:</span> 32px<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  .<span class="me1">result</span> .<span class="me1">title</span> <span class="br0">&#123;</span> vertical<span class="sy0">-</span>align<span class="sy0">:</span> top<span class="sy0">;</span> <span class="br0">&#125;</span>
+<span class="sy0">&lt;/</span>style<span class="sy0">&gt;</span>
+&nbsp;
+<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;</span>
+  <span class="sy0">&lt;</span>label <span class="kw1">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span><span class="sy0">&gt;</span>Search Flickr<span class="sy0">:&lt;/</span>label<span class="sy0">&gt;&lt;</span>br<span class="sy0">&gt;</span>
+  <span class="sy0">&lt;</span>input id<span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> type<span class="sy0">=</span><span class="st0">&quot;text&quot;</span><span class="sy0">&gt;</span>
+&nbsp;
+  <span class="sy0">&lt;</span>ul id<span class="sy0">=</span><span class="st0">&quot;photos&quot;</span><span class="sy0">&gt;</span>
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;empty&quot;</span><span class="sy0">&gt;</span>No photos selected.<span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+  <span class="sy0">&lt;/</span>ul<span class="sy0">&gt;</span>
+<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>
+&nbsp;
+<span class="sy0">&lt;</span>script<span class="sy0">&gt;</span>
+YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-highlighters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+  <span class="kw2">var</span> inputNode  <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#ac-input'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+      photosNode <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#photos'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="co1">// Constructs an image URL for the Flickr photo represented by the given</span>
+  <span class="co1">// AutoComplete result object.</span>
+  <span class="kw2">function</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> size<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span>size<span class="br0">&#41;</span> <span class="br0">&#123;</span> size <span class="sy0">=</span> <span class="st0">'s'</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+    <span class="kw1">return</span> Y.<span class="me1">Lang</span>.<span class="me1">sub</span><span class="br0">&#40;</span>
+      <span class="st0">'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_'</span> <span class="sy0">+</span> size <span class="sy0">+</span> <span class="st0">'.jpg'</span><span class="sy0">,</span>
+      result.<span class="me1">raw</span>
+    <span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  inputNode.<span class="me1">plug</span><span class="br0">&#40;</span>Y.<span class="me1">Plugin</span>.<span class="me1">AutoComplete</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    maxResults<span class="sy0">:</span> <span class="nu0">5</span><span class="sy0">,</span>
+    resultHighlighter<span class="sy0">:</span> <span class="st0">'wordMatch'</span><span class="sy0">,</span>
+    resultTextLocator<span class="sy0">:</span> <span class="st0">'title'</span><span class="sy0">,</span>
+    source<span class="sy0">:</span> <span class="st0">'select * from flickr.photos.search where text=&quot;{query}&quot; limit {maxResults}'</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Custom result formatter for Flickr results.</span>
+    resultFormatter<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>query<span class="sy0">,</span> results<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      <span class="kw1">return</span> Y.<span class="me1">Array</span>.<span class="me1">map</span><span class="br0">&#40;</span>results<span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">return</span> <span class="st0">'&lt;div class=&quot;result&quot;&gt;'</span> <span class="sy0">+</span>
+                 <span class="st0">'&lt;img class=&quot;photo&quot; src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'&quot; alt=&quot;thumbnail&quot;&gt;'</span> <span class="sy0">+</span>
+                 <span class="st0">'&lt;span class=&quot;title&quot;&gt;'</span> <span class="sy0">+</span> result.<span class="me1">highlighted</span> <span class="sy0">+</span> <span class="st0">'&lt;/span&gt;'</span> <span class="sy0">+</span>
+               <span class="st0">'&lt;/div&gt;'</span><span class="sy0">;</span>
+      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="co1">// After a photo is selected, add it to the collection.</span>
+  inputNode.<span class="me1">ac</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'select'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> result <span class="sy0">=</span> e.<span class="me1">result</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Prevent the default select handler so we can provide our own selection</span>
+    <span class="co1">// behavior instead.</span>
+    e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    inputNode.<span class="me1">select</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    inputNode.<span class="me1">ac</span>.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Remove the 'No photos selected' message if it exists.</span>
+    photosNode.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'.empty'</span><span class="br0">&#41;</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Append a new list item containing the selected photo.</span>
+    photosNode.<span class="me1">append</span><span class="br0">&#40;</span>
+      <span class="st0">'&lt;li class=&quot;photo&quot;&gt;'</span> <span class="sy0">+</span>
+        <span class="st0">'&lt;img src=&quot;'</span> <span class="sy0">+</span> getImageUrl<span class="br0">&#40;</span>result<span class="sy0">,</span> <span class="st0">'t'</span><span class="br0">&#41;</span> <span class="sy0">+</span>
+            <span class="st0">'&quot; alt=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot; title=&quot;'</span> <span class="sy0">+</span> result.<span class="me1">raw</span>.<span class="me1">title</span> <span class="sy0">+</span> <span class="st0">'&quot;&gt;'</span> <span class="sy0">+</span>
+      <span class="st0">'&lt;/li&gt;'</span>
+    <span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="sy0">&lt;/</span>script<span class="sy0">&gt;</span></pre></div><textarea id="syntax-6489cd3dc106307fac7dcb7f42c6e0c2-plain"><style>
+  #ac-input { width: 300px; }
+
+  #photos {
+    border: 1px solid #cfcfcf;
+    list-style: none;
+    margin: 1.5em 0 0;
+    padding: 6px;
+  }
+
+  #photos li {
+    display: inline-block;
+    list-style: none;
+
+    /* fake inline-block for IE<8 */
+    zoom: 1;
+    *display: inline;
+  }
+
+  #photos .empty { font-style: italic; }
+
+  #photos .photo {
+    margin: 5px;
+    text-align: center;
+    width: 100px;
+  }
+
+  #photos .photo img {
+    border: 1px solid #000;
+    vertical-align: top;
+  }
+
+  .result {
+    margin: 2px 0;
+    zoom: 1;
+  }
+
+  .result:after {
+    clear: both;
+    content: '.';
+    display: block;
+    height: 0;
+    visibility: hidden;
+  }
+
+  .result .photo {
+    height: 32px;
+    float: left;
+    margin-right: 6px;
+    width: 32px;
+  }
+
+  .result .title { vertical-align: top; }
+</style>
+
+<div id="demo">
+  <label for="ac-input">Search Flickr:</label><br>
+  <input id="ac-input" type="text">
+
+  <ul id="photos">
+    <li class="empty">No photos selected.</li>
+  </ul>
+</div>
+
+<script>
+YUI().use("autocomplete", "autocomplete-highlighters", function (Y) {
+  var inputNode  = Y.one('#ac-input'),
+      photosNode = Y.one('#photos');
+
+  // Constructs an image URL for the Flickr photo represented by the given
+  // AutoComplete result object.
+  function getImageUrl(result, size) {
+    if (!size) { size = 's'; }
+
+    return Y.Lang.sub(
+      'http://farm{farm}.static.flickr.com/{server}/{id}_{secret}_' + size + '.jpg',
+      result.raw
+    );
+  }
+
+  inputNode.plug(Y.Plugin.AutoComplete, {
+    maxResults: 5,
+    resultHighlighter: 'wordMatch',
+    resultTextLocator: 'title',
+    source: 'select * from flickr.photos.search where text="{query}" limit {maxResults}',
+
+    // Custom result formatter for Flickr results.
+    resultFormatter: function (query, results) {
+      return Y.Array.map(results, function (result) {
+        return '<div class="result">' +
+                 '<img class="photo" src="' + getImageUrl(result) + '" alt="thumbnail">' +
+                 '<span class="title">' + result.highlighted + '</span>' +
+               '</div>';
+      });
+    }
+  });
+
+  // After a photo is selected, add it to the collection.
+  inputNode.ac.on('select', function (e) {
+    var result = e.result;
+
+    // Prevent the default select handler so we can provide our own selection
+    // behavior instead.
+    e.preventDefault();
+
+    inputNode.select();
+    inputNode.ac.hide();
+
+    // Remove the 'No photos selected' message if it exists.
+    photosNode.all('.empty').remove();
+
+    // Append a new list item containing the selected photo.
+    photosNode.append(
+      '<li class="photo">' +
+        '<img src="' + getImageUrl(result, 't') +
+            '" alt="' + result.raw.title + '" title="' + result.raw.title + '">' +
+      '</li>'
+    );
+  });
+});
+</script></textarea></div>				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    AutoComplete Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li><a href='../autocomplete/ac_local.html'>Basic Local Data</a></li><li><a href='../autocomplete/ac_jsonp.html'>Remote Data via JSONP</a></li><li><a href='../autocomplete/ac_yql.html'>Remote Data via YQL</a></li><li><a href='../autocomplete/ac_datasource.html'>Remote Data via DataSource</a></li><li><a href='../autocomplete/ac_tagging.html'>Tag Completion using Query Delimiters</a></li><li class='selected'><a href='../autocomplete/ac_flickr.html'>Find Photos on Flickr (Custom Formatting, YQL Source)</a></li><li><a href='../autocomplete/ac_filter.html'>Filter a Set of Existing Items on the Page</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More AutoComplete Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/autocomplete/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_autocomplete.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="item"><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="selected "><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Charts: Customize a Chart's Tooltip</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+<style>
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    width:90%;
+    max-width: 800px;
+    height:400px;
+}
+</style>
+
+</head>
+<body id="yahoo-com" class="false">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Charts: Customize a Chart's Tooltip</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>Charts: Customize a Chart's Tooltip</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	This example shows how to customize the default tooltip of a <code>Chart</code>.
+	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="charts-customizedtooltip_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<html>
+<head>
+</head>
+<body>
+<div id="mychart"></div>
+<script type="text/javascript">
+(function() {
+    YUI().use('charts', function (Y) 
+    { 
+        var myDataValues = [ 
+            {category:"5/1/2010", Miscellaneous:2000, Expenses:3700, Revenue:2200}, 
+            {category:"5/2/2010", Miscellaneous:50, Expenses:9100, Revenue:100}, 
+            {category:"5/3/2010", Miscellaneous:400, Expenses:1100, Revenue:1500}, 
+            {category:"5/4/2010", Miscellaneous:200, Expenses:1900, Revenue:2800}, 
+            {category:"5/5/2010", Miscellaneous:5000, Expenses:5000, Revenue:2650}
+        ];
+        
+        var myTooltip = {
+            styles: { 
+                backgroundColor: "#333",
+                color: "#eee",
+                borderColor: "#eee",
+                textAlign: "center",
+                padding: "2px 8px 2px 8px"
+            },
+            markerLabelFunction: function(categoryItem, valueItem, itemIndex, series, seriesIndex)
+            {
+                var msg = "<span style=\"text-decoration:underline\">" + valueItem.displayName + " for " + 
+                categoryItem.axis.get("labelFunction").apply(this, [categoryItem.value, categoryItem.axis.get("labelFormat")]) + 
+                "</span><br/><div style=\"margin-top:5px;font-weight:bold\">" + valueItem.axis.get("labelFunction").apply(this, [valueItem.value, {prefix:"$", decimalPlaces:2}]) + "</div>";
+                return msg; 
+            }
+        };
+
+        var mychart = new Y.Chart({
+                            dataProvider:myDataValues, 
+                            type:"bar",
+                            render:"#mychart", 
+                            tooltip: myTooltip
+                        });
+    });
+})();
+</script>
+</body>
+</html>
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<h3>This example shows how to customize the tooltip for a <code>Chart</code>.</h3>
+
+<p>A <code>Chart</code> instance comes with a simple default tooltip. This tooltip is represented by the <code>tooltip</code> attribute. Through the tooltip attribute you can do the following:
+<ul>
+    <li>Style the tooltip background, border and text.</li>
+    <li>Customize and format the tooltip message.</li>
+    <li>Change the show and hide events.</li>
+    <li>Disable the tooltip.</li>
+</ul>
+</p>
+<p>The <code>tooltip</code> attribute contains the following properties:
+    <ul>
+       <li>showEvent: event that should trigger the tooltip</li>
+       <li>hideEvent: event that should trigger the removal of a tooltip (can be an event or an array of events)</li>
+       <li>styles: hash of style properties that will be applied to the tooltip node</li>
+       <li>show: indicates whether or not to show the tooltip</li>
+       <li>markerEventHandler: displays and hides tooltip based on marker events</li>
+       <li>planarEventHandler: displays and hides tooltip based on planar events</li>
+       <li>markerLabelFunction: reference to the function used to format a marker event triggered tooltip's text</li>
+       <li>planarLabelFunction: reference to the function used to format a planar event triggered tooltip's text</li>
+    </ul>
+</p>
+<p>In this example, we have changed the styles and set a custom <code>markerLabelFunction</code> to format the text.</p>
+<div id="syntax-2d4867adaf454158b96aa1b3bb877ff9" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myDataValues <span class="sy0">=</span> <span class="br0">&#91;</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/1/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">2000</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">3700</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">2200</span><span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/2/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">50</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">9100</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">100</span><span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/3/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">400</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">1100</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">1500</span><span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/4/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">200</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">1900</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">2800</span><span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/5/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">5000</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">5000</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">2650</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myTooltip <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    styles<span class="sy0">:</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">        backgroundColor<span class="sy0">:</span> <span class="st0">&quot;#333&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        color<span class="sy0">:</span> <span class="st0">&quot;#eee&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        borderColor<span class="sy0">:</span> <span class="st0">&quot;#fff&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        textAlign<span class="sy0">:</span> <span class="st0">&quot;center&quot;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    markerLabelFunction<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>categoryItem<span class="sy0">,</span> valueItem<span class="sy0">,</span> itemIndex<span class="sy0">,</span> series<span class="sy0">,</span> seriesIndex<span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> msg <span class="sy0">=</span> <span class="st0">&quot;&lt;span style=<span class="es0">\&quot;</span>text-decoration:underline<span class="es0">\&quot;</span>&gt;&quot;</span> <span class="sy0">+</span> valueItem.<span class="me1">displayName</span> <span class="sy0">+</span> <span class="st0">&quot; for &quot;</span> <span class="sy0">+</span> </div></li><li class="li1"><div class="de1">        categoryItem.<span class="me1">axis</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;labelFunction&quot;</span><span class="br0">&#41;</span>.<span class="me1">apply</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> <span class="br0">&#91;</span>categoryItem.<span class="me1">value</span><span class="sy0">,</span> categoryItem.<span class="me1">axis</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;labelFormat&quot;</span><span class="br0">&#41;</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="sy0">+</span> </div></li><li class="li2"><div class="de2">        <span class="st0">&quot;&lt;/span&gt;&lt;br/&gt;&lt;div style=<span class="es0">\&quot;</span>margin-top:5px;font-weight:bold<span class="es0">\&quot;</span>&gt;&quot;</span> <span class="sy0">+</span> valueItem.<span class="me1">axis</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;labelFunction&quot;</span><span class="br0">&#41;</span>.<span class="me1">apply</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> <span class="br0">&#91;</span>valueItem.<span class="me1">value</span><span class="sy0">,</span> <span class="br0">&#123;</span>prefix<span class="sy0">:</span><span class="st0">&quot;$&quot;</span><span class="sy0">,</span> decimalPlaces<span class="sy0">:</span><span class="nu0">2</span><span class="br0">&#125;</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">&quot;&lt;/div&gt;&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">return</span> msg<span class="sy0">;</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="kw2">var</span> mychart <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Chart</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                    dataProvider<span class="sy0">:</span>myDataValues<span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    type<span class="sy0">:</span><span class="st0">&quot;bar&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    render<span class="sy0">:</span><span class="st0">&quot;#mychart&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    tooltip<span class="sy0">:</span> myTooltip</div></li><li class="li2"><div class="de2">                <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myDataValues <span class="sy0">=</span> <span class="br0">&#91;</span> 
+    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/1/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">2000</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">3700</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">2200</span><span class="br0">&#125;</span><span class="sy0">,</span> 
+    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/2/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">50</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">9100</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">100</span><span class="br0">&#125;</span><span class="sy0">,</span> 
+    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/3/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">400</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">1100</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">1500</span><span class="br0">&#125;</span><span class="sy0">,</span> 
+    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/4/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">200</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">1900</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">2800</span><span class="br0">&#125;</span><span class="sy0">,</span> 
+    <span class="br0">&#123;</span>category<span class="sy0">:</span><span class="st0">&quot;5/5/2010&quot;</span><span class="sy0">,</span> Miscellaneous<span class="sy0">:</span><span class="nu0">5000</span><span class="sy0">,</span> Expenses<span class="sy0">:</span><span class="nu0">5000</span><span class="sy0">,</span> Revenue<span class="sy0">:</span><span class="nu0">2650</span><span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> myTooltip <span class="sy0">=</span> <span class="br0">&#123;</span>
+    styles<span class="sy0">:</span> <span class="br0">&#123;</span> 
+        backgroundColor<span class="sy0">:</span> <span class="st0">&quot;#333&quot;</span><span class="sy0">,</span>
+        color<span class="sy0">:</span> <span class="st0">&quot;#eee&quot;</span><span class="sy0">,</span>
+        borderColor<span class="sy0">:</span> <span class="st0">&quot;#fff&quot;</span><span class="sy0">,</span>
+        textAlign<span class="sy0">:</span> <span class="st0">&quot;center&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+    markerLabelFunction<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>categoryItem<span class="sy0">,</span> valueItem<span class="sy0">,</span> itemIndex<span class="sy0">,</span> series<span class="sy0">,</span> seriesIndex<span class="br0">&#41;</span>
+    <span class="br0">&#123;</span>
+        <span class="kw2">var</span> msg <span class="sy0">=</span> <span class="st0">&quot;&lt;span style=<span class="es0">\&quot;</span>text-decoration:underline<span class="es0">\&quot;</span>&gt;&quot;</span> <span class="sy0">+</span> valueItem.<span class="me1">displayName</span> <span class="sy0">+</span> <span class="st0">&quot; for &quot;</span> <span class="sy0">+</span> 
+        categoryItem.<span class="me1">axis</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;labelFunction&quot;</span><span class="br0">&#41;</span>.<span class="me1">apply</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> <span class="br0">&#91;</span>categoryItem.<span class="me1">value</span><span class="sy0">,</span> categoryItem.<span class="me1">axis</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;labelFormat&quot;</span><span class="br0">&#41;</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="sy0">+</span> 
+        <span class="st0">&quot;&lt;/span&gt;&lt;br/&gt;&lt;div style=<span class="es0">\&quot;</span>margin-top:5px;font-weight:bold<span class="es0">\&quot;</span>&gt;&quot;</span> <span class="sy0">+</span> valueItem.<span class="me1">axis</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;labelFunction&quot;</span><span class="br0">&#41;</span>.<span class="me1">apply</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> <span class="br0">&#91;</span>valueItem.<span class="me1">value</span><span class="sy0">,</span> <span class="br0">&#123;</span>prefix<span class="sy0">:</span><span class="st0">&quot;$&quot;</span><span class="sy0">,</span> decimalPlaces<span class="sy0">:</span><span class="nu0">2</span><span class="br0">&#125;</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">&quot;&lt;/div&gt;&quot;</span><span class="sy0">;</span>
+        <span class="kw1">return</span> msg<span class="sy0">;</span> 
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> mychart <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Chart</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+                    dataProvider<span class="sy0">:</span>myDataValues<span class="sy0">,</span> 
+                    type<span class="sy0">:</span><span class="st0">&quot;bar&quot;</span><span class="sy0">,</span>
+                    render<span class="sy0">:</span><span class="st0">&quot;#mychart&quot;</span><span class="sy0">,</span> 
+                    tooltip<span class="sy0">:</span> myTooltip
+                <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-2d4867adaf454158b96aa1b3bb877ff9-plain">var myDataValues = [ 
+    {category:"5/1/2010", Miscellaneous:2000, Expenses:3700, Revenue:2200}, 
+    {category:"5/2/2010", Miscellaneous:50, Expenses:9100, Revenue:100}, 
+    {category:"5/3/2010", Miscellaneous:400, Expenses:1100, Revenue:1500}, 
+    {category:"5/4/2010", Miscellaneous:200, Expenses:1900, Revenue:2800}, 
+    {category:"5/5/2010", Miscellaneous:5000, Expenses:5000, Revenue:2650}
+];
+
+var myTooltip = {
+    styles: { 
+        backgroundColor: "#333",
+        color: "#eee",
+        borderColor: "#fff",
+        textAlign: "center"
+    },
+    markerLabelFunction: function(categoryItem, valueItem, itemIndex, series, seriesIndex)
+    {
+        var msg = "<span style=\"text-decoration:underline\">" + valueItem.displayName + " for " + 
+        categoryItem.axis.get("labelFunction").apply(this, [categoryItem.value, categoryItem.axis.get("labelFormat")]) + 
+        "</span><br/><div style=\"margin-top:5px;font-weight:bold\">" + valueItem.axis.get("labelFunction").apply(this, [valueItem.value, {prefix:"$", decimalPlaces:2}]) + "</div>";
+        return msg; 
+    }
+};
+
+var mychart = new Y.Chart({
+                    dataProvider:myDataValues, 
+                    type:"bar",
+                    render:"#mychart", 
+                    tooltip: myTooltip
+                });</textarea></div>				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    Charts Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li><a href='../charts/charts-simple.html'>Basic Charts Implementation</a></li><li><a href='../charts/charts-multiseries.html'>Chart with Multiple Series</a></li><li><a href='../charts/charts-column.html'>Specify Chart Type</a></li><li><a href='../charts/charts-stackedcolumn.html'>Create Stacked Chart</a></li><li><a href='../charts/charts-timeaxis.html'>Create a Chart with a Time Axis</a></li><li><a href='../charts/charts-gridlines.html'>Add Gridlines to a Chart</a></li><li><a href='../charts/charts-stackedarea.html'>Create Stacked Area Chart with Planar Based Events</a></li><li><a href='../charts/charts-globalstyles.html'>Customize a Chart</a></li><li class='selected'><a href='../charts/charts-customizedtooltip.html'>Customize a Chart's Tooltip</a></li><li><a href='../charts/charts-objectstyles.html'>Define a Chart's Axes and Series</a></li><li><a href='../charts/charts-pie.html'>Pie Chart</a></li><li><a href='../charts/charts-dualaxes.html'>Dual Axes Chart</a></li><li><a href='../charts/charts-axisupdate.html'>Update Chart Axis</a></li><li><a href='../charts/charts-seriesupdate.html'>Update Chart Series</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More Charts Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/charts/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_charts.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="item"><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="item"><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="selected "><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

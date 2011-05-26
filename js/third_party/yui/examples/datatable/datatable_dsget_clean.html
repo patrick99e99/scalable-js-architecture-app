@@ -1,0 +1,72 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>DataTable + DataSource.Get + JSON Data</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+/* custom styles for this example */
+.dt-example {margin:1em;}
+
+/* css to counter global site css */
+.dt-example th {text-transform:none;}
+.dt-example table {width:auto;}
+.dt-example caption {display:table-caption;}
+</style>
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>DataTable + DataSource.Get + JSON Data</h1>
+
+<div class="exampleIntro">
+	<p>This example shows how to populate a DataTable with data from the Yahoo! Local webservice retrieved via a YQL query. First we create a DataSource.Get instance pointing to YQL, then using the DataTableDataSource plugin we can load data for pizza places near our office.</p>
+
+<p>In this example, we render the DataTable first, then load data into it in a separate call.</p>			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="pizza" class="dt-example"></div>
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("datasource-get", "datasource-jsonschema", "datatable-base", "datatable-datasource", function (Y) {
+    var cols = ["Title", "Phone", {key:"Rating.AverageRating", label:"Rating"}];
+    ds = new Y.DataSource.Get({
+        source:"http://query.yahooapis.com/v1/public/yql?format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys"})
+        .plug(Y.Plugin.DataSourceJSONSchema, {
+        schema: {
+            resultListLocator: "query.results.Result",
+            resultFields: ["Title", "Phone", "Rating.AverageRating"]
+        }
+    }),
+    dt = new Y.DataTable.Base({columnset:cols, summary:"Pizza places near 98089", caption:"Table with JSON data from YQL"}).plug(Y.Plugin.DataTableDataSource, {datasource:ds});
+    dt.render("#pizza");
+    dt.datasource.load({request:"&q=select%20*%20from%20local.search%20where%20zip%3D%2794089%27%20and%20query%3D%27pizza%27"});
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

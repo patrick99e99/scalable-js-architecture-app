@@ -1,0 +1,110 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Dual Axes Chart</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    width:90%;
+    max-width: 800px;
+    height:400px;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Dual Axes Chart</h1>
+
+<div class="exampleIntro">
+	This example shows how to create a <code>Chart</code> with multiple value axes.
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<html>
+<head>
+</head>
+<body>
+<div id="mychart"></div>
+<script type="text/javascript">
+(function() {
+    YUI().use('charts', function (Y) 
+    { 
+        var myDataValues = [ 
+            {month:"January", internetSales: 110000, percentOfRevenue: 25},
+            {month:"February", internetSales: 333500, percentOfRevenue: 28},
+            {month:"March", internetSales: 90500, percentOfRevenue: 15},
+            {month:"April", internetSales: 255550, percentOfRevenue: 21},
+            {month:"May", internetSales: 445000, percentOfRevenue: 33},
+            {month:"June", internetSales: 580000, percentOfRevenue: 38}
+        ];
+       
+        //Define axes and assign keys
+        var myAxes = {
+            percentage: {
+                type:"numeric",
+                position:"right",
+                keys:["percentOfRevenue"],
+                labelFormat: {suffix:"%"}
+            },
+            sales: {
+                type:"numeric",
+                position:"left",
+                keys:["internetSales"],
+                labelFormat: {
+                    prefix:"$",
+                    thousandsSeparator:","
+                }
+            }
+        };
+
+        //Define a series collection so that we can assign nice display names
+        var mySeries = [
+            {type:"combo", yKey:"internetSales", yDisplayName:"Internet Sales", xDisplayName:"Month"},
+            {type:"combo", yKey:"percentOfRevenue", yDisplayName:"Percent of Total Revenue", xDisplayName:"Month"}
+        ];
+
+        var mychart = new Y.Chart({
+                                dataProvider:myDataValues, 
+                                categoryKey:"month", 
+                                axes:myAxes, 
+                                seriesCollection:mySeries, 
+                                render:"#mychart"
+                            });
+    });
+})();
+</script>
+</body>
+</html>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

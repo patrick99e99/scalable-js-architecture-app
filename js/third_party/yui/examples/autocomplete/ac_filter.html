@@ -1,0 +1,964 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: AutoComplete: Filter a Set of Existing Items on the Page</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+
+<!--there is no custom header content for this example-->
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+</head>
+<body id="yahoo-com" class="yui3-skin-sam  yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: AutoComplete: Filter a Set of Existing Items on the Page</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>AutoComplete: Filter a Set of Existing Items on the Page</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	<p>
+This example demonstrates how to use <code>AutoCompleteBase</code> alone, without a list widget, to filter a set of existing items on a page. While this is a departure from the typical autocomplete interaction pattern, <code>AutoCompleteBase</code> is flexible enough to provide an excellent solution without any unnecessary overhead.
+</p>
+
+<p>
+To filter the list of delicious pies, type a descriptive term into the input field below. For example, to see only apple pies, type "apple", or for all fruit pies, type "fruit".
+</p>	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="ac_filter_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<style>
+  #photos {
+    border: 1px solid #cfcfcf;
+    list-style: none;
+    margin: 1.5em 0 0;
+    padding: 6px;
+  }
+
+  #photos li {
+    display: inline-block;
+    list-style: none;
+
+    /* fake inline-block for IE<8 */
+    zoom: 1;
+    *display: inline;
+  }
+
+  #photos .empty { font-style: italic; }
+
+  #photos .photo {
+    margin: 5px;
+    text-align: center;
+    width: 240px;
+  }
+
+  #photos .photo img {
+    border: 1px solid #000;
+    vertical-align: top;
+  }
+
+  #photos .hidden { display: none; }
+</style>
+
+<div id="demo">
+  <label for="ac-input">Filter by:</label><br>
+  <input id="ac-input" type="text">
+
+  <ul id="photos">
+    <li class="photo" data-tags="apple, fruit">
+      <a href="http://www.flickr.com/photos/wonko/5213328415/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5002/5213328415_4cf3aa583f_m.jpg" alt="Apple pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="pecan">
+      <a href="http://www.flickr.com/photos/wonko/5213327801/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5208/5213327801_1e62145da1_m.jpg" alt="Pecan pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="maple custard">
+      <a href="http://www.flickr.com/photos/wonko/5213920818/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5245/5213920818_bf7cd599c3_m.jpg" alt="Maple custard pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="pumpkin">
+      <a href="http://www.flickr.com/photos/wonko/5213912956/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5049/5213912956_7cba11aa01_m.jpg" alt="Pumpkin pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="turkey, pot pie, carrots, meat, savory">
+      <a href="http://www.flickr.com/photos/wonko/2055852065/in/photostream/">
+        <img src="http://farm3.static.flickr.com/2330/2055852065_d9a7d56650_m.jpg" alt="Turkey pot pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="cherry, hearts, fruit">
+      <a href="http://www.flickr.com/photos/wonko/100174720/in/photostream/">
+        <img src="http://farm1.static.flickr.com/34/100174720_dad453636d_m.jpg" alt="Cherry pie with two hearts on top">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="lattice, sour cherry, fruit">
+      <a href="http://www.flickr.com/photos/faerye/4839675135/in/photostream/">
+        <img src="http://farm5.static.flickr.com/4083/4839675135_fb5e88da3d_m.jpg" alt="Lattice-top sour cherry pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="chocolate, cream, cinnamon, meringue, christmas, tree">
+      <a href="http://www.flickr.com/photos/faerye/4283875981/">
+        <img src="http://farm5.static.flickr.com/4029/4283875981_faaccb9089_m.jpg" alt="Chocolate cream pie with cinnamon meringue">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="strawberry, chiffon, chocolate, wafer, fruit">
+      <a href="http://www.flickr.com/photos/faerye/4592482821/">
+        <img src="http://farm2.static.flickr.com/1070/4592482821_925ba97e60_m.jpg" alt="Strawberry chiffon pie with chocolate wafer crust">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="key lime, whipped cream, graham cracker, slice, fruit">
+      <a href="http://www.flickr.com/photos/faerye/3492566166/">
+        <img src="http://farm4.static.flickr.com/3413/3492566166_0fd62e0d43_m.jpg" alt="Key lime pie with graham cracker crust">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="lattice top, apple, fruit">
+      <a href="http://www.flickr.com/photos/faerye/3394679580/">
+        <img src="http://farm4.static.flickr.com/3569/3394679580_8b08c46fe6_m.jpg" alt="Lattice top apple pie">
+      </a>
+    </li>
+  </ul>
+</div>
+
+<script>
+YUI({ filter: 'raw' }).use("autocomplete-base", "autocomplete-filters", function (Y) {
+  // Create a custom PieFilter class that extends AutoCompleteBase.
+  var PieFilter = Y.Base.create('pieFilter', Y.Base, [Y.AutoCompleteBase], {
+    initializer: function () {
+      this._bindUIACBase();
+      this._syncUIACBase();
+    }
+  }),
+
+  // Create and configure an instance of the PieFilter class.
+  filter = new PieFilter({
+    inputNode: '#ac-input',
+    minQueryLength: 0,
+    queryDelay: 0,
+
+    // Run an immediately-invoked function that returns an array of results to
+    // be used for each query, based on the photos on the page. Since the list
+    // of photos remains static, this saves time by not gathering the results
+    // for each query.
+    //
+    // If the list of results were not static, we could simply set the source
+    // to the function itself rather than invoking the function immediately,
+    // and it would then run on every query.
+    source: (function () {
+      var results = [];
+
+      // Build an array of results containing each photo in the list.
+      Y.all('#photos > .photo').each(function (node) {
+        results.push({
+          node: node,
+          tags: node.getAttribute('data-tags')
+        });
+      });
+
+      return results;
+    }()), // <-- Note the parens. This invokes the function immediately.
+          //     Remove these to invoke the function on every query instead.
+
+    // Specify that the "tags" property of each result object contains the text
+    // to filter on.
+    resultTextLocator: 'tags',
+
+    // Use a result filter to filter the photo results based on their tags.
+    resultFilters: 'phraseMatch'
+  });
+
+  // Subscribe to the "results" event and update photo visibility based on
+  // whether or not they were included in the list of results.
+  filter.on('results', function (e) {
+    // First hide all the photos.
+    Y.all('#photos > .photo').addClass('hidden');
+
+    // Then unhide the ones that are in the current result list.
+    Y.Array.each(e.results, function (result) {
+      result.raw.node.removeClass('hidden');
+    });
+  });
+});
+</script>
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<h3>HTML</h3>
+
+<div id="syntax-bc56df04a57b9e46f520fc0dbdeb7a25" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;demo&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span>&gt;</span>Filter by:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">br</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  <span class="sc2">&lt;<span class="kw2">ul</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;photos&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;apple, fruit&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213328415/in/photostream/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5002/5213328415_4cf3aa583f_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Apple pie&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;pecan&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213327801/in/photostream/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5208/5213327801_1e62145da1_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Pecan pie&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;maple custard&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213920818/in/photostream/&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5245/5213920818_bf7cd599c3_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Maple custard pie&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;pumpkin&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213912956/in/photostream/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5049/5213912956_7cba11aa01_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Pumpkin pie&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;turkey, pot pie, carrots, meat, savory&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/2055852065/in/photostream/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm3.static.flickr.com/2330/2055852065_d9a7d56650_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Turkey pot pie&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;cherry, hearts, fruit&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/100174720/in/photostream/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm1.static.flickr.com/34/100174720_dad453636d_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Cherry pie with two hearts on top&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;lattice, sour cherry, fruit&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4839675135/in/photostream/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4083/4839675135_fb5e88da3d_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Lattice-top sour cherry pie&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;chocolate, cream, cinnamon, meringue, christmas, tree&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4283875981/&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4029/4283875981_faaccb9089_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Chocolate cream pie with cinnamon meringue&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;strawberry, chiffon, chocolate, wafer, fruit&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4592482821/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm2.static.flickr.com/1070/4592482821_925ba97e60_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Strawberry chiffon pie with chocolate wafer crust&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;key lime, whipped cream, graham cracker, slice, fruit&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3492566166/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3413/3492566166_0fd62e0d43_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Key lime pie with graham cracker crust&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;lattice top, apple, fruit&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3394679580/&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3569/3394679580_8b08c46fe6_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Lattice top apple pie&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;demo&quot;</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span>&gt;</span>Filter by:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">br</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span>&gt;</span>
+&nbsp;
+  <span class="sc2">&lt;<span class="kw2">ul</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;photos&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;apple, fruit&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213328415/in/photostream/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5002/5213328415_4cf3aa583f_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Apple pie&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;pecan&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213327801/in/photostream/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5208/5213327801_1e62145da1_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Pecan pie&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;maple custard&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213920818/in/photostream/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5245/5213920818_bf7cd599c3_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Maple custard pie&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;pumpkin&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213912956/in/photostream/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5049/5213912956_7cba11aa01_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Pumpkin pie&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;turkey, pot pie, carrots, meat, savory&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/2055852065/in/photostream/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm3.static.flickr.com/2330/2055852065_d9a7d56650_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Turkey pot pie&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;cherry, hearts, fruit&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/100174720/in/photostream/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm1.static.flickr.com/34/100174720_dad453636d_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Cherry pie with two hearts on top&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;lattice, sour cherry, fruit&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4839675135/in/photostream/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4083/4839675135_fb5e88da3d_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Lattice-top sour cherry pie&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;chocolate, cream, cinnamon, meringue, christmas, tree&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4283875981/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4029/4283875981_faaccb9089_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Chocolate cream pie with cinnamon meringue&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;strawberry, chiffon, chocolate, wafer, fruit&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4592482821/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm2.static.flickr.com/1070/4592482821_925ba97e60_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Strawberry chiffon pie with chocolate wafer crust&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;key lime, whipped cream, graham cracker, slice, fruit&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3492566166/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3413/3492566166_0fd62e0d43_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Key lime pie with graham cracker crust&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+&nbsp;
+    <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data-tags<span class="sy0">=</span><span class="st0">&quot;lattice top, apple, fruit&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="kw2">a</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3394679580/&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3569/3394679580_8b08c46fe6_m.jpg&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Lattice top apple pie&quot;</span>&gt;</span>
+      <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+  <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></pre></div><textarea id="syntax-bc56df04a57b9e46f520fc0dbdeb7a25-plain"><div id="demo">
+  <label for="ac-input">Filter by:</label><br>
+  <input id="ac-input" type="text">
+
+  <ul id="photos">
+    <li class="photo" data-tags="apple, fruit">
+      <a href="http://www.flickr.com/photos/wonko/5213328415/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5002/5213328415_4cf3aa583f_m.jpg" alt="Apple pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="pecan">
+      <a href="http://www.flickr.com/photos/wonko/5213327801/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5208/5213327801_1e62145da1_m.jpg" alt="Pecan pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="maple custard">
+      <a href="http://www.flickr.com/photos/wonko/5213920818/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5245/5213920818_bf7cd599c3_m.jpg" alt="Maple custard pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="pumpkin">
+      <a href="http://www.flickr.com/photos/wonko/5213912956/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5049/5213912956_7cba11aa01_m.jpg" alt="Pumpkin pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="turkey, pot pie, carrots, meat, savory">
+      <a href="http://www.flickr.com/photos/wonko/2055852065/in/photostream/">
+        <img src="http://farm3.static.flickr.com/2330/2055852065_d9a7d56650_m.jpg" alt="Turkey pot pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="cherry, hearts, fruit">
+      <a href="http://www.flickr.com/photos/wonko/100174720/in/photostream/">
+        <img src="http://farm1.static.flickr.com/34/100174720_dad453636d_m.jpg" alt="Cherry pie with two hearts on top">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="lattice, sour cherry, fruit">
+      <a href="http://www.flickr.com/photos/faerye/4839675135/in/photostream/">
+        <img src="http://farm5.static.flickr.com/4083/4839675135_fb5e88da3d_m.jpg" alt="Lattice-top sour cherry pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="chocolate, cream, cinnamon, meringue, christmas, tree">
+      <a href="http://www.flickr.com/photos/faerye/4283875981/">
+        <img src="http://farm5.static.flickr.com/4029/4283875981_faaccb9089_m.jpg" alt="Chocolate cream pie with cinnamon meringue">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="strawberry, chiffon, chocolate, wafer, fruit">
+      <a href="http://www.flickr.com/photos/faerye/4592482821/">
+        <img src="http://farm2.static.flickr.com/1070/4592482821_925ba97e60_m.jpg" alt="Strawberry chiffon pie with chocolate wafer crust">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="key lime, whipped cream, graham cracker, slice, fruit">
+      <a href="http://www.flickr.com/photos/faerye/3492566166/">
+        <img src="http://farm4.static.flickr.com/3413/3492566166_0fd62e0d43_m.jpg" alt="Key lime pie with graham cracker crust">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="lattice top, apple, fruit">
+      <a href="http://www.flickr.com/photos/faerye/3394679580/">
+        <img src="http://farm4.static.flickr.com/3569/3394679580_8b08c46fe6_m.jpg" alt="Lattice top apple pie">
+      </a>
+    </li>
+  </ul>
+</div></textarea></div>
+<h3>CSS</h3>
+
+<div id="syntax-81132b0b0be77d607a414cfea28df3d9" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#photos</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#cfcfcf</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">1.5em</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">  <span class="kw1">padding</span><span class="sy0">:</span> <span class="re3">6px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#photos</span> li <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">display</span><span class="sy0">:</span> inline-<span class="kw2">block</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="coMULTI">/* fake inline-block for IE&lt;8 */</span></div></li><li class="li1"><div class="de1">  zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">inline</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#photos</span> <span class="re1">.empty</span> <span class="br0">&#123;</span> <span class="kw1">font-style</span><span class="sy0">:</span> <span class="kw2">italic</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#photos</span> <span class="re1">.photo</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">5px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">text-align</span><span class="sy0">:</span> <span class="kw2">center</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">240px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="re0">#photos</span> <span class="re1">.photo</span> img <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#000</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">vertical-align</span><span class="sy0">:</span> <span class="kw1">top</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="re0">#photos</span> <span class="re1">.hidden</span> <span class="br0">&#123;</span> <span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#photos</span> <span class="br0">&#123;</span>
+  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#cfcfcf</span><span class="sy0">;</span>
+  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">1.5em</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span>
+  <span class="kw1">padding</span><span class="sy0">:</span> <span class="re3">6px</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> li <span class="br0">&#123;</span>
+  <span class="kw1">display</span><span class="sy0">:</span> inline-<span class="kw2">block</span><span class="sy0">;</span>
+  <span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+&nbsp;
+  <span class="coMULTI">/* fake inline-block for IE&lt;8 */</span>
+  zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span>
+  <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">inline</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="re1">.empty</span> <span class="br0">&#123;</span> <span class="kw1">font-style</span><span class="sy0">:</span> <span class="kw2">italic</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="re1">.photo</span> <span class="br0">&#123;</span>
+  <span class="kw1">margin</span><span class="sy0">:</span> <span class="re3">5px</span><span class="sy0">;</span>
+  <span class="kw1">text-align</span><span class="sy0">:</span> <span class="kw2">center</span><span class="sy0">;</span>
+  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">240px</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="re1">.photo</span> img <span class="br0">&#123;</span>
+  <span class="kw1">border</span><span class="sy0">:</span> <span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#000</span><span class="sy0">;</span>
+  <span class="kw1">vertical-align</span><span class="sy0">:</span> <span class="kw1">top</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#photos</span> <span class="re1">.hidden</span> <span class="br0">&#123;</span> <span class="kw1">display</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span> <span class="br0">&#125;</span></pre></div><textarea id="syntax-81132b0b0be77d607a414cfea28df3d9-plain">#photos {
+  border: 1px solid #cfcfcf;
+  list-style: none;
+  margin: 1.5em 0 0;
+  padding: 6px;
+}
+
+#photos li {
+  display: inline-block;
+  list-style: none;
+
+  /* fake inline-block for IE<8 */
+  zoom: 1;
+  *display: inline;
+}
+
+#photos .empty { font-style: italic; }
+
+#photos .photo {
+  margin: 5px;
+  text-align: center;
+  width: 240px;
+}
+
+#photos .photo img {
+  border: 1px solid #000;
+  vertical-align: top;
+}
+
+#photos .hidden { display: none; }</textarea></div>
+<h3>JavaScript</h3>
+
+<div id="syntax-23d4daf66dba63d23f772f81edea4d8d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-filters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="co1">// Create a custom PieFilter class that extends AutoCompleteBase.</span></div></li><li class="li1"><div class="de1">  <span class="kw2">var</span> PieFilter <span class="sy0">=</span> Y.<span class="me1">Base</span>.<span class="me1">create</span><span class="br0">&#40;</span><span class="st0">'pieFilter'</span><span class="sy0">,</span> Y.<span class="me1">Base</span><span class="sy0">,</span> <span class="br0">&#91;</span>Y.<span class="me1">AutoCompleteBase</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    initializer<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">      <span class="kw1">this</span>._bindUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">      <span class="kw1">this</span>._syncUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  <span class="co1">// Create and configure an instance of the PieFilter class.</span></div></li><li class="li1"><div class="de1">  filter <span class="sy0">=</span> <span class="kw2">new</span> PieFilter<span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    inputNode<span class="sy0">:</span> <span class="st0">'#ac-input'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    minQueryLength<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    queryDelay<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Run an immediately-invoked function that returns an array of results to</span></div></li><li class="li1"><div class="de1">    <span class="co1">// be used for each query, based on the photos on the page. Since the list</span></div></li><li class="li1"><div class="de1">    <span class="co1">// of photos remains static, this saves time by not gathering the results</span></div></li><li class="li1"><div class="de1">    <span class="co1">// for each query.</span></div></li><li class="li2"><div class="de2">    <span class="co1">//</span></div></li><li class="li1"><div class="de1">    <span class="co1">// If the list of results were not static, we could simply set the source</span></div></li><li class="li1"><div class="de1">    <span class="co1">// to the function itself rather than invoking the function immediately,</span></div></li><li class="li1"><div class="de1">    <span class="co1">// and it would then run on every query.</span></div></li><li class="li1"><div class="de1">    source<span class="sy0">:</span> <span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">      <span class="kw2">var</span> results <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">      <span class="co1">// Build an array of results containing each photo in the list.</span></div></li><li class="li1"><div class="de1">      Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">each</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        results.<span class="me1">push</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">          node<span class="sy0">:</span> node<span class="sy0">,</span></div></li><li class="li1"><div class="de1">          tags<span class="sy0">:</span> node.<span class="me1">getAttribute</span><span class="br0">&#40;</span><span class="st0">'data-tags'</span><span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">      <span class="kw1">return</span> results<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// &lt;-- Note the parens. This invokes the function immediately.</span></div></li><li class="li1"><div class="de1">          <span class="co1">//     Remove these to invoke the function on every query instead.</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Specify that the &quot;tags&quot; property of each result object contains the text</span></div></li><li class="li2"><div class="de2">    <span class="co1">// to filter on.</span></div></li><li class="li1"><div class="de1">    resultTextLocator<span class="sy0">:</span> <span class="st0">'tags'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Use a result filter to filter the photo results based on their tags.</span></div></li><li class="li1"><div class="de1">    resultFilters<span class="sy0">:</span> <span class="st0">'phraseMatch'</span></div></li><li class="li2"><div class="de2">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="co1">// Subscribe to the &quot;results&quot; event and update photo visibility based on</span></div></li><li class="li1"><div class="de1">  <span class="co1">// whether or not they were included in the list of results.</span></div></li><li class="li1"><div class="de1">  filter.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'results'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="co1">// First hide all the photos.</span></div></li><li class="li1"><div class="de1">    Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">addClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Then unhide the ones that are in the current result list.</span></div></li><li class="li1"><div class="de1">    Y.<span class="me1">Array</span>.<span class="me1">each</span><span class="br0">&#40;</span>e.<span class="me1">results</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">      result.<span class="me1">raw</span>.<span class="me1">node</span>.<span class="me1">removeClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-filters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+  <span class="co1">// Create a custom PieFilter class that extends AutoCompleteBase.</span>
+  <span class="kw2">var</span> PieFilter <span class="sy0">=</span> Y.<span class="me1">Base</span>.<span class="me1">create</span><span class="br0">&#40;</span><span class="st0">'pieFilter'</span><span class="sy0">,</span> Y.<span class="me1">Base</span><span class="sy0">,</span> <span class="br0">&#91;</span>Y.<span class="me1">AutoCompleteBase</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    initializer<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      <span class="kw1">this</span>._bindUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+      <span class="kw1">this</span>._syncUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span>
+&nbsp;
+  <span class="co1">// Create and configure an instance of the PieFilter class.</span>
+  filter <span class="sy0">=</span> <span class="kw2">new</span> PieFilter<span class="br0">&#40;</span><span class="br0">&#123;</span>
+    inputNode<span class="sy0">:</span> <span class="st0">'#ac-input'</span><span class="sy0">,</span>
+    minQueryLength<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>
+    queryDelay<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Run an immediately-invoked function that returns an array of results to</span>
+    <span class="co1">// be used for each query, based on the photos on the page. Since the list</span>
+    <span class="co1">// of photos remains static, this saves time by not gathering the results</span>
+    <span class="co1">// for each query.</span>
+    <span class="co1">//</span>
+    <span class="co1">// If the list of results were not static, we could simply set the source</span>
+    <span class="co1">// to the function itself rather than invoking the function immediately,</span>
+    <span class="co1">// and it would then run on every query.</span>
+    source<span class="sy0">:</span> <span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      <span class="kw2">var</span> results <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+      <span class="co1">// Build an array of results containing each photo in the list.</span>
+      Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">each</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        results.<span class="me1">push</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+          node<span class="sy0">:</span> node<span class="sy0">,</span>
+          tags<span class="sy0">:</span> node.<span class="me1">getAttribute</span><span class="br0">&#40;</span><span class="st0">'data-tags'</span><span class="br0">&#41;</span>
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+      <span class="kw1">return</span> results<span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// &lt;-- Note the parens. This invokes the function immediately.</span>
+          <span class="co1">//     Remove these to invoke the function on every query instead.</span>
+&nbsp;
+    <span class="co1">// Specify that the &quot;tags&quot; property of each result object contains the text</span>
+    <span class="co1">// to filter on.</span>
+    resultTextLocator<span class="sy0">:</span> <span class="st0">'tags'</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Use a result filter to filter the photo results based on their tags.</span>
+    resultFilters<span class="sy0">:</span> <span class="st0">'phraseMatch'</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="co1">// Subscribe to the &quot;results&quot; event and update photo visibility based on</span>
+  <span class="co1">// whether or not they were included in the list of results.</span>
+  filter.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'results'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// First hide all the photos.</span>
+    Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">addClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Then unhide the ones that are in the current result list.</span>
+    Y.<span class="me1">Array</span>.<span class="me1">each</span><span class="br0">&#40;</span>e.<span class="me1">results</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      result.<span class="me1">raw</span>.<span class="me1">node</span>.<span class="me1">removeClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-23d4daf66dba63d23f772f81edea4d8d-plain">YUI().use("autocomplete-base", "autocomplete-filters", function (Y) {
+  // Create a custom PieFilter class that extends AutoCompleteBase.
+  var PieFilter = Y.Base.create('pieFilter', Y.Base, [Y.AutoCompleteBase], {
+    initializer: function () {
+      this._bindUIACBase();
+      this._syncUIACBase();
+    }
+  }),
+
+  // Create and configure an instance of the PieFilter class.
+  filter = new PieFilter({
+    inputNode: '#ac-input',
+    minQueryLength: 0,
+    queryDelay: 0,
+
+    // Run an immediately-invoked function that returns an array of results to
+    // be used for each query, based on the photos on the page. Since the list
+    // of photos remains static, this saves time by not gathering the results
+    // for each query.
+    //
+    // If the list of results were not static, we could simply set the source
+    // to the function itself rather than invoking the function immediately,
+    // and it would then run on every query.
+    source: (function () {
+      var results = [];
+
+      // Build an array of results containing each photo in the list.
+      Y.all('#photos > .photo').each(function (node) {
+        results.push({
+          node: node,
+          tags: node.getAttribute('data-tags')
+        });
+      });
+
+      return results;
+    }()), // <-- Note the parens. This invokes the function immediately.
+          //     Remove these to invoke the function on every query instead.
+
+    // Specify that the "tags" property of each result object contains the text
+    // to filter on.
+    resultTextLocator: 'tags',
+
+    // Use a result filter to filter the photo results based on their tags.
+    resultFilters: 'phraseMatch'
+  });
+
+  // Subscribe to the "results" event and update photo visibility based on
+  // whether or not they were included in the list of results.
+  filter.on('results', function (e) {
+    // First hide all the photos.
+    Y.all('#photos > .photo').addClass('hidden');
+
+    // Then unhide the ones that are in the current result list.
+    Y.Array.each(e.results, function (result) {
+      result.raw.node.removeClass('hidden');
+    });
+  });
+});</textarea></div>
+<h3>Complete Example Source</h3>
+
+<div id="syntax-b48ba29b5f47818a2209e7500c9389ed" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sy0">&lt;</span>style<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">  #photos <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    border<span class="sy0">:</span> 1px solid #cfcfcf<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li2"><div class="de2">    margin<span class="sy0">:</span> 1.5em <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    padding<span class="sy0">:</span> 6px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  #photos li <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    display<span class="sy0">:</span> inline<span class="sy0">-</span>block<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co2">/* fake inline-block for IE&lt;8 */</span></div></li><li class="li1"><div class="de1">    zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="sy0">*</span>display<span class="sy0">:</span> inline<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  #photos .<span class="me1">empty</span> <span class="br0">&#123;</span> font<span class="sy0">-</span>style<span class="sy0">:</span> italic<span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">  #photos .<span class="me1">photo</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    margin<span class="sy0">:</span> 5px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    text<span class="sy0">-</span>align<span class="sy0">:</span> center<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> 240px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">  #photos .<span class="me1">photo</span> img <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    border<span class="sy0">:</span> 1px solid #000<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    vertical<span class="sy0">-</span>align<span class="sy0">:</span> top<span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">  #photos .<span class="me1">hidden</span> <span class="br0">&#123;</span> display<span class="sy0">:</span> none<span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="sy0">&lt;/</span>style<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">  <span class="sy0">&lt;</span>label <span class="kw1">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span><span class="sy0">&gt;</span>Filter by<span class="sy0">:&lt;/</span>label<span class="sy0">&gt;&lt;</span>br<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">&lt;</span>input id<span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> type<span class="sy0">=</span><span class="st0">&quot;text&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="sy0">&lt;</span>ul id<span class="sy0">=</span><span class="st0">&quot;photos&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;apple, fruit&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213328415/in/photostream/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5002/5213328415_4cf3aa583f_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Apple pie&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;pecan&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213327801/in/photostream/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5208/5213327801_1e62145da1_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Pecan pie&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;maple custard&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213920818/in/photostream/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5245/5213920818_bf7cd599c3_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Maple custard pie&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;pumpkin&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213912956/in/photostream/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5049/5213912956_7cba11aa01_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Pumpkin pie&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;turkey, pot pie, carrots, meat, savory&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/2055852065/in/photostream/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm3.static.flickr.com/2330/2055852065_d9a7d56650_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Turkey pot pie&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;cherry, hearts, fruit&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/100174720/in/photostream/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm1.static.flickr.com/34/100174720_dad453636d_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Cherry pie with two hearts on top&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;lattice, sour cherry, fruit&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4839675135/in/photostream/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4083/4839675135_fb5e88da3d_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Lattice-top sour cherry pie&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;chocolate, cream, cinnamon, meringue, christmas, tree&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4283875981/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4029/4283875981_faaccb9089_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Chocolate cream pie with cinnamon meringue&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;strawberry, chiffon, chocolate, wafer, fruit&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4592482821/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm2.static.flickr.com/1070/4592482821_925ba97e60_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Strawberry chiffon pie with chocolate wafer crust&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;key lime, whipped cream, graham cracker, slice, fruit&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3492566166/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3413/3492566166_0fd62e0d43_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Key lime pie with graham cracker crust&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;lattice top, apple, fruit&quot;</span><span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3394679580/&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3569/3394679580_8b08c46fe6_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Lattice top apple pie&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">&lt;/</span>ul<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2"><span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sy0">&lt;</span>script<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-filters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="co1">// Create a custom PieFilter class that extends AutoCompleteBase.</span></div></li><li class="li2"><div class="de2">  <span class="kw2">var</span> PieFilter <span class="sy0">=</span> Y.<span class="me1">Base</span>.<span class="me1">create</span><span class="br0">&#40;</span><span class="st0">'pieFilter'</span><span class="sy0">,</span> Y.<span class="me1">Base</span><span class="sy0">,</span> <span class="br0">&#91;</span>Y.<span class="me1">AutoCompleteBase</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    initializer<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">      <span class="kw1">this</span>._bindUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">      <span class="kw1">this</span>._syncUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="co1">// Create and configure an instance of the PieFilter class.</span></div></li><li class="li1"><div class="de1">  filter <span class="sy0">=</span> <span class="kw2">new</span> PieFilter<span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    inputNode<span class="sy0">:</span> <span class="st0">'#ac-input'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    minQueryLength<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    queryDelay<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Run an immediately-invoked function that returns an array of results to</span></div></li><li class="li1"><div class="de1">    <span class="co1">// be used for each query, based on the photos on the page. Since the list</span></div></li><li class="li2"><div class="de2">    <span class="co1">// of photos remains static, this saves time by not gathering the results</span></div></li><li class="li1"><div class="de1">    <span class="co1">// for each query.</span></div></li><li class="li1"><div class="de1">    <span class="co1">//</span></div></li><li class="li1"><div class="de1">    <span class="co1">// If the list of results were not static, we could simply set the source</span></div></li><li class="li1"><div class="de1">    <span class="co1">// to the function itself rather than invoking the function immediately,</span></div></li><li class="li2"><div class="de2">    <span class="co1">// and it would then run on every query.</span></div></li><li class="li1"><div class="de1">    source<span class="sy0">:</span> <span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">      <span class="kw2">var</span> results <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">      <span class="co1">// Build an array of results containing each photo in the list.</span></div></li><li class="li2"><div class="de2">      Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">each</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        results.<span class="me1">push</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">          node<span class="sy0">:</span> node<span class="sy0">,</span></div></li><li class="li1"><div class="de1">          tags<span class="sy0">:</span> node.<span class="me1">getAttribute</span><span class="br0">&#40;</span><span class="st0">'data-tags'</span><span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">      <span class="kw1">return</span> results<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// &lt;-- Note the parens. This invokes the function immediately.</span></div></li><li class="li1"><div class="de1">          <span class="co1">//     Remove these to invoke the function on every query instead.</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Specify that the &quot;tags&quot; property of each result object contains the text</span></div></li><li class="li1"><div class="de1">    <span class="co1">// to filter on.</span></div></li><li class="li1"><div class="de1">    resultTextLocator<span class="sy0">:</span> <span class="st0">'tags'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">// Use a result filter to filter the photo results based on their tags.</span></div></li><li class="li1"><div class="de1">    resultFilters<span class="sy0">:</span> <span class="st0">'phraseMatch'</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">  <span class="co1">// Subscribe to the &quot;results&quot; event and update photo visibility based on</span></div></li><li class="li2"><div class="de2">  <span class="co1">// whether or not they were included in the list of results.</span></div></li><li class="li1"><div class="de1">  filter.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'results'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// First hide all the photos.</span></div></li><li class="li1"><div class="de1">    Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">addClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">// Then unhide the ones that are in the current result list.</span></div></li><li class="li1"><div class="de1">    Y.<span class="me1">Array</span>.<span class="me1">each</span><span class="br0">&#40;</span>e.<span class="me1">results</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">      result.<span class="me1">raw</span>.<span class="me1">node</span>.<span class="me1">removeClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="sy0">&lt;/</span>script<span class="sy0">&gt;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="sy0">&lt;</span>style<span class="sy0">&gt;</span>
+  #photos <span class="br0">&#123;</span>
+    border<span class="sy0">:</span> 1px solid #cfcfcf<span class="sy0">;</span>
+    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span>
+    margin<span class="sy0">:</span> 1.5em <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span>
+    padding<span class="sy0">:</span> 6px<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  #photos li <span class="br0">&#123;</span>
+    display<span class="sy0">:</span> inline<span class="sy0">-</span>block<span class="sy0">;</span>
+    list<span class="sy0">-</span>style<span class="sy0">:</span> none<span class="sy0">;</span>
+&nbsp;
+    <span class="co2">/* fake inline-block for IE&lt;8 */</span>
+    zoom<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">;</span>
+    <span class="sy0">*</span>display<span class="sy0">:</span> inline<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  #photos .<span class="me1">empty</span> <span class="br0">&#123;</span> font<span class="sy0">-</span>style<span class="sy0">:</span> italic<span class="sy0">;</span> <span class="br0">&#125;</span>
+&nbsp;
+  #photos .<span class="me1">photo</span> <span class="br0">&#123;</span>
+    margin<span class="sy0">:</span> 5px<span class="sy0">;</span>
+    text<span class="sy0">-</span>align<span class="sy0">:</span> center<span class="sy0">;</span>
+    width<span class="sy0">:</span> 240px<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  #photos .<span class="me1">photo</span> img <span class="br0">&#123;</span>
+    border<span class="sy0">:</span> 1px solid #000<span class="sy0">;</span>
+    vertical<span class="sy0">-</span>align<span class="sy0">:</span> top<span class="sy0">;</span>
+  <span class="br0">&#125;</span>
+&nbsp;
+  #photos .<span class="me1">hidden</span> <span class="br0">&#123;</span> display<span class="sy0">:</span> none<span class="sy0">;</span> <span class="br0">&#125;</span>
+<span class="sy0">&lt;/</span>style<span class="sy0">&gt;</span>
+&nbsp;
+<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;</span>
+  <span class="sy0">&lt;</span>label <span class="kw1">for</span><span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span><span class="sy0">&gt;</span>Filter by<span class="sy0">:&lt;/</span>label<span class="sy0">&gt;&lt;</span>br<span class="sy0">&gt;</span>
+  <span class="sy0">&lt;</span>input id<span class="sy0">=</span><span class="st0">&quot;ac-input&quot;</span> type<span class="sy0">=</span><span class="st0">&quot;text&quot;</span><span class="sy0">&gt;</span>
+&nbsp;
+  <span class="sy0">&lt;</span>ul id<span class="sy0">=</span><span class="st0">&quot;photos&quot;</span><span class="sy0">&gt;</span>
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;apple, fruit&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213328415/in/photostream/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5002/5213328415_4cf3aa583f_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Apple pie&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;pecan&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213327801/in/photostream/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5208/5213327801_1e62145da1_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Pecan pie&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;maple custard&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213920818/in/photostream/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5245/5213920818_bf7cd599c3_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Maple custard pie&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;pumpkin&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/5213912956/in/photostream/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm6.static.flickr.com/5049/5213912956_7cba11aa01_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Pumpkin pie&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;turkey, pot pie, carrots, meat, savory&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/2055852065/in/photostream/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm3.static.flickr.com/2330/2055852065_d9a7d56650_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Turkey pot pie&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;cherry, hearts, fruit&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/wonko/100174720/in/photostream/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm1.static.flickr.com/34/100174720_dad453636d_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Cherry pie with two hearts on top&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;lattice, sour cherry, fruit&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4839675135/in/photostream/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4083/4839675135_fb5e88da3d_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Lattice-top sour cherry pie&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;chocolate, cream, cinnamon, meringue, christmas, tree&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4283875981/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm5.static.flickr.com/4029/4283875981_faaccb9089_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Chocolate cream pie with cinnamon meringue&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;strawberry, chiffon, chocolate, wafer, fruit&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/4592482821/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm2.static.flickr.com/1070/4592482821_925ba97e60_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Strawberry chiffon pie with chocolate wafer crust&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;key lime, whipped cream, graham cracker, slice, fruit&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3492566166/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3413/3492566166_0fd62e0d43_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Key lime pie with graham cracker crust&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+&nbsp;
+    <span class="sy0">&lt;</span>li <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;photo&quot;</span> data<span class="sy0">-</span>tags<span class="sy0">=</span><span class="st0">&quot;lattice top, apple, fruit&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;</span>a href<span class="sy0">=</span><span class="st0">&quot;http://www.flickr.com/photos/faerye/3394679580/&quot;</span><span class="sy0">&gt;</span>
+        <span class="sy0">&lt;</span>img src<span class="sy0">=</span><span class="st0">&quot;http://farm4.static.flickr.com/3569/3394679580_8b08c46fe6_m.jpg&quot;</span> alt<span class="sy0">=</span><span class="st0">&quot;Lattice top apple pie&quot;</span><span class="sy0">&gt;</span>
+      <span class="sy0">&lt;/</span>a<span class="sy0">&gt;</span>
+    <span class="sy0">&lt;/</span>li<span class="sy0">&gt;</span>
+  <span class="sy0">&lt;/</span>ul<span class="sy0">&gt;</span>
+<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>
+&nbsp;
+<span class="sy0">&lt;</span>script<span class="sy0">&gt;</span>
+YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;autocomplete-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;autocomplete-filters&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+  <span class="co1">// Create a custom PieFilter class that extends AutoCompleteBase.</span>
+  <span class="kw2">var</span> PieFilter <span class="sy0">=</span> Y.<span class="me1">Base</span>.<span class="me1">create</span><span class="br0">&#40;</span><span class="st0">'pieFilter'</span><span class="sy0">,</span> Y.<span class="me1">Base</span><span class="sy0">,</span> <span class="br0">&#91;</span>Y.<span class="me1">AutoCompleteBase</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    initializer<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      <span class="kw1">this</span>._bindUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+      <span class="kw1">this</span>._syncUIACBase<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span>
+&nbsp;
+  <span class="co1">// Create and configure an instance of the PieFilter class.</span>
+  filter <span class="sy0">=</span> <span class="kw2">new</span> PieFilter<span class="br0">&#40;</span><span class="br0">&#123;</span>
+    inputNode<span class="sy0">:</span> <span class="st0">'#ac-input'</span><span class="sy0">,</span>
+    minQueryLength<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>
+    queryDelay<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Run an immediately-invoked function that returns an array of results to</span>
+    <span class="co1">// be used for each query, based on the photos on the page. Since the list</span>
+    <span class="co1">// of photos remains static, this saves time by not gathering the results</span>
+    <span class="co1">// for each query.</span>
+    <span class="co1">//</span>
+    <span class="co1">// If the list of results were not static, we could simply set the source</span>
+    <span class="co1">// to the function itself rather than invoking the function immediately,</span>
+    <span class="co1">// and it would then run on every query.</span>
+    source<span class="sy0">:</span> <span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      <span class="kw2">var</span> results <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+      <span class="co1">// Build an array of results containing each photo in the list.</span>
+      Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">each</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        results.<span class="me1">push</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+          node<span class="sy0">:</span> node<span class="sy0">,</span>
+          tags<span class="sy0">:</span> node.<span class="me1">getAttribute</span><span class="br0">&#40;</span><span class="st0">'data-tags'</span><span class="br0">&#41;</span>
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+      <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+      <span class="kw1">return</span> results<span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// &lt;-- Note the parens. This invokes the function immediately.</span>
+          <span class="co1">//     Remove these to invoke the function on every query instead.</span>
+&nbsp;
+    <span class="co1">// Specify that the &quot;tags&quot; property of each result object contains the text</span>
+    <span class="co1">// to filter on.</span>
+    resultTextLocator<span class="sy0">:</span> <span class="st0">'tags'</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Use a result filter to filter the photo results based on their tags.</span>
+    resultFilters<span class="sy0">:</span> <span class="st0">'phraseMatch'</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+  <span class="co1">// Subscribe to the &quot;results&quot; event and update photo visibility based on</span>
+  <span class="co1">// whether or not they were included in the list of results.</span>
+  filter.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'results'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// First hide all the photos.</span>
+    Y.<span class="me1">all</span><span class="br0">&#40;</span><span class="st0">'#photos &gt; .photo'</span><span class="br0">&#41;</span>.<span class="me1">addClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Then unhide the ones that are in the current result list.</span>
+    Y.<span class="me1">Array</span>.<span class="me1">each</span><span class="br0">&#40;</span>e.<span class="me1">results</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>result<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+      result.<span class="me1">raw</span>.<span class="me1">node</span>.<span class="me1">removeClass</span><span class="br0">&#40;</span><span class="st0">'hidden'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+  <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="sy0">&lt;/</span>script<span class="sy0">&gt;</span></pre></div><textarea id="syntax-b48ba29b5f47818a2209e7500c9389ed-plain"><style>
+  #photos {
+    border: 1px solid #cfcfcf;
+    list-style: none;
+    margin: 1.5em 0 0;
+    padding: 6px;
+  }
+
+  #photos li {
+    display: inline-block;
+    list-style: none;
+
+    /* fake inline-block for IE<8 */
+    zoom: 1;
+    *display: inline;
+  }
+
+  #photos .empty { font-style: italic; }
+
+  #photos .photo {
+    margin: 5px;
+    text-align: center;
+    width: 240px;
+  }
+
+  #photos .photo img {
+    border: 1px solid #000;
+    vertical-align: top;
+  }
+
+  #photos .hidden { display: none; }
+</style>
+
+<div id="demo">
+  <label for="ac-input">Filter by:</label><br>
+  <input id="ac-input" type="text">
+
+  <ul id="photos">
+    <li class="photo" data-tags="apple, fruit">
+      <a href="http://www.flickr.com/photos/wonko/5213328415/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5002/5213328415_4cf3aa583f_m.jpg" alt="Apple pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="pecan">
+      <a href="http://www.flickr.com/photos/wonko/5213327801/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5208/5213327801_1e62145da1_m.jpg" alt="Pecan pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="maple custard">
+      <a href="http://www.flickr.com/photos/wonko/5213920818/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5245/5213920818_bf7cd599c3_m.jpg" alt="Maple custard pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="pumpkin">
+      <a href="http://www.flickr.com/photos/wonko/5213912956/in/photostream/">
+        <img src="http://farm6.static.flickr.com/5049/5213912956_7cba11aa01_m.jpg" alt="Pumpkin pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="turkey, pot pie, carrots, meat, savory">
+      <a href="http://www.flickr.com/photos/wonko/2055852065/in/photostream/">
+        <img src="http://farm3.static.flickr.com/2330/2055852065_d9a7d56650_m.jpg" alt="Turkey pot pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="cherry, hearts, fruit">
+      <a href="http://www.flickr.com/photos/wonko/100174720/in/photostream/">
+        <img src="http://farm1.static.flickr.com/34/100174720_dad453636d_m.jpg" alt="Cherry pie with two hearts on top">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="lattice, sour cherry, fruit">
+      <a href="http://www.flickr.com/photos/faerye/4839675135/in/photostream/">
+        <img src="http://farm5.static.flickr.com/4083/4839675135_fb5e88da3d_m.jpg" alt="Lattice-top sour cherry pie">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="chocolate, cream, cinnamon, meringue, christmas, tree">
+      <a href="http://www.flickr.com/photos/faerye/4283875981/">
+        <img src="http://farm5.static.flickr.com/4029/4283875981_faaccb9089_m.jpg" alt="Chocolate cream pie with cinnamon meringue">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="strawberry, chiffon, chocolate, wafer, fruit">
+      <a href="http://www.flickr.com/photos/faerye/4592482821/">
+        <img src="http://farm2.static.flickr.com/1070/4592482821_925ba97e60_m.jpg" alt="Strawberry chiffon pie with chocolate wafer crust">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="key lime, whipped cream, graham cracker, slice, fruit">
+      <a href="http://www.flickr.com/photos/faerye/3492566166/">
+        <img src="http://farm4.static.flickr.com/3413/3492566166_0fd62e0d43_m.jpg" alt="Key lime pie with graham cracker crust">
+      </a>
+    </li>
+
+    <li class="photo" data-tags="lattice top, apple, fruit">
+      <a href="http://www.flickr.com/photos/faerye/3394679580/">
+        <img src="http://farm4.static.flickr.com/3569/3394679580_8b08c46fe6_m.jpg" alt="Lattice top apple pie">
+      </a>
+    </li>
+  </ul>
+</div>
+
+<script>
+YUI().use("autocomplete-base", "autocomplete-filters", function (Y) {
+  // Create a custom PieFilter class that extends AutoCompleteBase.
+  var PieFilter = Y.Base.create('pieFilter', Y.Base, [Y.AutoCompleteBase], {
+    initializer: function () {
+      this._bindUIACBase();
+      this._syncUIACBase();
+    }
+  }),
+
+  // Create and configure an instance of the PieFilter class.
+  filter = new PieFilter({
+    inputNode: '#ac-input',
+    minQueryLength: 0,
+    queryDelay: 0,
+
+    // Run an immediately-invoked function that returns an array of results to
+    // be used for each query, based on the photos on the page. Since the list
+    // of photos remains static, this saves time by not gathering the results
+    // for each query.
+    //
+    // If the list of results were not static, we could simply set the source
+    // to the function itself rather than invoking the function immediately,
+    // and it would then run on every query.
+    source: (function () {
+      var results = [];
+
+      // Build an array of results containing each photo in the list.
+      Y.all('#photos > .photo').each(function (node) {
+        results.push({
+          node: node,
+          tags: node.getAttribute('data-tags')
+        });
+      });
+
+      return results;
+    }()), // <-- Note the parens. This invokes the function immediately.
+          //     Remove these to invoke the function on every query instead.
+
+    // Specify that the "tags" property of each result object contains the text
+    // to filter on.
+    resultTextLocator: 'tags',
+
+    // Use a result filter to filter the photo results based on their tags.
+    resultFilters: 'phraseMatch'
+  });
+
+  // Subscribe to the "results" event and update photo visibility based on
+  // whether or not they were included in the list of results.
+  filter.on('results', function (e) {
+    // First hide all the photos.
+    Y.all('#photos > .photo').addClass('hidden');
+
+    // Then unhide the ones that are in the current result list.
+    Y.Array.each(e.results, function (result) {
+      result.raw.node.removeClass('hidden');
+    });
+  });
+});
+</script></textarea></div>				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    AutoComplete Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li><a href='../autocomplete/ac_local.html'>Basic Local Data</a></li><li><a href='../autocomplete/ac_jsonp.html'>Remote Data via JSONP</a></li><li><a href='../autocomplete/ac_yql.html'>Remote Data via YQL</a></li><li><a href='../autocomplete/ac_datasource.html'>Remote Data via DataSource</a></li><li><a href='../autocomplete/ac_tagging.html'>Tag Completion using Query Delimiters</a></li><li><a href='../autocomplete/ac_flickr.html'>Find Photos on Flickr (Custom Formatting, YQL Source)</a></li><li class='selected'><a href='../autocomplete/ac_filter.html'>Filter a Set of Existing Items on the Page</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More AutoComplete Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/autocomplete/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_autocomplete.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="item"><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="selected "><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

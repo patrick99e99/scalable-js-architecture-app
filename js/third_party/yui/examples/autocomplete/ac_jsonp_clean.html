@@ -1,0 +1,63 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Remote Data via JSONP</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Remote Data via JSONP</h1>
+
+<div class="exampleIntro">
+	<p>
+This example demonstrates how to provide autocomplete suggestions from a remote JSONP API. In this case, we're using <a href="http://develop.github.com/p/users.html">GitHub's user search API</a> to suggest GitHub usernames.
+</p>
+
+<p>
+Try typing your GitHub username. If you don't have a GitHub account, try the names of some YUI developers: rgrove, lsmith, davglass, amoore, msweeney
+</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="demo">
+  <label for="ac-input">Enter a GitHub username:</label><br>
+  <input id="ac-input" type="text">
+</div>
+
+<script>
+YUI({ filter: 'raw' }).use("autocomplete", "autocomplete-highlighters", function (Y) {
+  Y.one('#ac-input').plug(Y.Plugin.AutoComplete, {
+    resultHighlighter: 'phraseMatch',
+    resultListLocator: 'users',
+    resultTextLocator: 'username',
+    source: 'http://github.com/api/v2/json/user/search/{query}?callback={callback}'
+  });
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

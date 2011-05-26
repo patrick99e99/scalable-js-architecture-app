@@ -1,0 +1,191 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Define a Chart's Axes and Series</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    width:90%;
+    max-width: 800px;
+    height:400px;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="false">
+
+<h1>Define a Chart's Axes and Series</h1>
+
+<div class="exampleIntro">
+	This example shows how to explicitly define the axes and series for a <code>Chart</code>.
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<html>
+<head>
+</head>
+<body>
+<div id="mychart"></div>
+<script type="text/javascript">
+(function() {
+    YUI().use('charts', function (Y) 
+    { 
+        //dataProvider source
+        var myDataValues = [ 
+            {date:"1/1/2010", miscellaneous:2000, expenses:3700, revenue:2200}, 
+            {date:"2/1/2010", miscellaneous:5000, expenses:9100, revenue:100}, 
+            {date:"3/1/2010", miscellaneous:4000, expenses:1900, revenue:1500}, 
+            {date:"4/1/2010", miscellaneous:3000, expenses:3900, revenue:2800}, 
+            {date:"5/1/2010", miscellaneous:500, expenses:7000, revenue:2650},
+            {date:"6/1/2010", miscellaneous:3000, expenses:4700, revenue:1200} 
+        ];
+        
+        //Define our axes for the chart.
+        var myAxes = {
+            financials:{
+                keys:["miscellaneous", "revenue", "expenses"],
+                position:"right",
+                type:"numeric",
+                styles:{
+                    majorTicks:{
+                        display: "none"
+                    }
+                }
+            },
+            dateRange:{
+                keys:["date"],
+                position:"bottom",
+                type:"category",
+                styles:{
+                    majorTicks:{
+                        display: "none"
+                    },
+                    label: {
+                        rotation:-45,
+                        margin:{top:5}
+                    }
+                }
+            }
+        };
+       
+        //define the series 
+        var seriesCollection = [
+         {
+                type:"column",
+                xAxis:"dateRange",
+                yAxis:"financials",
+                xKey:"date",
+                yKey:"miscellaneous",
+                xDisplayName:"Date",
+                yDisplayName:"Miscellaneous",
+                styles: {
+                    border: {
+                        weight: 1,
+                        color: "#58006e"
+                    },
+                    over: {
+                        fill: {
+                            alpha: 0.7
+                        }
+                    }
+                }
+            },
+            {
+                type:"column",
+                xAxis:"dateRange",
+                yAxis:"financials",
+                xKey:"date",
+                yKey:"expenses",
+                yDisplayName:"Expenses",
+                styles: {
+                    marker:{
+                        fill: {
+                            color: "#e0ddd0" 
+                        },
+                        border: {
+                            weight:"1",
+                            color: "#cbc8ba"
+                        },
+                        over: {
+                            fill: {
+                                alpha: 0.7
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                type:"combo",
+                xAxis:"dateRange",
+                yAxis:"financials",
+                xKey:"date",
+                yKey:"revenue",
+                xDisplayName:"Date",
+                yDisplayName:"Deductions",
+                    line: {
+                        color: "#ff7200"
+                    },
+                marker: {
+                    fill: {
+                        color: "#ff9f3b"
+                    },
+                    border: {
+                        color: "#ff7200",
+                        weight: 1
+                    },
+                    over: {
+                        width: 12,
+                        height: 12
+                    },
+                    width:9,
+                    height:9
+                }
+            }
+        ];
+
+        //instantiate the chart
+        var myChart = new Y.Chart({
+                            dataProvider:myDataValues, 
+                            axes:myAxes, 
+                            seriesCollection:seriesCollection, 
+                            horizontalGridlines: true,
+                            verticalGridlines: true,
+                            render:"#mychart"
+                        });
+    });
+})();
+</script>
+</body>
+</html>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Dial With a Surrounding Image</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+.yui3-dial{
+	margin:0 0 20px 20px;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring{
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:none;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button {
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:none;
+}
+.yui3-skin-sam .yui3-dial-ring-vml v\:oval {
+	visibility:hidden;
+}
+.yui3-skin-sam .yui3-dial-ring-vml .yui3-dial-marker v\:oval,
+.yui3-skin-sam .yui3-dial-ring-vml .yui3-dial-handle v\:oval {
+	visibility:visible;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button-vml,
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring-vml{
+	background:url(assets/images/empty.png);
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Dial With a Surrounding Image</h1>
+
+<div class="exampleIntro">
+	<p>This example shows how to create a <code>Dial</code> widget using an image 
+that surrounds (or is larger than) the Dial.</p>			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="demo"></div>
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("dial", function(Y) {
+
+	var dial = new Y.Dial({
+		min: -90,
+		max: 90,
+		stepsPerRev: 200,
+		value: 0,
+		diameter: 100
+	});
+	dial.render('#demo');
+	
+	dial._setLabelString('Climate:');
+	dial._setTooltipString('Drag for cool or heat.');
+	dial._setResetString('Off');
+	var im = Y.Node.create('<img src="assets/images/cold_hot.png"/>');
+	im.setStyles({'position':'absolute', 'top':'-3px', 'left':'-9px'});
+	Y.one('.yui3-dial-north-mark').insert(im, 'before');
+	
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

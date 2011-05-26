@@ -1,0 +1,790 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Dial: Dial With Interactive UI</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+<style>
+#example_container {
+	position:relative;
+}
+#demo{
+	margin:0;
+	position:absolute;
+	top:321px;
+	left:0;
+}
+.controls {
+	position:absolute;
+	top:0;
+	left:328px;
+	margin:0 0 0 0;
+	color:#808080;
+	width:300px;
+}
+.controls a {
+	color:#4B78D9 !important; 
+	cursor:pointer;
+}
+.intro-sentence{
+    font-size: 183%;
+    left: 0;
+    line-height: 0.9em;
+    position: absolute;
+    top: 273px;
+    width: 6em;
+}
+#view_frame{ 
+	position:relative;
+	height:500px;
+	width:300px;
+	border:solid 1px #cccccc;
+	overflow:hidden;
+}
+#scene{position:absolute;
+	left:0;
+	top:-6440px;
+	height:6440px;
+	width:100%;
+	background:url(assets/images/earth_to_hubble_bkg.png) repeat;
+}
+#altitude_mark {
+	border-top:solid 1px #CCCCCC;
+	left:-33px;
+	position:absolute;
+	top:403px;
+	width:30px;
+}
+#earth{
+	position:absolute;
+	left:0;
+	top:5834px;
+	height:214px;
+	width:300px;
+}
+#hubble{
+	position:absolute;
+	left:5px;
+	top:7px;
+	height:393px;
+	width:300px;
+}
+#stars{
+	position:absolute;
+	left:0;
+	top:0;
+	background:url(assets/images/stars.png) repeat;
+	height:5000px;
+	width:300px;
+}
+.label{
+	text-transform:uppercase;
+	width:100%;
+	letter-spacing:5px;
+	font-family:Verdana;
+	font-size:85%;
+	position:absolute;
+	left:0;
+	text-align:center;
+}
+.hubble{
+	bottom:6023px;
+	color:#612C88;
+}
+.thermosphere{
+	bottom:1290px;
+	color:#5A009D; }
+.mesosphere{
+	bottom:840px;
+	color:#570BFF;
+}
+.stratosphere{
+	bottom:540px;
+	color:#006999;
+}
+.troposphere{
+	bottom:477px;
+	color:#036585;
+}
+.ozone{
+	bottom:692px;
+	color:#005AAE;
+}
+.crust{
+	bottom:270px;
+	color:#4F2D00;
+}
+.mantle{
+	bottom:42px;
+	color:#897701;
+}
+</style>
+
+</head>
+<body id="yahoo-com" class="yui3-skin-sam  yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Dial: Dial With Interactive UI</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>Dial: Dial With Interactive UI</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	<p>This <code>Dial</code> widget example shows the following:</p>
+
+<ol>
+	<li>A demonstration of a large value range combined with fine increment control.</li>
+	<li>Setting UI strings before rendering</li>
+	<li>Setting configuration attributes</li>
+	<li>Construction-time event subscription allowing Dial to control an interactive UI</li>
+	<li>Calling one of Dial's value change methods from the click of a link. <code>&lt;a&gt;Hubble&lt;/a&gt;</code></li>
+</ol>
+<p>Notice the Dial can traverse the entire 6,000+ pixels of the scene height, but by pulling the handle
+farther away from the Dial's center while rotating, the user can get 1 pixel movements, without strain. 
+After the dial has focus, the following keys also opperate the Dial, arrow up/down/left/right, page up/down, home, end. The action of these keys can be controlled via <a href="http://developer.yahoo.com/yui/3/dial/#attributes" title="YUI 3: Dial">Dial's configuration attributes</a>.</p>
+	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="dial-interactive_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<div id="example_container">
+	<div id="view_frame">
+		<div id="scene">
+			<div id="stars"></div>
+			<img id="hubble" src="assets/images/hubble.png"/>
+			<img id="earth" src="assets/images/mountain_earth.png"/>
+			<div class="label hubble">hubble</div>		
+			<div class="label thermosphere">thermosphere</div>		
+			<div class="label mesosphere">mesosphere</div>		
+			<div class="label stratosphere">stratosphere</div>		
+			<div class="label troposphere">troposphere</div>		
+			<div class="label ozone">ozone</div>		
+			<div class="label crust">crust</div>		
+			<div class="label mantle">mantle</div>		
+		</div>
+	</div>
+	<div class="controls">
+		<div class="intro-sentence">From Earth to <a id="a-hubble">Hubble</a></div>
+		<div id="altitude_mark"></div>
+		<div id="demo"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("dial", function(Y) {
+
+	var sceneH = Y.one('#scene').get('region').height,
+	subSea = 450,
+	viewFrameH = Y.one('#view_frame').get('region').height -2,
+	zeroPt = 100,
+	originY = -sceneH + subSea + viewFrameH - zeroPt;
+	Y.one('#scene').setStyle('top', originY + 'px');
+	setSceneY = function(e) {
+		Y.one('#scene').setStyle('top', (originY + (e.newVal * 10)) + 'px');
+    }
+	var dial = new Y.Dial({
+			min:-35,
+			max:559,
+			stepsPerRev:30,
+			value: 0,
+			diameter: 100,
+			minorStep: 1,
+			majorStep: 10,
+			decimalPlaces: 2, 
+			strings:{label:'Altitude in Kilometers:', resetStr: 'Reset', tooltipHandle: 'Drag to set'},
+			// construction-time event subscription
+            after : {
+                valueChange: Y.bind( setSceneY, dial )
+            }
+	});
+	dial.render('#demo');
+	
+	// Function that calls a method in Dial that sets its value to the value of the max config attribute 
+	// Other methods available include,
+	// _setToMin(), _resetDial(), _incrMinor(), _decrMinor(), _incrMajor(), _decrMajor(),  
+	var setDialToMax = function(){
+		this._setToMax();
+	}
+	
+	// Subscribe to the click of the "Hubble" anchor, passing the dial as the 'this'
+	Y.on('click', setDialToMax, '#a-hubble', dial);	
+
+});
+</script>
+
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<h3>Making a Dial Drive an Interactive UI</h3>
+
+<p>The <code>valueChange</code> event of a <code>Dial</code> can be the means of controlling other UI displayed on a page.</p>
+
+<h4>The Markup</h4>
+
+<p>The only markup requirement for the <code>Dial</code> itself is an element to contain the Dial.
+The rest of the markup and CSS in this example is just for the Hubble telescope visualization.
+</p>
+
+<div id="syntax-cf0d80e459e71f73c62900b3bcd09cf7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></pre></div><textarea id="syntax-cf0d80e459e71f73c62900b3bcd09cf7-plain"><div id="demo"></div></textarea></div>
+<h4>The JavaScript</h4>
+
+<p>This example builds on previous examples by showing how to modify the visible UI strings before the dial renders.</p>
+
+<p>During instatiation of a Dial, several configuration attributes can be set (see the code-block below); note the construction-time event subscription:</p>
+
+<div id="syntax-47def86cae2c5fe89af5caef95e12389" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#123;</span> filter<span class="sy0">:</span> <span class="st0">'raw'</span> <span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;dial&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> dial <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Dial</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">			<span class="co1">// The units in this example are Altitude in Kilometers...</span></div></li><li class="li2"><div class="de2">			min<span class="sy0">:-</span><span class="nu0">35</span><span class="sy0">,</span> 		<span class="co1">// min altitude -35 Kilometers (below earth's surface)</span></div></li><li class="li1"><div class="de1">			max<span class="sy0">:</span><span class="nu0">559</span><span class="sy0">,</span> 		<span class="co1">// max altitude = Hubble's orbit</span></div></li><li class="li1"><div class="de1">			stepsPerRev<span class="sy0">:</span><span class="nu0">30</span><span class="sy0">,</span> 	<span class="co1">// One revolution of the Dial's handle will change the altitude this many units</span></div></li><li class="li1"><div class="de1">			value<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>		<span class="co1">// starting altitude of sea level</span></div></li><li class="li1"><div class="de1">			diameter<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span>		<span class="co1">// diameter of the ring of the dial control in pixels</span></div></li><li class="li2"><div class="de2">			minorStep<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span>		<span class="co1">// keyboard (arrow key) changes this many units</span></div></li><li class="li1"><div class="de1">			majorStep<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>		<span class="co1">// keyboard pg up/down changes this many units</span></div></li><li class="li1"><div class="de1">			decimalPlaces<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span>	<span class="co1">// display this many digits to the right of the decimal point</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">			<span class="co1">// an object literal containing key-value pairs of the visible strings in the Dial UI</span></div></li><li class="li2"><div class="de2">			strings<span class="sy0">:</span><span class="br0">&#123;</span>label<span class="sy0">:</span><span class="st0">'Altitude in Kilometers:'</span><span class="sy0">,</span> resetStr<span class="sy0">:</span> <span class="st0">'Reset'</span><span class="sy0">,</span> tooltipHandle<span class="sy0">:</span> <span class="st0">'Drag to set'</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">			<span class="co1">// construction-time event subscription.</span></div></li><li class="li1"><div class="de1">			<span class="co1">// Whenever the value of this dial object changes, the event handler function (setSceneY) fires</span></div></li><li class="li1"><div class="de1">            after <span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">                valueChange<span class="sy0">:</span> Y.<span class="me1">bind</span><span class="br0">&#40;</span> setSceneY<span class="sy0">,</span> dial <span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	dial.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;#demo&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#123;</span> filter<span class="sy0">:</span> <span class="st0">'raw'</span> <span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;dial&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+	<span class="kw2">var</span> dial <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Dial</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+			<span class="co1">// The units in this example are Altitude in Kilometers...</span>
+			min<span class="sy0">:-</span><span class="nu0">35</span><span class="sy0">,</span> 		<span class="co1">// min altitude -35 Kilometers (below earth's surface)</span>
+			max<span class="sy0">:</span><span class="nu0">559</span><span class="sy0">,</span> 		<span class="co1">// max altitude = Hubble's orbit</span>
+			stepsPerRev<span class="sy0">:</span><span class="nu0">30</span><span class="sy0">,</span> 	<span class="co1">// One revolution of the Dial's handle will change the altitude this many units</span>
+			value<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>		<span class="co1">// starting altitude of sea level</span>
+			diameter<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span>		<span class="co1">// diameter of the ring of the dial control in pixels</span>
+			minorStep<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span>		<span class="co1">// keyboard (arrow key) changes this many units</span>
+			majorStep<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>		<span class="co1">// keyboard pg up/down changes this many units</span>
+			decimalPlaces<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span>	<span class="co1">// display this many digits to the right of the decimal point</span>
+&nbsp;
+			<span class="co1">// an object literal containing key-value pairs of the visible strings in the Dial UI</span>
+			strings<span class="sy0">:</span><span class="br0">&#123;</span>label<span class="sy0">:</span><span class="st0">'Altitude in Kilometers:'</span><span class="sy0">,</span> resetStr<span class="sy0">:</span> <span class="st0">'Reset'</span><span class="sy0">,</span> tooltipHandle<span class="sy0">:</span> <span class="st0">'Drag to set'</span><span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+			<span class="co1">// construction-time event subscription.</span>
+			<span class="co1">// Whenever the value of this dial object changes, the event handler function (setSceneY) fires</span>
+            after <span class="sy0">:</span> <span class="br0">&#123;</span>
+                valueChange<span class="sy0">:</span> Y.<span class="me1">bind</span><span class="br0">&#40;</span> setSceneY<span class="sy0">,</span> dial <span class="br0">&#41;</span>
+            <span class="br0">&#125;</span>
+	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+	dial.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;#demo&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-47def86cae2c5fe89af5caef95e12389-plain">YUI({ filter: 'raw' }).use("dial", function(Y) {
+
+	var dial = new Y.Dial({
+			// The units in this example are Altitude in Kilometers...
+			min:-35, 		// min altitude -35 Kilometers (below earth's surface)
+			max:559, 		// max altitude = Hubble's orbit
+			stepsPerRev:30, 	// One revolution of the Dial's handle will change the altitude this many units
+			value: 0,		// starting altitude of sea level
+			diameter: 100,		// diameter of the ring of the dial control in pixels
+			minorStep: 1,		// keyboard (arrow key) changes this many units
+			majorStep: 10,		// keyboard pg up/down changes this many units
+			decimalPlaces: 2,	// display this many digits to the right of the decimal point
+			
+			// an object literal containing key-value pairs of the visible strings in the Dial UI
+			strings:{label:'Altitude in Kilometers:', resetStr: 'Reset', tooltipHandle: 'Drag to set'},
+			
+			// construction-time event subscription.
+			// Whenever the value of this dial object changes, the event handler function (setSceneY) fires
+            after : {
+                valueChange: Y.bind( setSceneY, dial )
+            }
+	});
+	dial.render("#demo");
+	
+});</textarea></div>
+
+<h5>The Event Handler</h5>
+
+<p>
+Preceding the code that instantiates the <code>Dial</code> widget, declare the event handler.
+We can use the value of the <code>Dial</code> to do whatever we want, but
+in this example the event handler updates the CSS <code>top</code> property of the pictorial scene <code>&lt;div id="scene"&gt;</code> of Hubble's relationship to Earth.
+This scene is moved up or down inside a framing element <code>&lt;div class="viewframe"&gt;</code> that has CSS <code>overflow:hidden;</code>.
+The reason <code>e.newVal</code> is multiplied by <code>10</code> is so that the scene moves 10px for every 1 kilometer of the <code>Dial</code>'s value.
+</p>
+
+
+
+<div id="syntax-98b40c2683d911a5edb6f43375877a52" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/**</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">* The Dial's valueChange event is passed to this.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">* sets the CSS top value of the pictoral scene of the earth to the hubble.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">* This scene is an absolute positioned div inside another div with</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">* overflow set to hidden.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1">setSceneY <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="sy0">,</span> <span class="br0">&#40;</span>originY <span class="sy0">+</span> <span class="br0">&#40;</span>e.<span class="me1">newVal</span> <span class="sy0">*</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/**
+* The Dial's valueChange event is passed to this.
+* sets the CSS top value of the pictoral scene of the earth to the hubble.
+* This scene is an absolute positioned div inside another div with
+* overflow set to hidden.
+*/</span>
+setSceneY <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="sy0">,</span> <span class="br0">&#40;</span>originY <span class="sy0">+</span> <span class="br0">&#40;</span>e.<span class="me1">newVal</span> <span class="sy0">*</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre></div><textarea id="syntax-98b40c2683d911a5edb6f43375877a52-plain">/**
+* The Dial's valueChange event is passed to this.
+* sets the CSS top value of the pictoral scene of the earth to the hubble.
+* This scene is an absolute positioned div inside another div with
+* overflow set to hidden.
+*/
+setSceneY = function(e) {
+	Y.one('#scene').setStyle('top', (originY + (e.newVal * 10)) + 'px');
+}</textarea></div>
+
+<h3 id="full_code_listing">Full Code Listing</h3>
+
+<h4>The Markup</h4>
+<div id="syntax-ff0888d60feb60ca026a6516555ec02b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;example_container&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;view_frame&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">		<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;scene&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;stars&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">			<span class="sy0">&lt;</span>img id<span class="sy0">=</span><span class="st0">&quot;hubble&quot;</span> src<span class="sy0">=</span><span class="st0">&quot;assets/images/hubble.png&quot;</span><span class="sy0">/&gt;</span></div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>img id<span class="sy0">=</span><span class="st0">&quot;earth&quot;</span> src<span class="sy0">=</span><span class="st0">&quot;assets/images/mountain_earth.png&quot;</span><span class="sy0">/&gt;</span></div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label hubble&quot;</span><span class="sy0">&gt;</span>hubble<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label thermosphere&quot;</span><span class="sy0">&gt;</span>thermosphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label mesosphere&quot;</span><span class="sy0">&gt;</span>mesosphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li2"><div class="de2">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label stratosphere&quot;</span><span class="sy0">&gt;</span>stratosphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label troposphere&quot;</span><span class="sy0">&gt;</span>troposphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label ozone&quot;</span><span class="sy0">&gt;</span>ozone<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label crust&quot;</span><span class="sy0">&gt;</span>crust<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li1"><div class="de1">			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label mantle&quot;</span><span class="sy0">&gt;</span>mantle<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		</div></li><li class="li2"><div class="de2">		<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;controls&quot;</span><span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">		<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;intro-sentence&quot;</span><span class="sy0">&gt;</span>From Earth to <span class="sy0">&lt;</span>a id<span class="sy0">=</span><span class="st0">&quot;a-hubble&quot;</span><span class="sy0">&gt;</span>Hubble<span class="sy0">&lt;/</span>a<span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">		<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;altitude_mark&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li2"><div class="de2">		<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1">	<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span></div></li><li class="li1"><div class="de1"><span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;example_container&quot;</span><span class="sy0">&gt;</span>
+	<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;view_frame&quot;</span><span class="sy0">&gt;</span>
+		<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;scene&quot;</span><span class="sy0">&gt;</span>
+			<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;stars&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span>
+			<span class="sy0">&lt;</span>img id<span class="sy0">=</span><span class="st0">&quot;hubble&quot;</span> src<span class="sy0">=</span><span class="st0">&quot;assets/images/hubble.png&quot;</span><span class="sy0">/&gt;</span>
+			<span class="sy0">&lt;</span>img id<span class="sy0">=</span><span class="st0">&quot;earth&quot;</span> src<span class="sy0">=</span><span class="st0">&quot;assets/images/mountain_earth.png&quot;</span><span class="sy0">/&gt;</span>
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label hubble&quot;</span><span class="sy0">&gt;</span>hubble<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label thermosphere&quot;</span><span class="sy0">&gt;</span>thermosphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label mesosphere&quot;</span><span class="sy0">&gt;</span>mesosphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label stratosphere&quot;</span><span class="sy0">&gt;</span>stratosphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label troposphere&quot;</span><span class="sy0">&gt;</span>troposphere<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label ozone&quot;</span><span class="sy0">&gt;</span>ozone<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label crust&quot;</span><span class="sy0">&gt;</span>crust<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+			<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;label mantle&quot;</span><span class="sy0">&gt;</span>mantle<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>		
+		<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>
+	<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>
+	<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;controls&quot;</span><span class="sy0">&gt;</span>
+		<span class="sy0">&lt;</span>div <span class="kw2">class</span><span class="sy0">=</span><span class="st0">&quot;intro-sentence&quot;</span><span class="sy0">&gt;</span>From Earth to <span class="sy0">&lt;</span>a id<span class="sy0">=</span><span class="st0">&quot;a-hubble&quot;</span><span class="sy0">&gt;</span>Hubble<span class="sy0">&lt;/</span>a<span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span>
+		<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;altitude_mark&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span>
+		<span class="sy0">&lt;</span>div id<span class="sy0">=</span><span class="st0">&quot;demo&quot;</span><span class="sy0">&gt;&lt;/</span>div<span class="sy0">&gt;</span>
+	<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span>
+<span class="sy0">&lt;/</span>div<span class="sy0">&gt;</span></pre></div><textarea id="syntax-ff0888d60feb60ca026a6516555ec02b-plain"><div id="example_container">
+	<div id="view_frame">
+		<div id="scene">
+			<div id="stars"></div>
+			<img id="hubble" src="assets/images/hubble.png"/>
+			<img id="earth" src="assets/images/mountain_earth.png"/>
+			<div class="label hubble">hubble</div>		
+			<div class="label thermosphere">thermosphere</div>		
+			<div class="label mesosphere">mesosphere</div>		
+			<div class="label stratosphere">stratosphere</div>		
+			<div class="label troposphere">troposphere</div>		
+			<div class="label ozone">ozone</div>		
+			<div class="label crust">crust</div>		
+			<div class="label mantle">mantle</div>		
+		</div>
+	</div>
+	<div class="controls">
+		<div class="intro-sentence">From Earth to <a id="a-hubble">Hubble</a></div>
+		<div id="altitude_mark"></div>
+		<div id="demo"></div>
+	</div>
+</div></textarea></div>
+
+<h4>The JavaScript</h4>
+<div id="syntax-9222449a9e997e89a4abcd1f50e11e47" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#123;</span> filter<span class="sy0">:</span> <span class="st0">'raw'</span> <span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;dial&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">// get and set some variables used to calculate the orininal Y position of the scene</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> sceneH <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">height</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">	subSea <span class="sy0">=</span> <span class="nu0">350</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	viewFrameH <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#view_frame'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">height</span> <span class="sy0">-</span> <span class="nu0">2</span><span class="sy0">,</span> <span class="co1">// minus 2 for border</span></div></li><li class="li1"><div class="de1">	zeroPt <span class="sy0">=</span> <span class="nu0">100</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">// original Y position of the scene</span></div></li><li class="li2"><div class="de2">	originY <span class="sy0">=</span> <span class="sy0">-</span>sceneH <span class="sy0">+</span> subSea <span class="sy0">+</span> viewFrameH <span class="sy0">-</span> zeroPt<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">// initialize the Y of the scene so earth surface aligns with altitude marker</span></div></li><li class="li1"><div class="de1">	Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="sy0">,</span> originY <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="coMULTI">/**</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	* The Dial's valueChange event is passed to this.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	* sets the CSS top value of the pictoral scene of the earth to the hubble.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	* This scene is an absolute positioned div inside another div with</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	* overflow set to hidden.</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">	*/</span></div></li><li class="li1"><div class="de1">	setSceneY <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="sy0">,</span> <span class="br0">&#40;</span>originY <span class="sy0">+</span> <span class="br0">&#40;</span>e.<span class="me1">newVal</span> <span class="sy0">*</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> dial <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Dial</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">			min<span class="sy0">:-</span><span class="nu0">35</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">			max<span class="sy0">:</span><span class="nu0">559</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">			stepsPerRev<span class="sy0">:</span><span class="nu0">30</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">			value<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">			diameter<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">			minorStep<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">			majorStep<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">			decimalPlaces<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">			<span class="co1">// an object literal containing key-value pairs of the visible strings in the Dial UI</span></div></li><li class="li2"><div class="de2">			strings<span class="sy0">:</span><span class="br0">&#123;</span>label<span class="sy0">:</span><span class="st0">'Altitude in Kilometers:'</span><span class="sy0">,</span> resetStr<span class="sy0">:</span> <span class="st0">'Reset'</span><span class="sy0">,</span> tooltipHandle<span class="sy0">:</span> <span class="st0">'Drag to set'</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">			<span class="co1">// construction-time event subscription.</span></div></li><li class="li1"><div class="de1">			<span class="co1">// Whenever the value of this dial object changes, the event handler (setSceneY) function fires</span></div></li><li class="li1"><div class="de1">            after <span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">                valueChange<span class="sy0">:</span> Y.<span class="me1">bind</span><span class="br0">&#40;</span> setSceneY<span class="sy0">,</span> dial <span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	dial.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'#demo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#altitude_mark'</span><span class="br0">&#41;</span>.<span class="me1">setXY</span><span class="br0">&#40;</span><span class="br0">&#91;</span>Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#view_frame'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">right</span><span class="sy0">,</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#view_frame'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">bottom</span> <span class="sy0">-</span> <span class="nu0">100</span><span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#123;</span> filter<span class="sy0">:</span> <span class="st0">'raw'</span> <span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;dial&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+	<span class="co1">// get and set some variables used to calculate the orininal Y position of the scene</span>
+	<span class="kw2">var</span> sceneH <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">height</span><span class="sy0">,</span>
+	subSea <span class="sy0">=</span> <span class="nu0">350</span><span class="sy0">,</span>
+	viewFrameH <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#view_frame'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">height</span> <span class="sy0">-</span> <span class="nu0">2</span><span class="sy0">,</span> <span class="co1">// minus 2 for border</span>
+	zeroPt <span class="sy0">=</span> <span class="nu0">100</span><span class="sy0">,</span>
+&nbsp;
+	<span class="co1">// original Y position of the scene</span>
+	originY <span class="sy0">=</span> <span class="sy0">-</span>sceneH <span class="sy0">+</span> subSea <span class="sy0">+</span> viewFrameH <span class="sy0">-</span> zeroPt<span class="sy0">;</span>
+&nbsp;
+	<span class="co1">// initialize the Y of the scene so earth surface aligns with altitude marker</span>
+	Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="sy0">,</span> originY <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="coMULTI">/**
+	* The Dial's valueChange event is passed to this.
+	* sets the CSS top value of the pictoral scene of the earth to the hubble.
+	* This scene is an absolute positioned div inside another div with
+	* overflow set to hidden.
+	*/</span>
+	setSceneY <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#scene'</span><span class="br0">&#41;</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="sy0">,</span> <span class="br0">&#40;</span>originY <span class="sy0">+</span> <span class="br0">&#40;</span>e.<span class="me1">newVal</span> <span class="sy0">*</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+	<span class="kw2">var</span> dial <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Dial</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+			min<span class="sy0">:-</span><span class="nu0">35</span><span class="sy0">,</span>
+			max<span class="sy0">:</span><span class="nu0">559</span><span class="sy0">,</span>
+			stepsPerRev<span class="sy0">:</span><span class="nu0">30</span><span class="sy0">,</span>
+			value<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>
+			diameter<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span>
+			minorStep<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span>
+			majorStep<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+			decimalPlaces<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span> 
+&nbsp;
+			<span class="co1">// an object literal containing key-value pairs of the visible strings in the Dial UI</span>
+			strings<span class="sy0">:</span><span class="br0">&#123;</span>label<span class="sy0">:</span><span class="st0">'Altitude in Kilometers:'</span><span class="sy0">,</span> resetStr<span class="sy0">:</span> <span class="st0">'Reset'</span><span class="sy0">,</span> tooltipHandle<span class="sy0">:</span> <span class="st0">'Drag to set'</span><span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+			<span class="co1">// construction-time event subscription.</span>
+			<span class="co1">// Whenever the value of this dial object changes, the event handler (setSceneY) function fires</span>
+            after <span class="sy0">:</span> <span class="br0">&#123;</span>
+                valueChange<span class="sy0">:</span> Y.<span class="me1">bind</span><span class="br0">&#40;</span> setSceneY<span class="sy0">,</span> dial <span class="br0">&#41;</span>
+            <span class="br0">&#125;</span>
+	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+	dial.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'#demo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+	Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#altitude_mark'</span><span class="br0">&#41;</span>.<span class="me1">setXY</span><span class="br0">&#40;</span><span class="br0">&#91;</span>Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#view_frame'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">right</span><span class="sy0">,</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#view_frame'</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'region'</span><span class="br0">&#41;</span>.<span class="me1">bottom</span> <span class="sy0">-</span> <span class="nu0">100</span><span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-9222449a9e997e89a4abcd1f50e11e47-plain">YUI({ filter: 'raw' }).use("dial", function(Y) {
+
+	// get and set some variables used to calculate the orininal Y position of the scene
+	var sceneH = Y.one('#scene').get('region').height,
+	subSea = 350,
+	viewFrameH = Y.one('#view_frame').get('region').height - 2, // minus 2 for border
+	zeroPt = 100,
+	
+	// original Y position of the scene
+	originY = -sceneH + subSea + viewFrameH - zeroPt;
+	
+	// initialize the Y of the scene so earth surface aligns with altitude marker
+	Y.one('#scene').setStyle('top', originY + 'px');
+
+	/**
+	* The Dial's valueChange event is passed to this.
+	* sets the CSS top value of the pictoral scene of the earth to the hubble.
+	* This scene is an absolute positioned div inside another div with
+	* overflow set to hidden.
+	*/
+	setSceneY = function(e) {
+		Y.one('#scene').setStyle('top', (originY + (e.newVal * 10)) + 'px');
+    }
+	var dial = new Y.Dial({
+			min:-35,
+			max:559,
+			stepsPerRev:30,
+			value: 0,
+			diameter: 100,
+			minorStep: 1,
+			majorStep: 10,
+			decimalPlaces: 2, 
+
+			// an object literal containing key-value pairs of the visible strings in the Dial UI
+			strings:{label:'Altitude in Kilometers:', resetStr: 'Reset', tooltipHandle: 'Drag to set'},
+			
+			// construction-time event subscription.
+			// Whenever the value of this dial object changes, the event handler (setSceneY) function fires
+            after : {
+                valueChange: Y.bind( setSceneY, dial )
+            }
+	});
+	dial.render('#demo');
+	Y.one('#altitude_mark').setXY([Y.one('#view_frame').get('region').right, Y.one('#view_frame').get('region').bottom - 100] );
+
+});</textarea></div>
+
+<h4>The CSS</h4>
+<div id="syntax-9d6a4f2a9ed47dd1f3eb40dd936d5608" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">#example_container <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>relative<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">#demo<span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	margin<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:</span>321px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">.<span class="me1">controls</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	left<span class="sy0">:</span>328px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	margin<span class="sy0">:</span><span class="nu0">0</span> <span class="nu0">0</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">	color<span class="sy0">:</span>#<span class="nu0">808080</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span>300px<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">controls</span> a <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	color<span class="sy0">:</span>#4B78D9 <span class="sy0">!</span>important<span class="sy0">;</span> </div></li><li class="li2"><div class="de2">	cursor<span class="sy0">:</span>pointer<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">intro</span><span class="sy0">-</span>sentence<span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	font<span class="sy0">-</span>size<span class="sy0">:</span> <span class="nu0">183</span><span class="sy0">%;</span></div></li><li class="li1"><div class="de1">	left<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">	line<span class="sy0">-</span>height<span class="sy0">:</span> 0.9em<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span> absolute<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:</span> 273px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span> 6em<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">#view_frame<span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>relative<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	height<span class="sy0">:</span>500px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span>300px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	border<span class="sy0">:</span>solid 1px #cccccc<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	overflow<span class="sy0">:</span>hidden<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">#scene<span class="br0">&#123;</span>position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:-</span>6440px<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	height<span class="sy0">:</span>6440px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span><span class="nu0">100</span><span class="sy0">%;</span></div></li><li class="li1"><div class="de1">	background<span class="sy0">:</span>url<span class="br0">&#40;</span>assets<span class="sy0">/</span>images<span class="sy0">/</span>earth_to_hubble_bkg.<span class="me1">png</span><span class="br0">&#41;</span> repeat<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">#altitude_mark <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	border<span class="sy0">-</span>top<span class="sy0">:</span>solid 1px #CCCCCC<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	left<span class="sy0">:-</span>33px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:</span>403px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span>30px<span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">#earth<span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:</span>5834px<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	height<span class="sy0">:</span>214px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span>300px<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">#hubble<span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	left<span class="sy0">:</span>5px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:</span>7px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	height<span class="sy0">:</span>393px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span>300px<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">#stars<span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	top<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	background<span class="sy0">:</span>url<span class="br0">&#40;</span>assets<span class="sy0">/</span>images<span class="sy0">/</span>stars.<span class="me1">png</span><span class="br0">&#41;</span> repeat<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	height<span class="sy0">:</span>5000px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	width<span class="sy0">:</span>300px<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">label</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	text<span class="sy0">-</span>transform<span class="sy0">:</span>uppercase<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	width<span class="sy0">:</span><span class="nu0">100</span><span class="sy0">%;</span></div></li><li class="li1"><div class="de1">	letter<span class="sy0">-</span>spacing<span class="sy0">:</span>5px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	font<span class="sy0">-</span>family<span class="sy0">:</span>Verdana<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	font<span class="sy0">-</span>size<span class="sy0">:</span><span class="nu0">85</span><span class="sy0">%;</span></div></li><li class="li1"><div class="de1">	position<span class="sy0">:</span>absolute<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	text<span class="sy0">-</span>align<span class="sy0">:</span>center<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">hubble</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	bottom<span class="sy0">:</span>6023px<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	color<span class="sy0">:</span>#612C88<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">thermosphere</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	bottom<span class="sy0">:</span>1290px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	color<span class="sy0">:</span>#5A009D<span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">mesosphere</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	bottom<span class="sy0">:</span>840px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	color<span class="sy0">:</span>#570BFF<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">.<span class="me1">stratosphere</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	bottom<span class="sy0">:</span>540px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	color<span class="sy0">:</span>#006999<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">troposphere</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	bottom<span class="sy0">:</span>477px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	color<span class="sy0">:</span>#036585<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">ozone</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	bottom<span class="sy0">:</span>692px<span class="sy0">;</span></div></li><li class="li2"><div class="de2">	color<span class="sy0">:</span>#005AAE<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">crust</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	bottom<span class="sy0">:</span>270px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	color<span class="sy0">:</span>#4F2D00<span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">.<span class="me1">mantle</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	bottom<span class="sy0">:</span>42px<span class="sy0">;</span></div></li><li class="li1"><div class="de1">	color<span class="sy0">:</span>#<span class="nu0">897701</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">#example_container <span class="br0">&#123;</span>
+	position<span class="sy0">:</span>relative<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+#demo<span class="br0">&#123;</span>
+	margin<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+	position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	top<span class="sy0">:</span>321px<span class="sy0">;</span>
+	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">controls</span> <span class="br0">&#123;</span>
+	position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	top<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+	left<span class="sy0">:</span>328px<span class="sy0">;</span>
+	margin<span class="sy0">:</span><span class="nu0">0</span> <span class="nu0">0</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span>
+	color<span class="sy0">:</span>#<span class="nu0">808080</span><span class="sy0">;</span>
+	width<span class="sy0">:</span>300px<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">controls</span> a <span class="br0">&#123;</span>
+	color<span class="sy0">:</span>#4B78D9 <span class="sy0">!</span>important<span class="sy0">;</span> 
+	cursor<span class="sy0">:</span>pointer<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">intro</span><span class="sy0">-</span>sentence<span class="br0">&#123;</span>
+	font<span class="sy0">-</span>size<span class="sy0">:</span> <span class="nu0">183</span><span class="sy0">%;</span>
+	left<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span>
+	line<span class="sy0">-</span>height<span class="sy0">:</span> 0.9em<span class="sy0">;</span>
+	position<span class="sy0">:</span> absolute<span class="sy0">;</span>
+	top<span class="sy0">:</span> 273px<span class="sy0">;</span>
+	width<span class="sy0">:</span> 6em<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+#view_frame<span class="br0">&#123;</span> 
+	position<span class="sy0">:</span>relative<span class="sy0">;</span>
+	height<span class="sy0">:</span>500px<span class="sy0">;</span>
+	width<span class="sy0">:</span>300px<span class="sy0">;</span>
+	border<span class="sy0">:</span>solid 1px #cccccc<span class="sy0">;</span>
+	overflow<span class="sy0">:</span>hidden<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+#scene<span class="br0">&#123;</span>position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+	top<span class="sy0">:-</span>6440px<span class="sy0">;</span>
+	height<span class="sy0">:</span>6440px<span class="sy0">;</span>
+	width<span class="sy0">:</span><span class="nu0">100</span><span class="sy0">%;</span>
+	background<span class="sy0">:</span>url<span class="br0">&#40;</span>assets<span class="sy0">/</span>images<span class="sy0">/</span>earth_to_hubble_bkg.<span class="me1">png</span><span class="br0">&#41;</span> repeat<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+#altitude_mark <span class="br0">&#123;</span>
+	border<span class="sy0">-</span>top<span class="sy0">:</span>solid 1px #CCCCCC<span class="sy0">;</span>
+	left<span class="sy0">:-</span>33px<span class="sy0">;</span>
+	position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	top<span class="sy0">:</span>403px<span class="sy0">;</span>
+	width<span class="sy0">:</span>30px<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+#earth<span class="br0">&#123;</span>
+	position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+	top<span class="sy0">:</span>5834px<span class="sy0">;</span>
+	height<span class="sy0">:</span>214px<span class="sy0">;</span>
+	width<span class="sy0">:</span>300px<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+#hubble<span class="br0">&#123;</span>
+	position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	left<span class="sy0">:</span>5px<span class="sy0">;</span>
+	top<span class="sy0">:</span>7px<span class="sy0">;</span>
+	height<span class="sy0">:</span>393px<span class="sy0">;</span>
+	width<span class="sy0">:</span>300px<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+#stars<span class="br0">&#123;</span>
+	position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+	top<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+	background<span class="sy0">:</span>url<span class="br0">&#40;</span>assets<span class="sy0">/</span>images<span class="sy0">/</span>stars.<span class="me1">png</span><span class="br0">&#41;</span> repeat<span class="sy0">;</span>
+	height<span class="sy0">:</span>5000px<span class="sy0">;</span>
+	width<span class="sy0">:</span>300px<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">label</span><span class="br0">&#123;</span>
+	text<span class="sy0">-</span>transform<span class="sy0">:</span>uppercase<span class="sy0">;</span>
+	width<span class="sy0">:</span><span class="nu0">100</span><span class="sy0">%;</span>
+	letter<span class="sy0">-</span>spacing<span class="sy0">:</span>5px<span class="sy0">;</span>
+	font<span class="sy0">-</span>family<span class="sy0">:</span>Verdana<span class="sy0">;</span>
+	font<span class="sy0">-</span>size<span class="sy0">:</span><span class="nu0">85</span><span class="sy0">%;</span>
+	position<span class="sy0">:</span>absolute<span class="sy0">;</span>
+	left<span class="sy0">:</span><span class="nu0">0</span><span class="sy0">;</span>
+	text<span class="sy0">-</span>align<span class="sy0">:</span>center<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">hubble</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>6023px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#612C88<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">thermosphere</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>1290px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#5A009D<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">mesosphere</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>840px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#570BFF<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">stratosphere</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>540px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#006999<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">troposphere</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>477px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#036585<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">ozone</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>692px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#005AAE<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">crust</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>270px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#4F2D00<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+.<span class="me1">mantle</span><span class="br0">&#123;</span>
+	bottom<span class="sy0">:</span>42px<span class="sy0">;</span>
+	color<span class="sy0">:</span>#<span class="nu0">897701</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre></div><textarea id="syntax-9d6a4f2a9ed47dd1f3eb40dd936d5608-plain">#example_container {
+	position:relative;
+}
+#demo{
+	margin:0;
+	position:absolute;
+	top:321px;
+	left:0;
+}
+.controls {
+	position:absolute;
+	top:0;
+	left:328px;
+	margin:0 0 0 0;
+	color:#808080;
+	width:300px;
+}
+.controls a {
+	color:#4B78D9 !important; 
+	cursor:pointer;
+}
+.intro-sentence{
+	font-size: 183%;
+	left: 0;
+	line-height: 0.9em;
+	position: absolute;
+	top: 273px;
+	width: 6em;
+}
+#view_frame{ 
+	position:relative;
+	height:500px;
+	width:300px;
+	border:solid 1px #cccccc;
+	overflow:hidden;
+}
+#scene{position:absolute;
+	left:0;
+	top:-6440px;
+	height:6440px;
+	width:100%;
+	background:url(assets/images/earth_to_hubble_bkg.png) repeat;
+}
+#altitude_mark {
+	border-top:solid 1px #CCCCCC;
+	left:-33px;
+	position:absolute;
+	top:403px;
+	width:30px;
+}
+#earth{
+	position:absolute;
+	left:0;
+	top:5834px;
+	height:214px;
+	width:300px;
+}
+#hubble{
+	position:absolute;
+	left:5px;
+	top:7px;
+	height:393px;
+	width:300px;
+}
+#stars{
+	position:absolute;
+	left:0;
+	top:0;
+	background:url(assets/images/stars.png) repeat;
+	height:5000px;
+	width:300px;
+}
+.label{
+	text-transform:uppercase;
+	width:100%;
+	letter-spacing:5px;
+	font-family:Verdana;
+	font-size:85%;
+	position:absolute;
+	left:0;
+	text-align:center;
+}
+.hubble{
+	bottom:6023px;
+	color:#612C88;
+}
+.thermosphere{
+	bottom:1290px;
+	color:#5A009D;
+}
+.mesosphere{
+	bottom:840px;
+	color:#570BFF;
+}
+.stratosphere{
+	bottom:540px;
+	color:#006999;
+}
+.troposphere{
+	bottom:477px;
+	color:#036585;
+}
+.ozone{
+	bottom:692px;
+	color:#005AAE;
+}
+.crust{
+	bottom:270px;
+	color:#4F2D00;
+}
+.mantle{
+	bottom:42px;
+	color:#897701;
+}</textarea></div>				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    Dial Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li><a href='../dial/dial-basic.html'>Basic Dial</a></li><li><a href='../dial/dial-text-input.html'>Dial Linked With Text Input</a></li><li><a href='../dial/dial-image-background.html'>Dial With Image Background</a></li><li><a href='../dial/dial-image-surrounding.html'>Dial With a Surrounding Image</a></li><li class='selected'><a href='../dial/dial-interactive.html'>Dial With Interactive UI</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More Dial Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/dial/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_dial.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="item"><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="item"><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="selected "><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

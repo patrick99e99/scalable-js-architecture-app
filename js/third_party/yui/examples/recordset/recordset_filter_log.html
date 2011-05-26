@@ -1,0 +1,378 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Recordset: Recordset Filter Plugin</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+<style type="text/css">
+/* custom styles for this example */
+</style>
+</head>
+<body id="yahoo-com" class="yui3-skin-sam  yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Recordset: Recordset Filter Plugin</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>Recordset: Recordset Filter Plugin</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	The RecordsetFilter plugin provides the ability to filter records within a specific recordset instance.	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="recordset_filter_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<!-- Working example code goes here -->
+<div id="demo">
+	<table>
+		<thead>
+			<tr>
+				<th>State</th>
+				<th>Population</th>
+				<th>Land Area</th>
+			</tr>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<div id="buttonControl">
+<input type="button" id="keyValButton" href="filter-key.php" value="Filter out California">
+<input type="button" id="functionButton" href="filter-func.php" value="Custom Filter Function (all M-P states)">
+<input type="button" id="resetButton" href="reset.php" value="Show Original Recordset">
+</div>
+<script>
+YUI({ filter: 'raw' }).use("recordset-base", "recordset-filter", "node", function (Y) {
+	
+	var state_census_data = [
+        {ANSI: "01000", STATE: "ALABAMA", TOTAL_POP: 4708708, LAND_AREA: 50744, POP_PER_SQ_MILE: 87.6},
+
+        {ANSI: "06000", STATE: "CALIFORNIA", TOTAL_POP: 36961664, LAND_AREA: 155959.34, POP_PER_SQ_MILE: 217.2},
+
+        {ANSI: "10000", STATE: "DELAWARE", TOTAL_POP: 885122, LAND_AREA: 1953.56, POP_PER_SQ_MILE: 401},
+        {ANSI: "12000", STATE: "FLORIDA", TOTAL_POP: 18537969, LAND_AREA: 53926.82, POP_PER_SQ_MILE: 296.4},
+        {ANSI: "13000", STATE: "GEORGIA", TOTAL_POP: 9829211, LAND_AREA: 57906.14, POP_PER_SQ_MILE: 141.4},
+        {ANSI: "15000", STATE: "HAWAII", TOTAL_POP: 1295178, LAND_AREA: 6422.62, POP_PER_SQ_MILE: 188.6},
+        {ANSI: "16000", STATE: "IDAHO", TOTAL_POP: 1545801, LAND_AREA: 82747.21, POP_PER_SQ_MILE: 15.6},
+
+        {ANSI: "20000", STATE: "KANSAS", TOTAL_POP: 2818747, LAND_AREA: 81814.88, POP_PER_SQ_MILE: 32.9},
+        {ANSI: "21000", STATE: "KENTUCKY", TOTAL_POP: 4314113, LAND_AREA: 39728.18, POP_PER_SQ_MILE: 101.7},
+        {ANSI: "22000", STATE: "LOUISIANA", TOTAL_POP: 4492076, LAND_AREA: 43561.85, POP_PER_SQ_MILE: 102.6},
+
+        {ANSI: "26000", STATE: "MICHIGAN", TOTAL_POP: 9969727, LAND_AREA: 56803.82, POP_PER_SQ_MILE: 175},
+
+        {ANSI: "29000", STATE: "MISSOURI", TOTAL_POP: 5987580, LAND_AREA: 68885.93, POP_PER_SQ_MILE: 81.2},
+        {ANSI: "30000", STATE: "MONTANA", TOTAL_POP: 974989, LAND_AREA: 145552.43, POP_PER_SQ_MILE: 6.2},
+        {ANSI: "31000", STATE: "NEBRASKA", TOTAL_POP: 1796619, LAND_AREA: 76872.41, POP_PER_SQ_MILE: 22.3},
+
+        {ANSI: "34000", STATE: "NEW JERSEY", TOTAL_POP: 8707739, LAND_AREA: 7417.34, POP_PER_SQ_MILE: 1134.5},
+
+        {ANSI: "38000", STATE: "NORTH DAKOTA", TOTAL_POP: 646844, LAND_AREA: 68975.93, POP_PER_SQ_MILE: 9.3},
+
+        {ANSI: "41000", STATE: "OREGON", TOTAL_POP: 3825657, LAND_AREA: 95996.79, POP_PER_SQ_MILE: 35.6},
+
+        {ANSI: "45000", STATE: "SOUTH CAROLINA", TOTAL_POP: 4561242, LAND_AREA: 30109.47, POP_PER_SQ_MILE: 133.2},
+        {ANSI: "46000", STATE: "SOUTH DAKOTA", TOTAL_POP: 812383, LAND_AREA: 75884.64, POP_PER_SQ_MILE: 9.9},
+        {ANSI: "47000", STATE: "TENNESSEE", TOTAL_POP: 6296254, LAND_AREA: 41217.12, POP_PER_SQ_MILE: 138},
+        {ANSI: "48000", STATE: "TEXAS", TOTAL_POP: 24782302, LAND_AREA: 261797.12, POP_PER_SQ_MILE: 79.6},
+
+        {ANSI: "56000", STATE: "WYOMING", TOTAL_POP: 544270, LAND_AREA: 97100.4, POP_PER_SQ_MILE: 5.1	}
+    ],
+	TEMPLATE_TR = '<tr id="row_{ANSI}"><td>{STATE}</td><td>{TOTAL_POP}</td><td>{LAND_AREA}</td></tr>';
+	
+  	// Create a Recordset instance.
+  	var recordset = new Y.Recordset({records:state_census_data});
+	recordset.plug(Y.Plugin.RecordsetFilter);
+	
+	
+	renderRows(recordset);
+	setUpButtons(recordset);
+
+	function setUpButtons(rs) {
+
+		function getRandomInt(min, max)
+		{
+		  return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+		
+		Y.one('#keyValButton').on('click', function(e) {
+			//prevent default behavior (stop link)
+			e.preventDefault();
+			var sub_recordset = rs.filter.filter('STATE',"CALIFORNIA");
+			renderRows(sub_recordset);
+		});
+		
+		Y.one('#functionButton').on('click', function(e) {
+			e.preventDefault();
+			
+			var customFunc = function(item) {
+				var letter = item.getValue('STATE').charAt(0);
+				if (letter === 'M' || letter === 'N' || letter === 'O' || letter === 'P') {
+					return true;
+				}
+				else {
+					return false;
+				}
+			},
+			
+			sub_recordset = rs.filter.filter(customFunc);
+			renderRows(sub_recordset);
+		});
+		
+		Y.one('#resetButton').on('click', function(e) {
+			e.preventDefault();
+			renderRows(recordset);
+		});
+
+	}
+	
+	function renderRows(rs) {
+		var tbody = Y.one('#demo tbody'),
+		i=0,
+		len = rs.getLength(),
+		html = '';
+		
+		if (tbody.hasChildNodes()) {
+			tbody.get('children').remove();
+		}
+		
+		for (; i < len; i++) {
+			html += Y.Lang.sub(TEMPLATE_TR, rs.getRecord(i).getValue());
+		}
+		tbody.append(html);
+	}
+});
+</script>
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<p>The filter plugin allows operations to filter a recordset instance. All the methods generate new recordsets that are subsets of the original recordset.</p>
+
+<h3>Using the Plugin</h3>
+<ul class="topspace">
+	<li><a href="#keyvalue">Filter by key/value</a></li>
+	<li><a href="#customFunction">Using custom filter functions</a></li>
+	<li><a href="#other">Other ways to filter</a></li>
+</ul>
+
+<p>The RecordsetFilter plugin supports filtering a recordset instance using a custom filter function, or key/value pairs.</p>
+
+<div id="syntax-8d660d1642fcc06b03b56ddecba8383d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;recordset-filter&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> state_census_data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;01000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;ALABAMA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">4708708</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">50744</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">87.6</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;06000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">36961664</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">155959.34</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">217.2</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;10000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;DELAWARE&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">885122</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">1953.56</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">401</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//instantiate a new Recordset</span></div></li><li class="li1"><div class="de1">	recordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span> state_census_data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="co1">//Plug it with the Filter plugin</span></div></li><li class="li1"><div class="de1">	recordset.<span class="me1">plug</span><span class="br0">&#40;</span>Y.<span class="me1">Plugin</span>.<span class="me1">RecordsetFilter</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//call filter methods with the 'filter' namespace</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> subset <span class="sy0">=</span> recordset.<span class="me1">filter</span>.<span class="me1">filter</span><span class="br0">&#40;</span><span class="st0">&quot;STATE&quot;</span><span class="sy0">,</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;recordset-filter&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> state_census_data <span class="sy0">=</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;01000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;ALABAMA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">4708708</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">50744</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">87.6</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;06000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">36961664</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">155959.34</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">217.2</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;10000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;DELAWARE&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">885122</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">1953.56</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">401</span><span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	<span class="co1">//instantiate a new Recordset</span>
+	recordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span> state_census_data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Plug it with the Filter plugin</span>
+	recordset.<span class="me1">plug</span><span class="br0">&#40;</span>Y.<span class="me1">Plugin</span>.<span class="me1">RecordsetFilter</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//call filter methods with the 'filter' namespace</span>
+	<span class="kw2">var</span> subset <span class="sy0">=</span> recordset.<span class="me1">filter</span>.<span class="me1">filter</span><span class="br0">&#40;</span><span class="st0">&quot;STATE&quot;</span><span class="sy0">,</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-8d660d1642fcc06b03b56ddecba8383d-plain">YUI().use("recordset-base", "recordset-filter", function(Y) {
+    var state_census_data = [
+        {ANSI: "01000", STATE: "ALABAMA", TOTAL_POP: 4708708, LAND_AREA: 50744, POP_PER_SQ_MILE: 87.6},
+        {ANSI: "06000", STATE: "CALIFORNIA", TOTAL_POP: 36961664, LAND_AREA: 155959.34, POP_PER_SQ_MILE: 217.2},
+        {ANSI: "10000", STATE: "DELAWARE", TOTAL_POP: 885122, LAND_AREA: 1953.56, POP_PER_SQ_MILE: 401},
+	
+	//instantiate a new Recordset
+	recordset = new Y.Recordset({records: state_census_data});
+	
+	//Plug it with the Filter plugin
+	recordset.plug(Y.Plugin.RecordsetFilter);
+	
+	//call filter methods with the 'filter' namespace
+	var subset = recordset.filter.filter("STATE", "CALIFORNIA");
+});</textarea></div>
+
+<h3 id="keyvalue">Filtering by Key/Value</h3>
+<p>The filter() method can take a key as its first argument, and a value as its second. Doing so will return a subset of the original recordset, with records that match the specific key/value pair.</p>
+
+<div id="syntax-f9821458df19f19d6b0911c60e90e9fd" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//call filter methods with the 'filter' namespace</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> subset <span class="sy0">=</span> recordset.<span class="me1">filter</span>.<span class="me1">filter</span><span class="br0">&#40;</span><span class="st0">&quot;STATE&quot;</span><span class="sy0">,</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//call filter methods with the 'filter' namespace</span>
+<span class="kw2">var</span> subset <span class="sy0">=</span> recordset.<span class="me1">filter</span>.<span class="me1">filter</span><span class="br0">&#40;</span><span class="st0">&quot;STATE&quot;</span><span class="sy0">,</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-f9821458df19f19d6b0911c60e90e9fd-plain">//call filter methods with the 'filter' namespace
+var subset = recordset.filter.filter("STATE", "CALIFORNIA");</textarea></div>
+
+<h3 id="customFunction">Filtering by Custom Function</h3>
+<p>Additionally, a custom function can be passed in to the filter method. In this scenario, all records will be evaluated against this function, and if a truthy value is returned, it will be pushed onto the returning sub-recordset.</p>
+
+<div id="syntax-508a1fb812fcd91997b61c0bfc3aade0" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myCustomFilterFunction <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="kw1">item</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> letter <span class="sy0">=</span> <span class="kw1">item</span>.<span class="me1">getValue</span><span class="br0">&#40;</span><span class="st0">'STATE'</span><span class="br0">&#41;</span>.<span class="me1">charAt</span><span class="br0">&#40;</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="kw1">if</span> <span class="br0">&#40;</span>letter <span class="sy0">===</span> <span class="st0">'M'</span> <span class="sy0">||</span> letter <span class="sy0">===</span> <span class="st0">'N'</span> <span class="sy0">||</span> letter <span class="sy0">===</span> <span class="st0">'O'</span> <span class="sy0">||</span> letter <span class="sy0">===</span> <span class="st0">'P'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		<span class="kw1">return</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		<span class="kw1">return</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//All records which have a STATE property starting with &quot;M&quot;, &quot;N&quot;, &quot;O&quot;, or &quot;P&quot; will be pushed onto the new recordset.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> subset <span class="sy0">=</span> recordset.<span class="me1">filter</span>.<span class="me1">filter</span><span class="br0">&#40;</span>myCustomFilterFunction<span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myCustomFilterFunction <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="kw1">item</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="kw2">var</span> letter <span class="sy0">=</span> <span class="kw1">item</span>.<span class="me1">getValue</span><span class="br0">&#40;</span><span class="st0">'STATE'</span><span class="br0">&#41;</span>.<span class="me1">charAt</span><span class="br0">&#40;</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span>
+	<span class="kw1">if</span> <span class="br0">&#40;</span>letter <span class="sy0">===</span> <span class="st0">'M'</span> <span class="sy0">||</span> letter <span class="sy0">===</span> <span class="st0">'N'</span> <span class="sy0">||</span> letter <span class="sy0">===</span> <span class="st0">'O'</span> <span class="sy0">||</span> letter <span class="sy0">===</span> <span class="st0">'P'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		<span class="kw1">return</span> <span class="kw2">true</span><span class="sy0">;</span>
+	<span class="br0">&#125;</span>
+	<span class="kw1">else</span> <span class="br0">&#123;</span>
+		<span class="kw1">return</span> <span class="kw2">false</span><span class="sy0">;</span>
+	<span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//All records which have a STATE property starting with &quot;M&quot;, &quot;N&quot;, &quot;O&quot;, or &quot;P&quot; will be pushed onto the new recordset.</span>
+<span class="kw2">var</span> subset <span class="sy0">=</span> recordset.<span class="me1">filter</span>.<span class="me1">filter</span><span class="br0">&#40;</span>myCustomFilterFunction<span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-508a1fb812fcd91997b61c0bfc3aade0-plain">var myCustomFilterFunction = function(item) {
+	var letter = item.getValue('STATE').charAt(0);
+	if (letter === 'M' || letter === 'N' || letter === 'O' || letter === 'P') {
+		return true;
+	}
+	else {
+		return false;
+	}
+};
+
+//All records which have a STATE property starting with "M", "N", "O", or "P" will be pushed onto the new recordset.
+var subset = recordset.filter.filter(myCustomFilterFunction);</textarea></div>
+<h3 id="other">Other Ways to Filter</h3>
+As Recordset augments <code>Y.Arraylist</code>, methods from the <code>array-extras</code> sub-module can be used. Currently, the <code>RecordsetFilter</code> plugin supports <code>reject()</code> and <code>grep()</code>. However, using other methods from the <code>array-extras</code> utility is straight-forward:
+<div id="syntax-3b37fcb7692a5fe8dd8944df43c35b29" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//use the 'array-extras' submodule</span></div></li><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;recordset-filter&quot;</span><span class="sy0">,</span> <span class="st0">&quot;array-extras&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> state_census_data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;01000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;ALABAMA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">4708708</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">50744</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">87.6</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;06000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">36961664</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">155959.34</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">217.2</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;10000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;DELAWARE&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">885122</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">1953.56</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">401</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">	<span class="co1">//instantiate a new Recordset</span></div></li><li class="li1"><div class="de1">	recordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span> state_census_data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Define a custom function</span></div></li><li class="li1"><div class="de1">	customFindFunction <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">		...</div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Use the Array.find method found in the array-extras sub-module</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> subset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	       records<span class="sy0">:</span> Y.<span class="me1">Array</span>.<span class="me1">find</span><span class="br0">&#40;</span>recordset.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'records'</span><span class="br0">&#41;</span><span class="sy0">,</span> customFindFunction<span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">&nbsp;
+<span class="co1">//use the 'array-extras' submodule</span>
+YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="st0">&quot;recordset-filter&quot;</span><span class="sy0">,</span> <span class="st0">&quot;array-extras&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="kw2">var</span> state_census_data <span class="sy0">=</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;01000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;ALABAMA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">4708708</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">50744</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">87.6</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;06000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;CALIFORNIA&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">36961664</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">155959.34</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">217.2</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>ANSI<span class="sy0">:</span> <span class="st0">&quot;10000&quot;</span><span class="sy0">,</span> STATE<span class="sy0">:</span> <span class="st0">&quot;DELAWARE&quot;</span><span class="sy0">,</span> TOTAL_POP<span class="sy0">:</span> <span class="nu0">885122</span><span class="sy0">,</span> LAND_AREA<span class="sy0">:</span> <span class="nu0">1953.56</span><span class="sy0">,</span> POP_PER_SQ_MILE<span class="sy0">:</span> <span class="nu0">401</span><span class="br0">&#125;</span>
+	<span class="br0">&#93;</span><span class="sy0">,</span>
+	<span class="co1">//instantiate a new Recordset</span>
+	recordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span> state_census_data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Define a custom function</span>
+	customFindFunction <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		...
+	<span class="br0">&#125;</span>
+&nbsp;
+	<span class="co1">//Use the Array.find method found in the array-extras sub-module</span>
+	<span class="kw2">var</span> subset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+	       records<span class="sy0">:</span> Y.<span class="me1">Array</span>.<span class="me1">find</span><span class="br0">&#40;</span>recordset.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'records'</span><span class="br0">&#41;</span><span class="sy0">,</span> customFindFunction<span class="br0">&#41;</span>
+	<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3b37fcb7692a5fe8dd8944df43c35b29-plain">
+//use the 'array-extras' submodule
+YUI().use("recordset-base", "recordset-filter", "array-extras", function(Y) {
+	
+    var state_census_data = [
+        {ANSI: "01000", STATE: "ALABAMA", TOTAL_POP: 4708708, LAND_AREA: 50744, POP_PER_SQ_MILE: 87.6},
+        {ANSI: "06000", STATE: "CALIFORNIA", TOTAL_POP: 36961664, LAND_AREA: 155959.34, POP_PER_SQ_MILE: 217.2},
+        {ANSI: "10000", STATE: "DELAWARE", TOTAL_POP: 885122, LAND_AREA: 1953.56, POP_PER_SQ_MILE: 401}
+	],
+	//instantiate a new Recordset
+	recordset = new Y.Recordset({records: state_census_data});
+	
+	//Define a custom function
+	customFindFunction = function() {
+		...
+	}
+	
+	//Use the Array.find method found in the array-extras sub-module
+	var subset = new Y.Recordset({
+	       records: Y.Array.find(recordset.get('records'), customFindFunction)
+	});
+});
+</textarea></div>
+				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    Recordset Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li><a href='../recordset/recordset_basic.html'>Basic Recordset</a></li><li class='selected'><a href='../recordset/recordset_filter.html'>Recordset Filter Plugin</a></li><li><a href='../recordset/recordset_indexer.html'>Recordset Indexer Plugin</a></li><li><a href='../recordset/recordset_sort.html'>Recordset Sort Plugin</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More Recordset Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/recordset/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_recordset.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="item"><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="selected "><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="item"><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

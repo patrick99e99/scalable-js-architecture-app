@@ -1,0 +1,79 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Basic DataTable</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+/* custom styles for this example */
+.dt-example {margin:1em;}
+
+/* css to counter global site css */
+.dt-example th {text-transform:none;}
+.dt-example table {width:auto;}
+.dt-example caption {display:table-caption;}
+</style>
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Basic DataTable</h1>
+
+<div class="exampleIntro">
+	<p>The DataTable widget displays data in a tabular format. Use plugins and extensions to add features and functionality to the <code>Y.DataTable.Base</code> class.</p>			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="simple" class="dt-example"></div>
+
+<div id="labels" class="dt-example"></div>
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("datatable-base", function (Y) {
+    var simpleCols = ["id","name","price"],
+    simpleData = [
+        {id:"ga_3475", name:"gadget", price:"$6.99"},
+        {id:"sp_9980", name:"sprocket", price:"$3.75"},
+        {id:"wi_0650", name:"widget", price:"$4.25"}
+    ],
+    labeledCols = [
+        {key:"mfr_parts_database_id", label:"Mfr Part ID", abbr:"ID"},
+        {key:"mfr_parts_database_name", label:"Mfr Part Name", abbr:"Name"},
+        {key:"mfr_parts_database_price", label:"Wholesale Price", abbr:"Price"}
+    ],
+    labeledData = [
+        {mfr_parts_database_id:"ga_3475", mfr_parts_database_name:"gadget", mfr_parts_database_price:"$6.99"},
+        {mfr_parts_database_id:"sp_9980", mfr_parts_database_name:"sprocket", mfr_parts_database_price:"$3.75"},
+        {mfr_parts_database_id:"wi_0650", mfr_parts_database_name:"widget", mfr_parts_database_price:"$4.25"}
+    ],
+
+    dt1 = new Y.DataTable.Base({columnset:simpleCols, recordset:simpleData, summary:"Price sheet for inventory parts", caption:"Example table with simple columns"}).render("#simple"),
+    dt2 = new Y.DataTable.Base({columnset:labeledCols, recordset:labeledData, summary:"Price sheet for inventory parts", caption:"These columns have labels and abbrs"}).render("#labels");
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

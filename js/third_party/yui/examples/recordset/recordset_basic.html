@@ -1,0 +1,580 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Recordset: Basic Recordset</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+<style type="text/css">
+/* custom styles for this example */
+</style>
+
+</head>
+<body id="yahoo-com" class="yui3-skin-sam  yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Recordset: Basic Recordset</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>Recordset: Basic Recordset</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	The Recordset Utility provides a standard way for dealing with a collection of similar objects known as records. The <code>recordset-base</code> sub-module provides the base Recordset implementation.
+
+<p>This example demonstrates some standard ways to interact with the recordset. Click on the buttons below to play around with a recordset created with state information.</p>	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="recordset_basic_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<!-- Working example code goes here -->
+<div id="demo">
+	<table>
+		<thead>
+			<tr>
+				<th>State</th>
+				<th>Population</th>
+				<th>Land Area</th>
+			</tr>
+		<tbody>
+		</tbody>
+	</table>
+</div>
+
+<input type="button" id="addButton" href="add.php" value="Add Record To Bottom">
+<input type="button" id="removeButton" href="remove.php" value="Remove Record from Top">
+<input type="button" id="emptyButton" href="empty.php" value="Empty Recordset">
+<input type="button" id="updateButton" href="update.php" value="Update 2nd Last Record">
+<script>
+YUI({ filter: 'raw' }).use("recordset-base", "node", function (Y) {
+	
+	var state_census_data = [
+        {ANSI: "01000", STATE: "ALABAMA", TOTAL_POP: 4708708, LAND_AREA: 50744, POP_PER_SQ_MILE: 87.6},
+        {ANSI: "02000", STATE: "ALASKA", TOTAL_POP: 698473, LAND_AREA: 571951.26, POP_PER_SQ_MILE: 1.1},
+        {ANSI: "04000", STATE: "ARIZONA", TOTAL_POP: 6595778, LAND_AREA: 113634.57, POP_PER_SQ_MILE: 45.2},
+        {ANSI: "05000", STATE: "ARKANSAS", TOTAL_POP: 2889450, LAND_AREA: 52068.17, POP_PER_SQ_MILE: 51.3},
+        {ANSI: "06000", STATE: "CALIFORNIA", TOTAL_POP: 36961664, LAND_AREA: 155959.34, POP_PER_SQ_MILE: 217.2},
+        {ANSI: "08000", STATE: "COLORADO", TOTAL_POP: 5024748, LAND_AREA: 103717.53, POP_PER_SQ_MILE: 41.5},
+        {ANSI: "09000", STATE: "CONNECTICUT", TOTAL_POP: 3518288, LAND_AREA: 4844.8, POP_PER_SQ_MILE: 702.9},
+        {ANSI: "10000", STATE: "DELAWARE", TOTAL_POP: 885122, LAND_AREA: 1953.56, POP_PER_SQ_MILE: 401},
+        {ANSI: "12000", STATE: "FLORIDA", TOTAL_POP: 18537969, LAND_AREA: 53926.82, POP_PER_SQ_MILE: 296.4},
+        {ANSI: "13000", STATE: "GEORGIA", TOTAL_POP: 9829211, LAND_AREA: 57906.14, POP_PER_SQ_MILE: 141.4},
+        {ANSI: "15000", STATE: "HAWAII", TOTAL_POP: 1295178, LAND_AREA: 6422.62, POP_PER_SQ_MILE: 188.6},
+        {ANSI: "16000", STATE: "IDAHO", TOTAL_POP: 1545801, LAND_AREA: 82747.21, POP_PER_SQ_MILE: 15.6},
+        {ANSI: "17000", STATE: "ILLINOIS", TOTAL_POP: 12910409, LAND_AREA: 55583.58, POP_PER_SQ_MILE: 223.4},
+        {ANSI: "18000", STATE: "INDIANA", TOTAL_POP: 6423113, LAND_AREA: 35866.9, POP_PER_SQ_MILE: 169.5},
+        {ANSI: "19000", STATE: "IOWA", TOTAL_POP: 3007856, LAND_AREA: 55869.36, POP_PER_SQ_MILE: 52.4},
+        {ANSI: "20000", STATE: "KANSAS", TOTAL_POP: 2818747, LAND_AREA: 81814.88, POP_PER_SQ_MILE: 32.9},
+        {ANSI: "21000", STATE: "KENTUCKY", TOTAL_POP: 4314113, LAND_AREA: 39728.18, POP_PER_SQ_MILE: 101.7},
+        {ANSI: "22000", STATE: "LOUISIANA", TOTAL_POP: 4492076, LAND_AREA: 43561.85, POP_PER_SQ_MILE: 102.6},
+        {ANSI: "23000", STATE: "MAINE", TOTAL_POP: 1318301, LAND_AREA: 30861.55, POP_PER_SQ_MILE: 41.3},
+        {ANSI: "24000", STATE: "MARYLAND", TOTAL_POP: 5699478, LAND_AREA: 9773.82, POP_PER_SQ_MILE: 541.9},
+        {ANSI: "25000", STATE: "MASSACHUSETTS", TOTAL_POP: 6593587, LAND_AREA: 7840.02, POP_PER_SQ_MILE: 809.8},
+        {ANSI: "26000", STATE: "MICHIGAN", TOTAL_POP: 9969727, LAND_AREA: 56803.82, POP_PER_SQ_MILE: 175},
+        {ANSI: "27000", STATE: "MINNESOTA", TOTAL_POP: 5266214, LAND_AREA: 79610.08, POP_PER_SQ_MILE: 61.8},
+        {ANSI: "28000", STATE: "MISSISSIPPI", TOTAL_POP: 2951996, LAND_AREA: 46906.96, POP_PER_SQ_MILE: 60.6},
+        {ANSI: "29000", STATE: "MISSOURI", TOTAL_POP: 5987580, LAND_AREA: 68885.93, POP_PER_SQ_MILE: 81.2},
+        {ANSI: "30000", STATE: "MONTANA", TOTAL_POP: 974989, LAND_AREA: 145552.43, POP_PER_SQ_MILE: 6.2},
+        {ANSI: "31000", STATE: "NEBRASKA", TOTAL_POP: 1796619, LAND_AREA: 76872.41, POP_PER_SQ_MILE: 22.3},
+        {ANSI: "32000", STATE: "NEVADA", TOTAL_POP: 2643085, LAND_AREA: 109825.99, POP_PER_SQ_MILE: 18.2},
+        {ANSI: "33000", STATE: "NEW HAMPSHIRE", TOTAL_POP: 1324575, LAND_AREA: 8968.1, POP_PER_SQ_MILE: 137.8},
+        {ANSI: "34000", STATE: "NEW JERSEY", TOTAL_POP: 8707739, LAND_AREA: 7417.34, POP_PER_SQ_MILE: 1134.5},
+        {ANSI: "35000", STATE: "NEW MEXICO", TOTAL_POP: 2009671, LAND_AREA: 121355.53, POP_PER_SQ_MILE: 15},
+        {ANSI: "36000", STATE: "NEW YORK", TOTAL_POP: 19541453, LAND_AREA: 47213.79, POP_PER_SQ_MILE: 401.9},
+        {ANSI: "37000", STATE: "NORTH CAROLINA", TOTAL_POP: 9380884, LAND_AREA: 48710.88, POP_PER_SQ_MILE: 165.2},
+        {ANSI: "38000", STATE: "NORTH DAKOTA", TOTAL_POP: 646844, LAND_AREA: 68975.93, POP_PER_SQ_MILE: 9.3},
+        {ANSI: "39000", STATE: "OHIO", TOTAL_POP: 11542645, LAND_AREA: 40948.38, POP_PER_SQ_MILE: 277.3},
+        {ANSI: "40000", STATE: "OKLAHOMA", TOTAL_POP: 3687050, LAND_AREA: 68667.06, POP_PER_SQ_MILE: 50.3},
+        {ANSI: "41000", STATE: "OREGON", TOTAL_POP: 3825657, LAND_AREA: 95996.79, POP_PER_SQ_MILE: 35.6},
+        {ANSI: "42000", STATE: "PENNSYLVANIA", TOTAL_POP: 12604767, LAND_AREA: 44816.61, POP_PER_SQ_MILE: 274},
+        {ANSI: "44000", STATE: "RHODE ISLAND", TOTAL_POP: 1053209, LAND_AREA: 1044.93, POP_PER_SQ_MILE: 1003.2},
+        {ANSI: "45000", STATE: "SOUTH CAROLINA", TOTAL_POP: 4561242, LAND_AREA: 30109.47, POP_PER_SQ_MILE: 133.2},
+        {ANSI: "46000", STATE: "SOUTH DAKOTA", TOTAL_POP: 812383, LAND_AREA: 75884.64, POP_PER_SQ_MILE: 9.9},
+        {ANSI: "47000", STATE: "TENNESSEE", TOTAL_POP: 6296254, LAND_AREA: 41217.12, POP_PER_SQ_MILE: 138},
+        {ANSI: "48000", STATE: "TEXAS", TOTAL_POP: 24782302, LAND_AREA: 261797.12, POP_PER_SQ_MILE: 79.6},
+        {ANSI: "49000", STATE: "UTAH", TOTAL_POP: 2784572, LAND_AREA: 82143.65, POP_PER_SQ_MILE: 27.2},
+        {ANSI: "50000", STATE: "VERMONT", TOTAL_POP: 621760, LAND_AREA: 9249.56, POP_PER_SQ_MILE: 65.8},
+        {ANSI: "51000", STATE: "VIRGINIA", TOTAL_POP: 7882590, LAND_AREA: 39594.07, POP_PER_SQ_MILE: 178.8},
+        {ANSI: "53000", STATE: "WASHINGTON", TOTAL_POP: 6664195, LAND_AREA: 66544.06, POP_PER_SQ_MILE: 88.6},
+        {ANSI: "54000", STATE: "WEST VIRGINIA", TOTAL_POP: 1819777, LAND_AREA: 24077.73, POP_PER_SQ_MILE: 75.1},
+        {ANSI: "55000", STATE: "WISCONSIN", TOTAL_POP: 5654774, LAND_AREA: 54310.1, POP_PER_SQ_MILE: 98.8},
+        {ANSI: "56000", STATE: "WYOMING", TOTAL_POP: 544270, LAND_AREA: 97100.4, POP_PER_SQ_MILE: 5.1	}
+    ],
+	TEMPLATE_TR = '<tr id="row_{ANSI}"><td>{STATE}</td><td>{TOTAL_POP}</td><td>{LAND_AREA}</td></tr>';
+	
+  	// Create a Recordset instance.
+  	var recordset = new Y.Recordset({records:state_census_data.splice(0,5)});
+	
+	createRows(recordset);
+	setUpEvents(recordset);
+	setUpButtons(recordset);
+	
+	function setUpEvents(rs) {
+		/*Edits the table based on recordset events that are fired*/
+		rs.after('add', function(e) {
+			Y.one('#demo tbody').append(Y.Lang.sub(TEMPLATE_TR, e.added[0].getValue()));
+		});
+
+		rs.after('remove', function(e) {
+			Y.one('#row_'+e.removed[0].getValue('ANSI')).remove();
+			
+			//add the object back to the data array so it can be added again later
+			state_census_data.push(e.removed[0].getValue());
+		});
+
+		rs.after('empty', function(e) {
+			Y.all('#demo tbody tr').remove();
+		});
+		
+		rs.after('update', function(e) {
+			var tr = Y.Lang.sub(TEMPLATE_TR, e.updated[0].getValue());
+			Y.one('#row_'+e.overwritten[0].getValue('ANSI')).replace(Y.Node.create(tr));
+		});
+	}
+
+	function setUpButtons(rs) {
+
+		function getRandomInt(min, max)
+		{
+		  return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+		
+		Y.one('#addButton').on('click', function(e) {
+			//prevent default behavior (stop link)
+			e.preventDefault();
+			
+			//get a random state and add it to the recordset
+			var rand = getRandomInt(0, state_census_data.length-1);
+			rs.add(state_census_data[rand]);
+			
+			//remove the state from the array so that it doesn't get added again later
+			state_census_data.splice(rand,1);
+		});
+		
+		Y.one('#removeButton').on('click', function(e) {
+			e.preventDefault();
+			if (rs.getLength() > 0) {
+				rs.remove(0);
+			}
+		});
+		
+		Y.one('#emptyButton').on('click', function(e) {
+			e.preventDefault();
+			rs.empty();
+		});
+		
+		Y.one('#updateButton').on('click', function(e) {
+			var index = rs.getLength() - 2,
+			newState = state_census_data[getRandomInt(0, state_census_data.length-1)];
+			
+			e.preventDefault;
+			
+			if (index >= 0) {
+				rs.update(newState, index);			
+			}
+		});
+	}
+	
+	function createRows(rs) {
+		var i=0,
+		len = rs.getLength(),
+		html = '';
+		
+		for (; i < len; i++) {
+			html += Y.Lang.sub(TEMPLATE_TR, rs.getRecord(i).getValue());
+		}
+		Y.one('#demo tbody').append(html);
+	}
+});
+</script>
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<p>A recordset in its simplest form is a collection of records, where records can be considered to be object literals. Recordset allows the user to handle this collection of records with a consistent API.</p>
+
+<p>Recordset-base provides an API for adding, removing and updating record(s). It also creates a hash table of all the records by their IDs, to allow for fast retrieval.</p>
+
+<h6>Records vs. Object Literals</h6>
+<p>You can interact with a recordset instance by simply passing in object literals. Recordset will convert them into record instances under the hood. If you want the object literal back from the recordset, simply use the <code>getValue</code> method on a record instance. Optionally, a string can be passed into the <code>getValue</code> method if you only want a specific property back. Not passing in an argument returns the entire object bag that the record is holding on to.
+	
+<h3>Working with a Recordset</h3>
+
+This section describes how to use the Recordset Utility in further detail. It contains the following subsections:
+<ul class="topspace">
+	<li><a href="#instantiation">Initializing a Recordset</a></li>
+	<li><a href="#adding">Adding Records</a></li>
+	<li><a href="#removing">Removing Records</a></li>
+	<li><a href="#updating">Updating Records</a></li>
+	<li><a href="#emptying">Emptying a Recordset</a></li>
+	<li><a href="#hash">Using the Hash Table</a></li>
+</ul>
+
+<h4 id="instantiation">Initializing a Recordset</h4>
+<div id="syntax-e850a9cbabaabb501b52d3ae3891d0f3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span>a<span class="sy0">:</span><span class="nu0">3</span><span class="sy0">,</span> b<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> c<span class="sy0">:</span><span class="nu0">1</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span>a<span class="sy0">:</span><span class="nu0">9</span><span class="sy0">,</span> b<span class="sy0">:</span><span class="nu0">8</span><span class="sy0">,</span> c<span class="sy0">:</span><span class="nu0">7</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		<span class="br0">&#123;</span>a<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">,</span> b<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> c<span class="sy0">:</span><span class="nu0">3</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Recordset is created with the objects from the data array</span></div></li><li class="li1"><div class="de1">	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span> data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Empty recordsets can also be created</span></div></li><li class="li1"><div class="de1">	anEmptyRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span>
+		<span class="br0">&#123;</span>a<span class="sy0">:</span><span class="nu0">3</span><span class="sy0">,</span> b<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> c<span class="sy0">:</span><span class="nu0">1</span><span class="br0">&#125;</span><span class="sy0">,</span>
+		<span class="br0">&#123;</span>a<span class="sy0">:</span><span class="nu0">9</span><span class="sy0">,</span> b<span class="sy0">:</span><span class="nu0">8</span><span class="sy0">,</span> c<span class="sy0">:</span><span class="nu0">7</span><span class="br0">&#125;</span><span class="sy0">,</span>
+		<span class="br0">&#123;</span>a<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">,</span> b<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> c<span class="sy0">:</span><span class="nu0">3</span><span class="br0">&#125;</span>
+	<span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+	<span class="co1">//Recordset is created with the objects from the data array</span>
+	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span> data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span>
+&nbsp;
+	<span class="co1">//Empty recordsets can also be created</span>
+	anEmptyRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-e850a9cbabaabb501b52d3ae3891d0f3-plain">YUI().use("recordset-base", function(Y) {
+    var data = [
+		{a:3, b:2, c:1},
+		{a:9, b:8, c:7},
+		{a:1, b:2, c:3}
+	],
+	
+	//Recordset is created with the objects from the data array
+	myRecordset = new Y.Recordset({records: data}),
+	
+	//Empty recordsets can also be created
+	anEmptyRecordset = new Y.Recordset(); 
+
+});</textarea></div>
+<h4 id="adding">Adding Records</h4>
+<p>Once initialized, the recordset can be modified by CRUD methods provided by the API. Add single or multiple objects/records to the recordset by calling the <code>add</code> method.</p>
+
+<div id="syntax-21bc73bdf50186fd1e859da8c0a9505d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordst-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="co1">//Adding a single record to the end of a recordset</span></div></li><li class="li1"><div class="de1">	myRecordset.<span class="me1">add</span><span class="br0">&#40;</span><span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;d&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column D&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Adding multiple records at the 2nd index of the recordset</span></div></li><li class="li1"><div class="de1">	myRecordset.<span class="me1">add</span><span class="br0">&#40;</span><span class="br0">&#91;</span></div></li><li class="li2"><div class="de2">		<span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;e&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column E&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;f&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column F&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#93;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordst-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span>
+    <span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Adding a single record to the end of a recordset</span>
+	myRecordset.<span class="me1">add</span><span class="br0">&#40;</span><span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;d&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column D&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Adding multiple records at the 2nd index of the recordset</span>
+	myRecordset.<span class="me1">add</span><span class="br0">&#40;</span><span class="br0">&#91;</span>
+		<span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;e&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column E&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+		<span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;f&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column F&quot;</span><span class="br0">&#125;</span>
+	<span class="br0">&#93;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-21bc73bdf50186fd1e859da8c0a9505d-plain">YUI().use("recordst-base", function(Y) {
+    var data = [
+        {key:"a", label:"Column A"},
+        {key:"b", label:"Column B"},
+        {key:"c", label:"Column C"}
+    ],
+	
+	myRecordset = new Y.Recordset({records:data});
+	
+	//Adding a single record to the end of a recordset
+	myRecordset.add({key:"d", label:"Column D"});
+	
+	//Adding multiple records at the 2nd index of the recordset
+	myRecordset.add([
+		{key:"e", label:"Column E"},
+		{key:"f", label:"Column F"}
+	], 2);
+});</textarea></div>
+<h4 id="removing">Removing Records</h4>
+<p>Similarly, items can also be removed from the recordset using the <code>remove</code> method.</p>
+<div id="syntax-ec0deeb8f875df2ed0a2fbb9784b2dbe" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="co1">//removes the record stored at index 2 (in this case {key:&quot;c&quot;, label:&quot;Column C&quot;} is removed)</span></div></li><li class="li1"><div class="de1">	myRecordset.<span class="me1">remove</span><span class="br0">&#40;</span><span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Removes 2 records starting at index zero</span></div></li><li class="li1"><div class="de1">	myRecordset.<span class="me1">remove</span><span class="br0">&#40;</span><span class="nu0">0</span><span class="sy0">,</span><span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span>
+    <span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//removes the record stored at index 2 (in this case {key:&quot;c&quot;, label:&quot;Column C&quot;} is removed)</span>
+	myRecordset.<span class="me1">remove</span><span class="br0">&#40;</span><span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Removes 2 records starting at index zero</span>
+	myRecordset.<span class="me1">remove</span><span class="br0">&#40;</span><span class="nu0">0</span><span class="sy0">,</span><span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-ec0deeb8f875df2ed0a2fbb9784b2dbe-plain">YUI().use("recordset-base", function(Y) {
+    var data = [
+        {key:"a", label:"Column A"},
+        {key:"b", label:"Column B"},
+        {key:"c", label:"Column C"}
+    ],
+	
+	myRecordset = new Y.Recordset({records:data});
+	
+	//removes the record stored at index 2 (in this case {key:"c", label:"Column C"} is removed)
+	myRecordset.remove(2);
+	
+	//Removes 2 records starting at index zero
+	myRecordset.remove(0,2);
+});</textarea></div>
+<h4 id="updating">Updating Records</h4>
+<p>You can overwrite existing records in the recordset through the <code>update</code> method. This method takes 2 arguments, the first being an object/record or array of objects/records, and the second being the index at which to start the update process. When updating a recordset, any records found within the index/indices that are to be updated will be overwritten. However, you can get an object bag with these overwritten records back if you hook onto the 'update' event. </p>
+<div id="syntax-d29997ffff479ed76b6e56a904a7ab42" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="co1">//overwite the record at index 2 with the following record</span></div></li><li class="li1"><div class="de1">	myRecordset.<span class="me1">update</span><span class="br0">&#40;</span><span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;d&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column D&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//You can also update multiple records at a time.</span></div></li><li class="li1"><div class="de1">	<span class="co1">//Here we are updating indices 0 and 1 of the recordset with the corresponding two objects.</span></div></li><li class="li2"><div class="de2">	myRecordset.<span class="me1">update</span><span class="br0">&#40;</span><span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;e&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column E&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span>key<span class="sy0">:</span> <span class="st0">&quot;f&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">&quot;Column F&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#93;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span>
+    <span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//overwite the record at index 2 with the following record</span>
+	myRecordset.<span class="me1">update</span><span class="br0">&#40;</span><span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;d&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column D&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//You can also update multiple records at a time.</span>
+	<span class="co1">//Here we are updating indices 0 and 1 of the recordset with the corresponding two objects.</span>
+	myRecordset.<span class="me1">update</span><span class="br0">&#40;</span><span class="br0">&#91;</span>
+		<span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;e&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column E&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+		<span class="br0">&#123;</span>key<span class="sy0">:</span> <span class="st0">&quot;f&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">&quot;Column F&quot;</span><span class="br0">&#125;</span>
+	<span class="br0">&#93;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-d29997ffff479ed76b6e56a904a7ab42-plain">YUI().use("recordset-base", function(Y) {
+    var data = [
+        {key:"a", label:"Column A"},
+        {key:"b", label:"Column B"},
+        {key:"c", label:"Column C"}
+    ],
+	
+	myRecordset = new Y.Recordset({records:data});
+	
+	//overwite the record at index 2 with the following record
+	myRecordset.update({key:"d", label:"Column D"}, 2);
+	
+	//You can also update multiple records at a time.
+	//Here we are updating indices 0 and 1 of the recordset with the corresponding two objects.
+	myRecordset.update([
+		{key:"e", label:"Column E"},
+		{key: "f", label: "Column F"}
+	], 0);
+});</textarea></div>
+<h4 id="emptying">Emptying a Recordset</h4>
+<p>Emptying the recordset is easily done with the <code>empty</code> method. </p>
+<div id="syntax-af2d644b6cd4a847fd61f7dfc7801aca" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	myRecordset.<span class="me1">empty</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span>
+    <span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+	myRecordset.<span class="me1">empty</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-af2d644b6cd4a847fd61f7dfc7801aca-plain">YUI().use("recordset-base", function(Y) {
+    var data = [
+        {key:"a", label:"Column A"},
+        {key:"b", label:"Column B"},
+        {key:"c", label:"Column C"}
+    ],
+	
+	myRecordset = new Y.Recordset({records:data});
+	myRecordset.empty();
+});</textarea></div>
+
+<h4 id="hash">Using the Hash Table</h4>
+<p>The recordset-base submodule has a built-in hash table that hashes records by their IDs. IDs are set during initialization of each individual record and are stored as ATTRS. You should not modify the ID of a record, but you can access it by calling <code>myRecord.get('id')</code>.</p>
+
+<p>Under the hood, the hash table is kept in sync with the recordset by hooking onto the events that recordset fires (namely 'add', 'remove', 'update', and 'empty'). The ID hash table is an easy way to retrieve records that will be needed often.</p>
+
+<p>If you need hash tables that store records by keys other than IDs, refer to the <strong>RecordsetIndexer</strong> plugin.</p>
+<div id="syntax-1d9ae01d0004cf1fae849a60ed2ec3b3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="co1">//Store some IDs that I will need access to later</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> record2_ID <span class="sy0">=</span> myRecordset.<span class="me1">getRecord</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	record3_ID <span class="sy0">=</span> myRecordset.<span class="me1">getRecord</span><span class="br0">&#40;</span><span class="nu0">2</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Get Access to the Hash Table</span></div></li><li class="li2"><div class="de2">	<span class="kw2">var</span> hashTable <span class="sy0">=</span> myRecordset.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'table'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Get Records back using IDs</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> record2 <span class="sy0">=</span> hashTable<span class="br0">&#91;</span>record2_ID<span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> record3 <span class="sy0">=</span> hashTable<span class="br0">&#91;</span>record3_ID<span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//Remove Record from index 1 (record2)</span></div></li><li class="li1"><div class="de1">	myRecordset.<span class="me1">remove</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	hashTable<span class="br0">&#91;</span>record2_ID<span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">//this will now be undefined as that record was removed.</span></div></li><li class="li1"><div class="de1">	hashTable<span class="br0">&#91;</span>record3_ID<span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">//this still points to the correct record (record3)</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;recordset-base&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> data <span class="sy0">=</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;a&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column A&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;b&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column B&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span>key<span class="sy0">:</span><span class="st0">&quot;c&quot;</span><span class="sy0">,</span> label<span class="sy0">:</span><span class="st0">&quot;Column C&quot;</span><span class="br0">&#125;</span>
+    <span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+	myRecordset <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">Recordset</span><span class="br0">&#40;</span><span class="br0">&#123;</span>records<span class="sy0">:</span>data<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Store some IDs that I will need access to later</span>
+	<span class="kw2">var</span> record2_ID <span class="sy0">=</span> myRecordset.<span class="me1">getRecord</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+	record3_ID <span class="sy0">=</span> myRecordset.<span class="me1">getRecord</span><span class="br0">&#40;</span><span class="nu0">2</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Get Access to the Hash Table</span>
+	<span class="kw2">var</span> hashTable <span class="sy0">=</span> myRecordset.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'table'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//Get Records back using IDs</span>
+	<span class="kw2">var</span> record2 <span class="sy0">=</span> hashTable<span class="br0">&#91;</span>record2_ID<span class="br0">&#93;</span><span class="sy0">;</span>
+	<span class="kw2">var</span> record3 <span class="sy0">=</span> hashTable<span class="br0">&#91;</span>record3_ID<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+	<span class="co1">//Remove Record from index 1 (record2)</span>
+	myRecordset.<span class="me1">remove</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	hashTable<span class="br0">&#91;</span>record2_ID<span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">//this will now be undefined as that record was removed.</span>
+	hashTable<span class="br0">&#91;</span>record3_ID<span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">//this still points to the correct record (record3)</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-1d9ae01d0004cf1fae849a60ed2ec3b3-plain">YUI().use("recordset-base", function(Y) {
+    var data = [
+        {key:"a", label:"Column A"},
+        {key:"b", label:"Column B"},
+        {key:"c", label:"Column C"}
+    ],
+	
+	myRecordset = new Y.Recordset({records:data});
+	
+	//Store some IDs that I will need access to later
+	var record2_ID = myRecordset.getRecord(1).get('id'),
+	record3_ID = myRecordset.getRecord(2).get('id');
+	
+	//Get Access to the Hash Table
+	var hashTable = myRecordset.get('table');
+	
+	//Get Records back using IDs
+	var record2 = hashTable[record2_ID];
+	var record3 = hashTable[record3_ID];
+	
+	
+	//Remove Record from index 1 (record2)
+	myRecordset.remove(1);
+	
+	hashTable[record2_ID]; //this will now be undefined as that record was removed.
+	hashTable[record3_ID]; //this still points to the correct record (record3)
+});</textarea></div>
+<h3>Events</h3>
+<p>The Recordset Utility fires 5 custom events in addition attribute change events: <strong>'add'</strong>, <strong>'remove'</strong>, <strong>'update'</strong>, <strong>'empty'</strong> and <strong>'change'</strong>. <strong>'change'</strong> in particular, is a high-level event that is fired after any modifications to the recordset are made (ie: after 'add', 'remove', 'update', 'empty'). Details on these events are shown below.</p>
+
+<table>
+	<thead>
+		<tr>
+			<th>Event</th>
+			<th>Payload</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td><code>add</code></td>
+			<td><strong>added:</strong> an array of new records that were added (can contain a single record)<br/>
+		        <strong>index:</strong> index that the addition started at
+			</td>
+		</tr>
+		<tr>
+			<td><code>remove</code></td>
+			<td><strong>removed:</strong> an array of records that were removed (can contain a single record)<br/>
+		        <strong>index:</strong> index that the removals started at<br/>
+				<strong>range:</strong> range of records that were removed
+			</td>
+		</tr>
+		<tr>
+			<td><code>update</code> </td>
+			<td><strong>updated:</strong> an array of records that updated (added to the recordset)<br/>
+		        <strong>index:</strong> index that the updates started at<br/>
+				<strong>range:</strong> range of records that were updated
+			</td>
+		</tr>
+		<tr>
+			<td><code>empty</code></td>
+			<td>Empty object bag</td>
+		</tr>
+		<tr>
+			<td><code>change</code></td>
+			<td><strong>type:</strong> The event that caused the change (ie: "recordset:add", "recordset:update")<br/>
+			<strong>details:</strong>The payload of the event that caused the change. This object will have different keys, based on what <code>type</code> is. (ie: If <code>type</code> is "recordset:add", then <code>details</code> will contain the <code>added</code> and <code>index</code> keys.)<br/>
+			</td>
+
+		</tr>
+	</tbody>
+</table>
+
+<p>Refer to the API documentation to get a full list of events inherited by Recordset.</p>				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    Recordset Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li class='selected'><a href='../recordset/recordset_basic.html'>Basic Recordset</a></li><li><a href='../recordset/recordset_filter.html'>Recordset Filter Plugin</a></li><li><a href='../recordset/recordset_indexer.html'>Recordset Indexer Plugin</a></li><li><a href='../recordset/recordset_sort.html'>Recordset Sort Plugin</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More Recordset Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/recordset/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_recordset.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="item"><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="selected "><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="item"><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

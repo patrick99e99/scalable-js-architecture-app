@@ -1,0 +1,829 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Event: Creating an Arrow Event for DOM Subscription</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui.css" >
+
+<style>
+    /*Supplemental CSS for the YUI distribution*/
+    #custom-doc { width: 95%; min-width: 950px; }
+    #pagetitle {background-image: url(../../assets/bg_hd.gif);}
+/*    #pagetitle h1 {background-image: url(../../assets/title_h_bg.gif);}*/
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+<style type="text/css">
+    #homebase {
+        margin-left: 100px;
+        position: relative;
+        height: 125px;
+        width: 200px;
+    }
+    .robot {
+        height: 100px;
+        width: 74px;
+        background: url(assets/red_robot.png) no-repeat top left;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    #B {
+        background-image: url(assets/blue_robot.png);
+        left: 125px;
+    }
+    #demo input {
+        margin-left: 4em;
+    }
+    #demo label {
+        font-size: 87%;
+        color: #555;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui3-skin-sam  yui-skin-sam">
+<div id="custom-doc" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p>
+            <em>
+                <a href="http://developer.yahoo.com/yui/3/">YUI 3.x Home</a> <i> - </i>	
+            </em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+            <input name="vs" type="hidden" value="developer.yahoo.com">
+            <input name="vs" type="hidden" value="yuiblog.com">
+			<input name="vs" type="hidden" value="yuilibrary.com">
+		    <div id="sitesearch">
+		    	<label for="searchinput">Site Search (YDN, YUILibrary &amp; YUIBlog): </label>
+			    <input type="text" id="searchinput" name="p">
+			    <input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		    </div>
+		</form>
+    </div>
+	<div id="ygma"><a href="../../"><img src="../../assets/logo.gif"  border="0" width="200" height="93"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Event: Creating an Arrow Event for DOM Subscription</h1></div>
+</div>
+<div id="bd">
+
+
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example" id="main">
+
+	<h2>Event: Creating an Arrow Event for DOM Subscription</h2>
+
+	<div id="example" class="promo">
+	<div class="example-intro">
+	<p>This example will illustrate how to use the synthetic event creation API.
+We'll create an <code>arrow</code> event that fires in response to the user
+pressing the arrow keys (up, down, left, right) and adds a
+<code>direction</code> property to the generated event.</p>
+
+<p>Subscribing to this new event will look like this:</p>
+<div id="syntax-232df91361c5ee1be364d00bf0daa739" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">node.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">node.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-232df91361c5ee1be364d00bf0daa739-plain">node.on("arrow", onArrowHandler);
+</textarea></div>
+<p>Support will also be added for delegation, allowing a single subscriber from
+a node higher up the DOM tree, to listen for the new event emanating from its
+descendant elements.</p>
+
+<div id="syntax-f55d2a4b04c4082c159f0c726d595fde" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">containerNode.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="sy0">,</span> <span class="st0">&quot;.robot&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">containerNode.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> onArrowHandler<span class="sy0">,</span> <span class="st0">&quot;.robot&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f55d2a4b04c4082c159f0c726d595fde-plain">containerNode.delegate("arrow", onArrowHandler, ".robot");
+</textarea></div>	</div>
+
+	<div class="module example-container ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam">
+                <a href="event-synth-arrow_clean.html" target="_blank">View example in new window.</a>
+            </p>
+		</div>		<div id="example-canvas" class="bd">
+
+	
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+	<div id="demo">
+    <p>Step 1. <button type="button" id="attach" tabindex="1">subscribe</button> to the <code>arrow</code> event.<br>
+    <input type="checkbox" id="delegate" value="1" tabindex="1">
+        <label for="delegate">Use a delegated subscription</label></p>
+    <p>Step 2. Click on a robot and move it around with the arrow keys.</p>
+
+    <div id="homebase">
+        <div id="A" class="robot" tabindex="2"></div>
+        <div id="B" class="robot" tabindex="3"></div>
+    </div>
+
+    <button type="button" id="detach" tabindex="4">Detach subscriptions</button>
+</div>
+<script>
+YUI({ filter: 'raw' }).use("event-synthetic", "node", "transition", function (Y) {
+
+    Y.Event.define("arrow", {
+        // Webkit and IE repeat keydown when you hold down arrow keys.
+        // Opera links keypress to page scroll; others keydown.
+        // Firefox prevents page scroll via preventDefault() on either
+        // keydown or keypress.
+        _event: (Y.UA.webkit || Y.UA.ie) ? 'keydown' : 'keypress',
+
+        _keys: {
+            '37': 'left',
+            '38': 'up',
+            '39': 'right',
+            '40': 'down'
+        },
+
+        _keyHandler: function (e, notifier) {
+            if (this._keys[e.keyCode]) {
+                e.direction = this._keys[e.keyCode];
+                notifier.fire(e);
+            }
+        },
+
+        on: function (node, sub, notifier) {
+            sub._detacher = node.on(this._event, this._keyHandler,
+                                    this, notifier);
+        },
+
+        detach: function (node, sub, notifier) {
+            sub._detacher.detach();
+        },
+
+        delegate: function (node, sub, notifier, filter) {
+            sub._delegateDetacher = node.delegate(this._event, this._keyHandler,
+                                                  filter, this, notifier);
+        },
+
+        detachDelegate: function (node, sub, notifier) {
+            sub._delegateDetacher.detach();
+        }
+    });
+
+
+    var robotA = Y.one('#A'),
+        robotB = Y.one('#B'),
+        subs;
+
+    robotA.setData('x', parseInt(robotA.getStyle('left'), 10));
+    robotA.setData('y', parseInt(robotA.getStyle('top'), 10));
+    robotB.setData('x', parseInt(robotB.getStyle('left'), 10));
+    robotB.setData('y', parseInt(robotB.getStyle('top'), 10));
+
+    function move(e) {
+        // to prevent page scrolling
+        e.preventDefault();
+
+        var xy = this.getData();
+
+        switch (e.direction) {
+            case 'up':    xy.y -= 10; break;
+            case 'down':  xy.y += 10; break;
+            case 'left':  xy.x -= 10; break;
+            case 'right': xy.x += 10; break;
+        }
+
+        this.transition({
+            top : (xy.y + 'px'),
+            left: (xy.x + 'px'),
+            duration: .2
+        });
+    }
+
+    function detachSubs() {
+        if (subs) {
+            subs.detach();
+            subs = null;
+        }
+    }
+
+    Y.one("#attach").on("click", function (e) {
+        detachSubs();
+
+        if (Y.one("#delegate").get('checked')) {
+            subs = Y.one('#demo').delegate('arrow', move, '.robot');
+        } else {
+            subs = new Y.EventHandle([
+                robotA.on("arrow", move),
+                robotB.on("arrow", move)
+            ]);
+        }
+    });
+
+    Y.one("#detach").on("click", detachSubs);
+
+} );
+</script>
+
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+	
+		</div>
+	</div>
+	</div>
+
+	<h3 class="first"><code>on</code>, <code>fire</code>, and <code>detach</code></h3>
+<p>The three interesting moments in the lifecycle of an event subscription
+are</p>
+<ol>
+    <li>The event is subscribed to</li>
+    <li>The event is fired</li>
+    <li>The event is unsubscribed from</li>
+</ol>
+
+<p>Create a new synthetic DOM event with <code>Y.Event.define( <em>name</em>,
+<em>config</em> )</code>.  Define the implementation logic for the
+<code>on</code> and <code>detach</code> moments in the configuration.
+Typically the condition triggering the event firing is set up in the
+<code>on</code> phase.</p>
+
+<div id="syntax-0484cd0d7c15354ded7ccf30c2444324" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// what happens when a subscription is made</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="co1">// if (condition) {</span></div></li><li class="li1"><div class="de1">            notifier.<span class="me1">fire</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// subscribers executed</span></div></li><li class="li1"><div class="de1">        <span class="co1">// }</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// what happens when a subscription is removed</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// what happens when a subscription is made</span>
+&nbsp;
+        <span class="co1">// if (condition) {</span>
+            notifier.<span class="me1">fire</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// subscribers executed</span>
+        <span class="co1">// }</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// what happens when a subscription is removed</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-0484cd0d7c15354ded7ccf30c2444324-plain">Y.Event.define("arrow", {
+    on: function (node, sub, notifier) {
+        // what happens when a subscription is made
+
+        // if (condition) {
+            notifier.fire(); // subscribers executed
+        // }
+    },
+
+    detach: function (node, sub, notifier) {
+        // what happens when a subscription is removed
+    }
+} );</textarea></div>
+<p>In the case of arrow handling, the trigger is simply a key event with a <code>keyCode</code> between 37 and 40.  There are a few browser quirks with arrow handling that warrant listening to <code>keydown</code> for some browsers and <code>keypress</code> for others, so we'll take care of that transparently for <code>arrow</code> subscribers.</p> 
+
+<div id="syntax-92ff23a05b3075a7fce804ecddee25c2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;hover&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> directions <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="nu0">37</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">            <span class="nu0">38</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="nu0">39</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="nu0">40</span><span class="sy0">:</span> <span class="st0">'down'</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Opera links keypress to page scroll; others keydown.</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span></div></li><li class="li1"><div class="de1">        <span class="co1">// keydown or keypress.</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Bummer to sniff, but can't test the repeating behavior, and a</span></div></li><li class="li2"><div class="de2">        <span class="co1">// feature test for the scrolling would more than double the code size.</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> eventName <span class="sy0">=</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="co1">// To make detaching the associated DOM event easy, store the detach</span></div></li><li class="li1"><div class="de1">        <span class="co1">// handle from the DOM subscription on the synthethic subscription</span></div></li><li class="li2"><div class="de2">        <span class="co1">// object.</span></div></li><li class="li1"><div class="de1">        sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span>eventName<span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="co1">// Only notify subscribers if one of the arrow keys was pressed</span></div></li><li class="li1"><div class="de1">            <span class="kw1">if</span> <span class="br0">&#40;</span>directions<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                <span class="co1">// Add the extra property</span></div></li><li class="li2"><div class="de2">                e.<span class="me1">direction</span> <span class="sy0">=</span> directions<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">                <span class="co1">// Firing the notifier event executes the arrow subscribers</span></div></li><li class="li1"><div class="de1">                <span class="co1">// Pass along the key event, which will be renamed &quot;arrow&quot;</span></div></li><li class="li1"><div class="de1">                notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="co1">// Detach the key event subscription using the stored detach handle</span></div></li><li class="li1"><div class="de1">        sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;hover&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw2">var</span> directions <span class="sy0">=</span> <span class="br0">&#123;</span>
+            <span class="nu0">37</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span>
+            <span class="nu0">38</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span>
+            <span class="nu0">39</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span>
+            <span class="nu0">40</span><span class="sy0">:</span> <span class="st0">'down'</span>
+        <span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span>
+        <span class="co1">// Opera links keypress to page scroll; others keydown.</span>
+        <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span>
+        <span class="co1">// keydown or keypress.</span>
+        <span class="co1">// Bummer to sniff, but can't test the repeating behavior, and a</span>
+        <span class="co1">// feature test for the scrolling would more than double the code size.</span>
+        <span class="kw2">var</span> eventName <span class="sy0">=</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">;</span>
+&nbsp;
+        <span class="co1">// To make detaching the associated DOM event easy, store the detach</span>
+        <span class="co1">// handle from the DOM subscription on the synthethic subscription</span>
+        <span class="co1">// object.</span>
+        sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span>eventName<span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="co1">// Only notify subscribers if one of the arrow keys was pressed</span>
+            <span class="kw1">if</span> <span class="br0">&#40;</span>directions<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+                <span class="co1">// Add the extra property</span>
+                e.<span class="me1">direction</span> <span class="sy0">=</span> directions<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+                <span class="co1">// Firing the notifier event executes the arrow subscribers</span>
+                <span class="co1">// Pass along the key event, which will be renamed &quot;arrow&quot;</span>
+                notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="br0">&#125;</span>
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// Detach the key event subscription using the stored detach handle</span>
+        sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span> <span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-92ff23a05b3075a7fce804ecddee25c2-plain">Y.Event.define("hover", {
+    on: function (node, sub, notifier) {
+        var directions = {
+            37: 'left',
+            38: 'up',
+            39: 'right',
+            40: 'down'
+        };
+
+        // Webkit and IE repeat keydown when you hold down arrow keys.
+        // Opera links keypress to page scroll; others keydown.
+        // Firefox prevents page scroll via preventDefault() on either
+        // keydown or keypress.
+        // Bummer to sniff, but can't test the repeating behavior, and a
+        // feature test for the scrolling would more than double the code size.
+        var eventName = (Y.UA.webkit || Y.UA.ie) ? 'keydown' : 'keypress';
+
+        // To make detaching the associated DOM event easy, store the detach
+        // handle from the DOM subscription on the synthethic subscription
+        // object.
+        sub._detacher = node.on(eventName, function (e) {
+            // Only notify subscribers if one of the arrow keys was pressed
+            if (directions[e.keyCode]) {
+                // Add the extra property
+                e.direction = directions[e.keyCode];
+
+                // Firing the notifier event executes the arrow subscribers
+                // Pass along the key event, which will be renamed "arrow"
+                notifier.fire(e);
+            }
+        });
+    },
+
+    detach: function (node, sub, notifier) {
+        // Detach the key event subscription using the stored detach handle
+        sub._detacher.detach();
+    }
+} );</textarea></div>
+<h3>Add Delegation Support</h3>
+<p>Since the <code>arrow</code> event is simply a filtered <code>keydown</code> or <code>keypress</code> event, no special handling needs to be done for delegate subscriptions.  We will extract the key event handler and use it for both <code>on("arrow", ...)</code> and <code>delegate("arrow", ...)</code> subscriptions.
+
+<div id="syntax-5ea55a0e8f5a63bf685cd88b46c10270" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Opera links keypress to page scroll; others keydown.</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span></div></li><li class="li2"><div class="de2">    <span class="co1">// keydown or keypress.</span></div></li><li class="li1"><div class="de1">    _event<span class="sy0">:</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    _keys<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="st0">'37'</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="st0">'38'</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="st0">'39'</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="st0">'40'</span><span class="sy0">:</span> <span class="st0">'down'</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    _keyHandler<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            e.<span class="me1">direction</span> <span class="sy0">=</span> <span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Use the extended subscription signature to set the 'this' object</span></div></li><li class="li1"><div class="de1">        <span class="co1">// in the callback and pass the notifier as a second parameter to</span></div></li><li class="li2"><div class="de2">        <span class="co1">// _keyHandler</span></div></li><li class="li1"><div class="de1">        sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Note the delegate handler receives a fourth parameter, the filter</span></div></li><li class="li2"><div class="de2">    <span class="co1">// passed (e.g.) container.delegate('click', callback, '.HERE');</span></div></li><li class="li1"><div class="de1">    <span class="co1">// The filter could be either a string or a function.</span></div></li><li class="li1"><div class="de1">    delegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="sy0">,</span> filter<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        sub._delegateDetacher <span class="sy0">=</span> node.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                              filter<span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Delegate uses a separate detach function to facilitate undoing more</span></div></li><li class="li1"><div class="de1">    <span class="co1">// complex wiring created in the delegate logic above.  Not needed here.</span></div></li><li class="li1"><div class="de1">    detachDelegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        sub._delegateDetacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span>
+    <span class="co1">// Opera links keypress to page scroll; others keydown.</span>
+    <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span>
+    <span class="co1">// keydown or keypress.</span>
+    _event<span class="sy0">:</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">,</span>
+&nbsp;
+    _keys<span class="sy0">:</span> <span class="br0">&#123;</span>
+        <span class="st0">'37'</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span>
+        <span class="st0">'38'</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span>
+        <span class="st0">'39'</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span>
+        <span class="st0">'40'</span><span class="sy0">:</span> <span class="st0">'down'</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    _keyHandler<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            e.<span class="me1">direction</span> <span class="sy0">=</span> <span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span>
+            notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// Use the extended subscription signature to set the 'this' object</span>
+        <span class="co1">// in the callback and pass the notifier as a second parameter to</span>
+        <span class="co1">// _keyHandler</span>
+        sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span>
+                                <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Note the delegate handler receives a fourth parameter, the filter</span>
+    <span class="co1">// passed (e.g.) container.delegate('click', callback, '.HERE');</span>
+    <span class="co1">// The filter could be either a string or a function.</span>
+    delegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="sy0">,</span> filter<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        sub._delegateDetacher <span class="sy0">=</span> node.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span>
+                                              filter<span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Delegate uses a separate detach function to facilitate undoing more</span>
+    <span class="co1">// complex wiring created in the delegate logic above.  Not needed here.</span>
+    detachDelegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        sub._delegateDetacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-5ea55a0e8f5a63bf685cd88b46c10270-plain">Y.Event.define("arrow", {
+    // Webkit and IE repeat keydown when you hold down arrow keys.
+    // Opera links keypress to page scroll; others keydown.
+    // Firefox prevents page scroll via preventDefault() on either
+    // keydown or keypress.
+    _event: (Y.UA.webkit || Y.UA.ie) ? 'keydown' : 'keypress',
+
+    _keys: {
+        '37': 'left',
+        '38': 'up',
+        '39': 'right',
+        '40': 'down'
+    },
+
+    _keyHandler: function (e, notifier) {
+        if (this._keys[e.keyCode]) {
+            e.direction = this._keys[e.keyCode];
+            notifier.fire(e);
+        }
+    },
+
+    on: function (node, sub, notifier) {
+        // Use the extended subscription signature to set the 'this' object
+        // in the callback and pass the notifier as a second parameter to
+        // _keyHandler
+        sub._detacher = node.on(this._event, this._keyHandler,
+                                this, notifier);
+    },
+
+    detach: function (node, sub, notifier) {
+        sub._detacher.detach();
+    },
+
+    // Note the delegate handler receives a fourth parameter, the filter
+    // passed (e.g.) container.delegate('click', callback, '.HERE');
+    // The filter could be either a string or a function.
+    delegate: function (node, sub, notifier, filter) {
+        sub._delegateDetacher = node.delegate(this._event, this._keyHandler,
+                                              filter, this, notifier);
+    },
+
+    // Delegate uses a separate detach function to facilitate undoing more
+    // complex wiring created in the delegate logic above.  Not needed here.
+    detachDelegate: function (node, sub, notifier) {
+        sub._delegateDetacher.detach();
+    }
+});</textarea></div>
+<h3>Use it</h3>
+<p>Subscribe to the new event or detach the event as you would any other DOM event.</p>
+
+<div id="syntax-f1691b6b0bdde664483653a2e9a78587" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">function</span> move<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// to prevent page scrolling</span></div></li><li class="li1"><div class="de1">    e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">// See full code listing to show the data set up</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> xy <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">getData</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw1">switch</span> <span class="br0">&#40;</span>e.<span class="me1">direction</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">case</span> <span class="st0">'up'</span><span class="sy0">:</span>    xy.<span class="me1">y</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">case</span> <span class="st0">'down'</span><span class="sy0">:</span>  xy.<span class="me1">y</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">case</span> <span class="st0">'left'</span><span class="sy0">:</span>  xy.<span class="me1">x</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">case</span> <span class="st0">'right'</span><span class="sy0">:</span> xy.<span class="me1">x</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw1">this</span>.<span class="me1">transition</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        top <span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">y</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        left<span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">x</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        duration<span class="sy0">:</span> .2</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Subscribe using node.on(&quot;arrow&quot;, ...);</span></div></li><li class="li1"><div class="de1">Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#A&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#B&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// OR using container.delegate(&quot;arrow&quot;, ...);</span></div></li><li class="li1"><div class="de1">subs <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#demo'</span><span class="br0">&#41;</span>.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">'arrow'</span><span class="sy0">,</span> move<span class="sy0">,</span> <span class="st0">'.robot'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">function</span> move<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// to prevent page scrolling</span>
+    e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// See full code listing to show the data set up</span>
+    <span class="kw2">var</span> xy <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">getData</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw1">switch</span> <span class="br0">&#40;</span>e.<span class="me1">direction</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">case</span> <span class="st0">'up'</span><span class="sy0">:</span>    xy.<span class="me1">y</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+        <span class="kw1">case</span> <span class="st0">'down'</span><span class="sy0">:</span>  xy.<span class="me1">y</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+        <span class="kw1">case</span> <span class="st0">'left'</span><span class="sy0">:</span>  xy.<span class="me1">x</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+        <span class="kw1">case</span> <span class="st0">'right'</span><span class="sy0">:</span> xy.<span class="me1">x</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+&nbsp;
+    <span class="kw1">this</span>.<span class="me1">transition</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+        top <span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">y</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+        left<span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">x</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+        duration<span class="sy0">:</span> .2
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="co1">// Subscribe using node.on(&quot;arrow&quot;, ...);</span>
+Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#A&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span><span class="sy0">,</span>
+Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#B&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span>
+&nbsp;
+<span class="co1">// OR using container.delegate(&quot;arrow&quot;, ...);</span>
+subs <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#demo'</span><span class="br0">&#41;</span>.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">'arrow'</span><span class="sy0">,</span> move<span class="sy0">,</span> <span class="st0">'.robot'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-f1691b6b0bdde664483653a2e9a78587-plain">function move(e) {
+    // to prevent page scrolling
+    e.preventDefault();
+
+    // See full code listing to show the data set up
+    var xy = this.getData();
+
+    switch (e.direction) {
+        case 'up':    xy.y -= 10; break;
+        case 'down':  xy.y += 10; break;
+        case 'left':  xy.x -= 10; break;
+        case 'right': xy.x += 10; break;
+    }
+
+    this.transition({
+        top : (xy.y + 'px'),
+        left: (xy.x + 'px'),
+        duration: .2
+    });
+}
+
+// Subscribe using node.on("arrow", ...);
+Y.one("#A").on("arrow", move),
+Y.one("#B").on("arrow", move)
+
+// OR using container.delegate("arrow", ...);
+subs = Y.one('#demo').delegate('arrow', move, '.robot');</textarea></div>
+<h3>Bonus Step: to the Gallery!</h3>
+<p>Synthetic events are perfect candidates for Gallery modules.  There are a number already hosted there, and there are plenty of UI interaction patterns that would benefit from being encapsulated in synthetic events.</p>
+
+<p>This event would look like this as a gallery module:</p>
+<div id="syntax-49fd92fbc4568ff67b4a705f9973f00c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI.<span class="me1">add</span><span class="br0">&#40;</span><span class="st0">&quot;gallery-event-arrow&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Opera links keypress to page scroll; others keydown.</span></div></li><li class="li2"><div class="de2">        <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span></div></li><li class="li1"><div class="de1">        <span class="co1">// keydown or keypress.</span></div></li><li class="li1"><div class="de1">        _event<span class="sy0">:</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        _keys<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            <span class="st0">'37'</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="st0">'38'</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="st0">'39'</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="st0">'40'</span><span class="sy0">:</span> <span class="st0">'down'</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        _keyHandler<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                e.<span class="me1">direction</span> <span class="sy0">=</span> <span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">                notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span></div></li><li class="li2"><div class="de2">                                    <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        delegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="sy0">,</span> filter<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            sub._delegateDetacher <span class="sy0">=</span> node.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                                  filter<span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        detachDelegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            sub._delegateDetacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">'0.0.1'</span><span class="sy0">,</span> <span class="br0">&#123;</span> requires<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'event-synthetic'</span><span class="br0">&#93;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI.<span class="me1">add</span><span class="br0">&#40;</span><span class="st0">&quot;gallery-event-arrow&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+        <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span>
+        <span class="co1">// Opera links keypress to page scroll; others keydown.</span>
+        <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span>
+        <span class="co1">// keydown or keypress.</span>
+        _event<span class="sy0">:</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">,</span>
+&nbsp;
+        _keys<span class="sy0">:</span> <span class="br0">&#123;</span>
+            <span class="st0">'37'</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span>
+            <span class="st0">'38'</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span>
+            <span class="st0">'39'</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span>
+            <span class="st0">'40'</span><span class="sy0">:</span> <span class="st0">'down'</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        _keyHandler<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+                e.<span class="me1">direction</span> <span class="sy0">=</span> <span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span>
+                notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="br0">&#125;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span>
+                                    <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        delegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="sy0">,</span> filter<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._delegateDetacher <span class="sy0">=</span> node.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span>
+                                                  filter<span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        detachDelegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._delegateDetacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">'0.0.1'</span><span class="sy0">,</span> <span class="br0">&#123;</span> requires<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'event-synthetic'</span><span class="br0">&#93;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-49fd92fbc4568ff67b4a705f9973f00c-plain">YUI.add("gallery-event-arrow", function (Y) {
+    Y.Event.define("arrow", {
+        // Webkit and IE repeat keydown when you hold down arrow keys.
+        // Opera links keypress to page scroll; others keydown.
+        // Firefox prevents page scroll via preventDefault() on either
+        // keydown or keypress.
+        _event: (Y.UA.webkit || Y.UA.ie) ? 'keydown' : 'keypress',
+
+        _keys: {
+            '37': 'left',
+            '38': 'up',
+            '39': 'right',
+            '40': 'down'
+        },
+
+        _keyHandler: function (e, notifier) {
+            if (this._keys[e.keyCode]) {
+                e.direction = this._keys[e.keyCode];
+                notifier.fire(e);
+            }
+        },
+
+        on: function (node, sub, notifier) {
+            sub._detacher = node.on(this._event, this._keyHandler,
+                                    this, notifier);
+        },
+
+        detach: function (node, sub, notifier) {
+            sub._detacher.detach();
+        },
+
+        delegate: function (node, sub, notifier, filter) {
+            sub._delegateDetacher = node.delegate(this._event, this._keyHandler,
+                                                  filter, this, notifier);
+        },
+
+        detachDelegate: function (node, sub, notifier) {
+            sub._delegateDetacher.detach();
+        }
+    });
+}, '0.0.1', { requires: ['event-synthetic'] });</textarea></div>
+<h3>Full Code Listing</h3>
+<div id="syntax-9dd760ecdc12c2c1e96224b1171beb1e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;event-synthetic&quot;</span><span class="sy0">,</span> <span class="st0">&quot;node&quot;</span><span class="sy0">,</span> <span class="st0">&quot;transition&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span></div></li><li class="li2"><div class="de2">        <span class="co1">// Opera links keypress to page scroll; others keydown.</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span></div></li><li class="li1"><div class="de1">        <span class="co1">// keydown or keypress.</span></div></li><li class="li1"><div class="de1">        _event<span class="sy0">:</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        _keys<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="st0">'37'</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="st0">'38'</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="st0">'39'</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="st0">'40'</span><span class="sy0">:</span> <span class="st0">'down'</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        _keyHandler<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                e.<span class="me1">direction</span> <span class="sy0">=</span> <span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">                notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                    <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        delegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="sy0">,</span> filter<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            sub._delegateDetacher <span class="sy0">=</span> node.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span></div></li><li class="li2"><div class="de2">                                                  filter<span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        detachDelegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            sub._delegateDetacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> robotA <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#A'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        robotB <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#B'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        subs<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    robotA.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'x'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotA.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'left'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    robotA.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'y'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotA.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    robotB.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'x'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotB.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'left'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    robotB.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'y'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotB.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">function</span> move<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// to prevent page scrolling</span></div></li><li class="li2"><div class="de2">        e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> xy <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">getData</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw1">switch</span> <span class="br0">&#40;</span>e.<span class="me1">direction</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            <span class="kw1">case</span> <span class="st0">'up'</span><span class="sy0">:</span>    xy.<span class="me1">y</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">case</span> <span class="st0">'down'</span><span class="sy0">:</span>  xy.<span class="me1">y</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">case</span> <span class="st0">'left'</span><span class="sy0">:</span>  xy.<span class="me1">x</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">case</span> <span class="st0">'right'</span><span class="sy0">:</span> xy.<span class="me1">x</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw1">this</span>.<span class="me1">transition</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            top <span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">y</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            left<span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">x</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            duration<span class="sy0">:</span> .2</div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">function</span> detachSubs<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">if</span> <span class="br0">&#40;</span>subs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            subs.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            subs <span class="sy0">=</span> <span class="kw2">null</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#attach&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        detachSubs<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw1">if</span> <span class="br0">&#40;</span>Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#delegate&quot;</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'checked'</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            subs <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#demo'</span><span class="br0">&#41;</span>.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">'arrow'</span><span class="sy0">,</span> move<span class="sy0">,</span> <span class="st0">'.robot'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            subs <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">EventHandle</span><span class="br0">&#40;</span><span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">                robotA.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                robotB.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#detach&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> detachSubs<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">&quot;event-synthetic&quot;</span><span class="sy0">,</span> <span class="st0">&quot;node&quot;</span><span class="sy0">,</span> <span class="st0">&quot;transition&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    Y.<span class="me1">Event</span>.<span class="me1">define</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+        <span class="co1">// Webkit and IE repeat keydown when you hold down arrow keys.</span>
+        <span class="co1">// Opera links keypress to page scroll; others keydown.</span>
+        <span class="co1">// Firefox prevents page scroll via preventDefault() on either</span>
+        <span class="co1">// keydown or keypress.</span>
+        _event<span class="sy0">:</span> <span class="br0">&#40;</span>Y.<span class="me1">UA</span>.<span class="me1">webkit</span> <span class="sy0">||</span> Y.<span class="me1">UA</span>.<span class="me1">ie</span><span class="br0">&#41;</span> <span class="sy0">?</span> <span class="st0">'keydown'</span> <span class="sy0">:</span> <span class="st0">'keypress'</span><span class="sy0">,</span>
+&nbsp;
+        _keys<span class="sy0">:</span> <span class="br0">&#123;</span>
+            <span class="st0">'37'</span><span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span>
+            <span class="st0">'38'</span><span class="sy0">:</span> <span class="st0">'up'</span><span class="sy0">,</span>
+            <span class="st0">'39'</span><span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span>
+            <span class="st0">'40'</span><span class="sy0">:</span> <span class="st0">'down'</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        _keyHandler<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+                e.<span class="me1">direction</span> <span class="sy0">=</span> <span class="kw1">this</span>._keys<span class="br0">&#91;</span>e.<span class="me1">keyCode</span><span class="br0">&#93;</span><span class="sy0">;</span>
+                notifier.<span class="me1">fire</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="br0">&#125;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        on<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._detacher <span class="sy0">=</span> node.<span class="me1">on</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span>
+                                    <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        detach<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._detacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        delegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="sy0">,</span> filter<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._delegateDetacher <span class="sy0">=</span> node.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="kw1">this</span>._event<span class="sy0">,</span> <span class="kw1">this</span>._keyHandler<span class="sy0">,</span>
+                                                  filter<span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> notifier<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        detachDelegate<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>node<span class="sy0">,</span> sub<span class="sy0">,</span> notifier<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            sub._delegateDetacher.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+    <span class="kw2">var</span> robotA <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#A'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+        robotB <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#B'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+        subs<span class="sy0">;</span>
+&nbsp;
+    robotA.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'x'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotA.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'left'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    robotA.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'y'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotA.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    robotB.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'x'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotB.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'left'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    robotB.<span class="me1">setData</span><span class="br0">&#40;</span><span class="st0">'y'</span><span class="sy0">,</span> parseInt<span class="br0">&#40;</span>robotB.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'top'</span><span class="br0">&#41;</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw2">function</span> move<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// to prevent page scrolling</span>
+        e.<span class="me1">preventDefault</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="kw2">var</span> xy <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">getData</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="kw1">switch</span> <span class="br0">&#40;</span>e.<span class="me1">direction</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="kw1">case</span> <span class="st0">'up'</span><span class="sy0">:</span>    xy.<span class="me1">y</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+            <span class="kw1">case</span> <span class="st0">'down'</span><span class="sy0">:</span>  xy.<span class="me1">y</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+            <span class="kw1">case</span> <span class="st0">'left'</span><span class="sy0">:</span>  xy.<span class="me1">x</span> <span class="sy0">-=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+            <span class="kw1">case</span> <span class="st0">'right'</span><span class="sy0">:</span> xy.<span class="me1">x</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="kw1">break</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+&nbsp;
+        <span class="kw1">this</span>.<span class="me1">transition</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+            top <span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">y</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+            left<span class="sy0">:</span> <span class="br0">&#40;</span>xy.<span class="me1">x</span> <span class="sy0">+</span> <span class="st0">'px'</span><span class="br0">&#41;</span><span class="sy0">,</span>
+            duration<span class="sy0">:</span> .2
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+&nbsp;
+    <span class="kw2">function</span> detachSubs<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">if</span> <span class="br0">&#40;</span>subs<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            subs.<span class="me1">detach</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+            subs <span class="sy0">=</span> <span class="kw2">null</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span>
+&nbsp;
+    Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#attach&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        detachSubs<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="kw1">if</span> <span class="br0">&#40;</span>Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#delegate&quot;</span><span class="br0">&#41;</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'checked'</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            subs <span class="sy0">=</span> Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">'#demo'</span><span class="br0">&#41;</span>.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">'arrow'</span><span class="sy0">,</span> move<span class="sy0">,</span> <span class="st0">'.robot'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+            subs <span class="sy0">=</span> <span class="kw2">new</span> Y.<span class="me1">EventHandle</span><span class="br0">&#40;</span><span class="br0">&#91;</span>
+                robotA.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span><span class="sy0">,</span>
+                robotB.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;arrow&quot;</span><span class="sy0">,</span> move<span class="br0">&#41;</span>
+            <span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    Y.<span class="me1">one</span><span class="br0">&#40;</span><span class="st0">&quot;#detach&quot;</span><span class="br0">&#41;</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> detachSubs<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-9dd760ecdc12c2c1e96224b1171beb1e-plain">YUI().use("event-synthetic", "node", "transition", function (Y) {
+
+    Y.Event.define("arrow", {
+        // Webkit and IE repeat keydown when you hold down arrow keys.
+        // Opera links keypress to page scroll; others keydown.
+        // Firefox prevents page scroll via preventDefault() on either
+        // keydown or keypress.
+        _event: (Y.UA.webkit || Y.UA.ie) ? 'keydown' : 'keypress',
+
+        _keys: {
+            '37': 'left',
+            '38': 'up',
+            '39': 'right',
+            '40': 'down'
+        },
+
+        _keyHandler: function (e, notifier) {
+            if (this._keys[e.keyCode]) {
+                e.direction = this._keys[e.keyCode];
+                notifier.fire(e);
+            }
+        },
+
+        on: function (node, sub, notifier) {
+            sub._detacher = node.on(this._event, this._keyHandler,
+                                    this, notifier);
+        },
+
+        detach: function (node, sub, notifier) {
+            sub._detacher.detach();
+        },
+
+        delegate: function (node, sub, notifier, filter) {
+            sub._delegateDetacher = node.delegate(this._event, this._keyHandler,
+                                                  filter, this, notifier);
+        },
+
+        detachDelegate: function (node, sub, notifier) {
+            sub._delegateDetacher.detach();
+        }
+    });
+
+
+    var robotA = Y.one('#A'),
+        robotB = Y.one('#B'),
+        subs;
+
+    robotA.setData('x', parseInt(robotA.getStyle('left'), 10));
+    robotA.setData('y', parseInt(robotA.getStyle('top'), 10));
+    robotB.setData('x', parseInt(robotB.getStyle('left'), 10));
+    robotB.setData('y', parseInt(robotB.getStyle('top'), 10));
+
+    function move(e) {
+        // to prevent page scrolling
+        e.preventDefault();
+
+        var xy = this.getData();
+
+        switch (e.direction) {
+            case 'up':    xy.y -= 10; break;
+            case 'down':  xy.y += 10; break;
+            case 'left':  xy.x -= 10; break;
+            case 'right': xy.x += 10; break;
+        }
+
+        this.transition({
+            top : (xy.y + 'px'),
+            left: (xy.x + 'px'),
+            duration: .2
+        });
+    }
+
+    function detachSubs() {
+        if (subs) {
+            subs.detach();
+            subs = null;
+        }
+    }
+
+    Y.one("#attach").on("click", function (e) {
+        detachSubs();
+
+        if (Y.one("#delegate").get('checked')) {
+            subs = Y.one('#demo').delegate('arrow', move, '.robot');
+        } else {
+            subs = new Y.EventHandle([
+                robotA.on("arrow", move),
+                robotB.on("arrow", move)
+            ]);
+        }
+    });
+
+    Y.one("#detach").on("click", detachSubs);
+
+});</textarea></div>				</div>
+				<div class="yui-u sidebar">
+	
+					<div id="examples" class="mod box4">
+                        <div class="hd">
+						<h4>
+    Event Examples:</h4>
+                        </div>
+						<div class="bd">
+							<ul>
+								<li><a href='../event/event-simple.html'>Simple DOM Events</a></li><li><a href='../event/event-timing.html'>Using 'available', 'contentready', and 'domready'</a></li><li><a href='../event/event-ce.html'>Using Custom Events</a></li><li><a href='../event/event-focus-blur.html'>Skinning via Progressive Enhancement using the Event Utility and the Loader</a></li><li class='selected'><a href='../event/event-synth-arrow.html'>Creating an Arrow Event for DOM Subscription</a></li><li><a href='../event/swipe-gesture.html'>Supporting A Swipe Left Gesture</a></li><li><a href='../yui/yui-augment.html'>Compose Classes of Objects with <code>augment</code> (included with examples for The YUI Global Object)</a></li><li><a href='../node-focusmanager/node-focusmanager-3.html'>Accessible Menu Button (included with examples for Focus Manager Node Plugin)</a></li><li><a href='../node-focusmanager/node-focusmanager-2.html'>Accessible TabView (included with examples for Focus Manager Node Plugin)</a></li><li><a href='../attribute/attribute-event.html'>Attribute Change Events (included with examples for Attribute)</a></li><li><a href='../attribute/attribute-event-speeddate.html'>Attribute Event Based Speed Dating (included with examples for Attribute)</a></li><li><a href='../attribute/attribute-getset.html'>Attribute Getters, Setters and Validators (included with examples for Attribute)</a></li><li><a href='../widget/widget-extend.html'>Extending the Base Widget Class (included with examples for Widget)</a></li><li><a href='../dd/photo-browser.html'>Photo Browser (included with examples for Drag &amp; Drop)</a></li>							</ul>
+						</div>
+					</div>
+
+					<div class="mod box4">
+                        <div class="hd">
+						<h4>More Event Resources:</h4>
+                        </div>
+                        <div class="bd">
+						<ul>
+							<!-- <li><a href="http://developer.yahoo.com/yui/event/">User's Guide</a> (external)</li> -->
+<li><a href="../../api/module_event.html">API Documentation</a></li></ul>
+                        </div>
+					</div>
+			  </div>
+		</div>
+
+		</div>
+	</div>
+
+
+<div class="yui-b toc3" id="tocWrapper">
+<!-- TABLE OF CONTENTS -->
+<div id="toc">
+	
+<ul>
+<li class="sect first">YUI 3 Resources</li><li class="item"><a title="YUI 3 -- Yahoo! User Interface (YUI) Library" href="http://developer.yahoo.com/yui/3/">YUI 3 Web Site</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/">YUI 3 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for the entire YUI library." href="../../api/">YUI 3 API Docs</a></li><li class="item"><a title="YUI 3 Dependency Configurator -- configure your custom YUI implementation" href="http://developer.yahoo.com/yui/3/configurator/index.html">YUI 3 Dependency Configurator</a></li><li class="item"><a title="The YUI 3 Forum on YUILibrary.com" href="http://yuilibrary.com/forum/viewforum.php?f=15">YUI 3 Forums (external)</a></li><li class="item"><a title="Found a bug or a missing feature? Let us know on YUILibrary.com." href="http://developer.yahoo.com/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://developer.yahoo.com/yui/license.html">YUI License</a></li><li class="item"><a title="Download and fork the YUI project on GitHub" href="http://github.com/yui">YUI on Github</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUI Blog (external)</a></li><li class="sect">YUI 3 Core - Examples</li><li class="item"><a title="YUI Global Object - Functional Examples" href="../../examples/yui/index.html">YUI Global Object</a></li><li class="selected "><a title="Event - Functional Examples" href="../../examples/event/index.html">Event</a></li><li class="item"><a title="Node - Functional Examples" href="../../examples/node/index.html">Node</a></li><li class="sect">YUI 3 Component Infrastructure - Examples</li><li class="item"><a title="Attribute - Functional Examples" href="../../examples/attribute/index.html">Attribute</a></li><li class="item"><a title="Plugin - Functional Examples" href="../../examples/plugin/index.html">Plugin</a></li><li class="item"><a title="Widget - Functional Examples" href="../../examples/widget/index.html">Widget</a></li><li class="sect">YUI 3 Utilities - Examples</li><li class="item"><a title="Animation - Functional Examples" href="../../examples/anim/index.html">Animation</a></li><li class="item"><a title="AsyncQueue - Functional Examples" href="../../examples/async-queue/index.html">AsyncQueue</a></li><li class="item"><a title="Cache - Functional Examples" href="../../examples/cache/index.html">Cache</a></li><li class="item"><a title="Cookie - Functional Examples" href="../../examples/cookie/index.html">Cookie</a></li><li class="item"><a title="DataSchema - Functional Examples" href="../../examples/dataschema/index.html">DataSchema <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataSource - Functional Examples" href="../../examples/datasource/index.html">DataSource <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataType - Functional Examples" href="../../examples/datatype/index.html">DataType <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Drag &amp; Drop - Functional Examples" href="../../examples/dd/index.html">Drag &amp; Drop</a></li><li class="item"><a title="Get - Functional Examples" href="../../examples/get/index.html">Get</a></li><li class="item"><a title="History - Functional Examples" href="../../examples/history/index.html">History <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="IO - Functional Examples" href="../../examples/io/index.html">IO</a></li><li class="item"><a title="ImageLoader - Functional Examples" href="../../examples/imageloader/index.html">ImageLoader</a></li><li class="item"><a title="Internationalization - Functional Examples" href="../../examples/intl/index.html">Internationalization</a></li><li class="item"><a title="JSON (JavaScript Object Notation) - Functional Examples" href="../../examples/json/index.html">JSON</a></li><li class="item"><a title="JSONP (JSON with Padding) - Functional Examples" href="../../examples/jsonp/index.html">JSONP <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Recordset - Functional Examples" href="../../examples/recordset/index.html">Recordset <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Resize - Functional Examples" href="../../examples/resize/index.html">Resize <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Sortable - Functional Examples" href="../../examples/sortable/index.html">Sortable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Stylesheet - Functional Examples" href="../../examples/stylesheet/index.html">Stylesheet</a></li><li class="item"><a title="Transition - Functional Examples" href="../../examples/transition/index.html">Transition <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Uploader - Functional Examples" href="../../examples/uploader/index.html">Uploader <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YQL Query - Functional Examples" href="../../examples/yql/index.html">YQL Query <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Widgets - Examples</li><li class="item"><a title="AutoComplete - Functional Examples" href="../../examples/autocomplete/index.html">AutoComplete <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Charts - Functional Examples" href="../../examples/charts/index.html">Charts <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="DataTable - Functional Examples" href="../../examples/datatable/index.html">DataTable <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Dial - Functional Examples" href="../../examples/dial/index.html">Dial <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Editor - Functional Examples" href="../../examples/editor/index.html">Editor <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Overlay - Functional Examples" href="../../examples/overlay/index.html">Overlay <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="ScrollView - Functional Examples" href="../../examples/scrollview/index.html">ScrollView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Slider - Functional Examples" href="../../examples/slider/index.html">Slider <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="TabView - Functional Examples" href="../../examples/tabview/index.html">TabView <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 Node Plugins - Examples</li><li class="item"><a title="FocusManager Node Plugin - Functional Examples" href="../../examples/node-focusmanager/index.html">FocusManager Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="MenuNav Node Plugin - Functional Examples" href="../../examples/node-menunav/index.html">MenuNav Node Plugin <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="sect">YUI 3 CSS - Examples</li><li class="item"><a title="YUI Base - Functional Examples" href="../../examples/cssbase/index.html">CSS Base</a></li><li class="item"><a title="YUI Fonts - Functional Examples" href="../../examples/cssfonts/index.html">CSS Fonts</a></li><li class="item"><a title="YUI Grids - Functional Examples" href="../../examples/cssgrids/index.html">CSS Grids <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="YUI CSS Reset - Functional Examples" href="../../examples/cssreset/index.html">CSS Reset</a></li><li class="sect">YUI 3 Developer Tools - Examples</li><li class="item"><a title="Console - Functional Examples" href="../../examples/console/index.html">Console <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Console Filters Plugin- Functional Examples" href="../../examples/console-filters/index.html">Plugin.ConsoleFilters <img alt='beta' src='http://l.yimg.com/a/i/not/beta_1.gif'></a></li><li class="item"><a title="Profiler - Functional Examples" href="../../examples/profiler/index.html">Profiler</a></li><li class="item"><a title="Test - Functional Examples" href="../../examples/test/index.html">Test</a></li><li class="sect">Other Useful YUI 3 Resources</li><li class="item"><a title="Answers to Frequently Asked Questions about the YUI Library" href="http://developer.yahoo.com/yui/articles/faq/">YUI FAQ (external)</a></li><li class="item"><a title="Yahoo!'s philosophy of Graded Browser Support" href="http://developer.yahoo.com/yui/articles/gbs/">Graded Browser Support (external)</a></li><li class="item"><a title="Videos and podcasts from the YUI Team and from the Yahoo! frontend engineering community." href="http://developer.yahoo.com/yui/theater/">YUI Theater (external)</a></li></ul>
+</div>
+</div>
+	</div><!--closes bd-->
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2011 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://privacy.yahoo.com/privacy/us/devel/index.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+<script language="javascript"> 
+var yuiConfig = { filter: 'raw' };
+</script>
+<script src="../../assets/syntax.js"></script>
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+</body>
+</html>

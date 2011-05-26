@@ -1,0 +1,95 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Dial With Image Background</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link type="text/css" rel="stylesheet" href="../../build/cssfonts/fonts-min.css" />
+<script type="text/javascript" src="../../build/yui/yui-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style>
+.yui3-skin-sam .yui3-dial-content .yui3-dial-handle-user{
+	background:url("assets/images/ball_bearing.png") no-repeat;
+	opacity:1; 
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring{
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:url("assets/images/bkg_ring_of_lines.png") no-repeat scroll 0px 0px;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button {
+	box-shadow: none;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	-moz-box-shadow: none;
+	background:none;
+	opacity:1;
+}
+.yui3-skin-sam .yui3-dial-ring-vml v\:oval {
+	visibility:hidden;
+}
+.yui3-skin-sam .yui3-dial-ring-vml .yui3-dial-marker v\:oval {
+	visibility:visible;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-ring-vml{
+	background:url("assets/images/bkg_ring_of_lines.png") no-repeat scroll 0px 0px;
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-handle-user-vml{
+	background:url("assets/images/ball_bearing_8.png") no-repeat scroll 0px 0px;
+	opacity:1; 
+}
+.yui3-skin-sam .yui3-dial-content .yui3-dial-center-button-vml {
+	background:url(assets/images/empty.png);
+}
+</style>
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam">
+
+<h1>Dial With Image Background</h1>
+
+<div class="exampleIntro">
+	<p>This example shows how to create a <code>Dial</code> widget using background images for the ring and the handle.</p>			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="demo"></div>
+
+<script type="text/javascript">
+YUI({ filter: 'raw' }).use("dial", function(Y) {
+
+	var dial = new Y.Dial({
+		min:-220,
+		max:220,
+		stepsPerRev:100,
+		value: 30
+	});
+    dial.render('#demo');
+
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+</body>
+</html>

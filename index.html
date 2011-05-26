@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+	<html lang="en">
+
+	<head>
+
+		<meta charset="utf-8" />
+	
+		<!-- This prevents the conditional comments below from holding up the page load
+			 www.phpied.com/conditional-comments-block-downloads/ -->
+		<!--[if IE]><![endif]-->
+	
+		<title>Scalable JS Architecture</title>
+
+		<link rel="stylesheet" href="css/reset.css" />		
+		<link rel="stylesheet" href="css/main.css" />
+		<link rel="stylesheet" href="css/third_party/color_picker/colorpicker.css" />
+		<link rel="stylesheet" href="css/third_party/query_loader/queryLoader.css" />
+		<link rel="stylesheet" href="css/third_party/uploadify/uploadify.css" />
+		
+	</head>
+
+	<body>
+		<div id="wrapper">
+		  <label for="radius">Radius:</label>
+		  <input type="text" id="radius" value="100" />
+		  
+		  <label for="speed">Speed:</label>
+		  <input type="text" id="speed" value="50" />
+		  
+		  <input type="button" id="go" value="Walk Lucky" />
+		  <input type="button" id="stop" value="Stop Lucky" />
+		  
+      <img id="lucky" src="images/lucky.jpg" />
+
+      <p id="status"></p>
+		</div> <!-- wrapper -->
+		
+<!-- use in production!
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>		
+-->
+
+<!-- for non webkit/firefox browsers:
+	  <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script> 
+-->	
+
+		<script src="js/third_party/yui/build/yui/yui-min.js" charset="utf-8"></script>
+		<script src="js/third_party/jquery/jquery-1.6.1.min.js"></script>
+		<script src="js/third_party/jquery/jquery-ui.min.js"></script>
+		
+		<script src="js/third_party/swfobject/swfobject.js"></script>
+		
+		<script src="js/third_party/jquery/plugins/colorpicker/colorpicker.js"></script>
+	  <script src="js/third_party/jquery/plugins/colorpicker/eye.js"></script>
+	  <script src="js/third_party/jquery/plugins/colorpicker/utils.js"></script>
+		<script src="js/third_party/jquery/plugins/selectmenu.js"></script>
+		<script src="js/third_party/jquery/plugins/queryloader.js"></script>
+		<script src="js/third_party/jquery/plugins/shadow.js"></script>
+		<script src="js/third_party/jquery/plugins/text_selection.js"></script>
+		<script src="js/third_party/jquery/plugins/throttle_debounce.js"></script>
+		<script src="js/third_party/jquery/plugins/onImagesLoad.min.js"></script>
+		<script src="js/third_party/jquery/plugins/uploadify.v2.1.4.js"></script>
+		
+		<script src="js/core_jquery.js"></script>
+		<script src="js/sandbox.js"></script>
+
+		<script src="js/plugins/dom.js"></script>
+		<script src="js/plugins/utilities.js"></script>
+		<script src="js/plugins/alert_window.js"></script>
+		<script src="js/plugins/external.js"></script>
+		<script src="js/plugins/effects.js"></script>
+		<script src="js/plugins/ajax.js"></script>
+		<script src="js/plugins/ui.js"></script>
+		<script src="js/plugins/data.js"></script>
+		<script src="js/plugins/config.js"></script>
+		<script src="js/plugins/tooltip.js"></script>
+		<script src="js/plugins/html_generator.js"></script>
+		<script src="js/plugins/form_markup_generator.js"></script>		
+		<script src="js/plugins/event_manager.js"></script>		
+		<script src="js/plugins/test.js"></script>	
+			
+		<script src="js/modules/lucky.js"></script>
+		<script src="js/modules/status.js"></script>
+		<script src="js/modules/viewport.js"></script>
+		<script src="js/modules/inputs.js"></script>
+
+		<script src="js/application.js"></script>
+		
+	</body>
+
+	
+</html>
