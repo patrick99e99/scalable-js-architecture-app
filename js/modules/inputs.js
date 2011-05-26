@@ -1,10 +1,10 @@
 Core.loadModule('inputs', function(sandbox) {
 	
 	var self,
-		 go_button = sandbox.find('go'),
+		 go_button   = sandbox.find('go'),
 		 stop_button = sandbox.find('stop'),
-		 radius	  = sandbox.find('radius');
-		 speed	  = sandbox.find('speed');
+		 radius	    = sandbox.find('radius'),
+		 speed	    = sandbox.find('speed');
 
 	return {
 		
@@ -15,8 +15,8 @@ Core.loadModule('inputs', function(sandbox) {
 		},
 		
 		onReady: function() {
-			var r = sandbox.getValue(radius),
-				 s = sandbox.getValue(speed);
+			var r = parseInt(sandbox.getValue(radius), 10),
+				 s = parseInt(sandbox.getValue(speed), 10);
 				
 			sandbox.setValue(radius, r);
 			sandbox.notify('radius-changed', r);

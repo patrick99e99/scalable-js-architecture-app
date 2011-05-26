@@ -2,10 +2,10 @@ Core.loadModule('lucky', function(sandbox) {
 	
 	var self,
 		 helpers,
-		 wrapper = sandbox.find('wrapper'),
-		 lucky   = sandbox.find('lucky'),
+		 lucky = sandbox.find('lucky'),
 		 radius,
 		 speed,
+		 start_degree,
 		 moving = false,
 		 center;
 		
@@ -29,16 +29,16 @@ Core.loadModule('lucky', function(sandbox) {
 			sandbox.appear(lucky);
 		},
 		
-		center: function() {
+		center: function(wrapper) {
 			center = sandbox.center(lucky, wrapper);
 		},
 		
 		setRadius: function(r) {
-			radius = parseInt(r, 10);
+			radius = r;
 		},
 		
 		setSpeed: function(s) {
-			speed = parseInt(s, 10);
+			speed = s;
 		},
 		
 		revolve: function() {
@@ -51,25 +51,25 @@ Core.loadModule('lucky', function(sandbox) {
 				moving = true;
 				sandbox.notify('lucky-is-moving');
 
-				self.move(1);
+				self.move(start_degree);
 			});
 
 		},
 		
-		move: function(i) {
+		move: function(degree) {
 			// stop lucky
-			if (!moving || i >= 360) {
+			if (!moving || degree >= start_degree + 360) {
 			  self.stop();
 			  return false;
 			}
 			
 			// figure out the X & Y point of the circle that she should be at...
-			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': i, 'radius': radius});
+			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': degree, 'radius': radius});
 
 		   sandbox.setCSS(lucky, {'top': pos.y, 'left': pos.x});
 			
 			// recursively call this function until we've achieved 360 degrees
-			setTimeout(self.move.curry(i + 1), speed);
+			setTimeout(self.move.curry(degree + 1), speed);
 		},
 		
 		stop: function() {
@@ -94,8 +94,10 @@ Core.loadModule('lucky', function(sandbox) {
 		moveOutToCircumfrence: function(callback) {
 			sandbox.notify('lucky-is-moving-out-to-circumfrence');
 		
+			start_degree = helpers.lucky.getRandomDegree();
+		
 			// figure out the X & Y point of the start of the circle path
-			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': 1, 'radius': radius});
+			var pos = helpers.lucky.circumfrenceXY({'x': center.x, 'y': center.y, 'degree': start_degree, 'radius': radius});
 		
 			// tell lucky to start moving out to that point of the path
 			sandbox.animate(lucky, {'top': pos.y, 'left': pos.x}, {'duration': 1000, 'complete': function() {

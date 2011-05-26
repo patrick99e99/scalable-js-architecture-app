@@ -30,7 +30,7 @@ Core.loadModule('viewport', function(sandbox) {
 		 	viewport_height = sandbox.getHeight(window);
 			sandbox.setCSS(wrapper, {'height': viewport_height + 'px'});
 			
-			sandbox.notify('wrapper-height-changed');
+			sandbox.notify('wrapper-height-changed', wrapper);
 			
 			if (sandbox.isFunction(callback)) {
 				callback();
